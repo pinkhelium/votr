@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>VOTR by cyberbeast</title>
+	<style>
+table {
+    border-collapse: separate;
+    empty-cells: hide;
+}
+</style>
+<!-- 	<meta name="description" content="Blueprint: A basic template for a page stack navigation effect" />
+	<meta name="keywords" content="blueprint, template, html, css, page stack, 3d, perspective, navigation, menu" />
+	<meta name="author" content="Codrops" />
+	<link rel="shortcut icon" href="favicon.ico"> -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/demo.css" />
+	<link rel="stylesheet" type="text/css" href="css/component.css" />
+	<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="css/demo.css" /> -->
+	<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
+	<link rel="stylesheet" type="text/css" href="css/cs-skin-border.css" />
+	<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+	<script src="js/modernizr-custom.js"></script>
+</head>
+
+<body>
+	<!-- navigation -->
+	<nav class="pages-nav">
+		<div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
+		<div class="pages-nav__item"><a class="link link--page" href="#page-vote">Vote</a></div>
+		<div class="pages-nav__item"><a class="link link--page" href="#page-profile">Candidates</a></div>
+		<!-- <div class="pages-nav__item"><a class="link link--page" href="#page-software">Software</a></div>
+		<div class="pages-nav__item"><a class="link link--page" href="#page-custom">Customization &amp; Settings</a></div>
+		<div class="pages-nav__item"><a class="link link--page" href="#page-training">Training</a></div>
+		<div class="pages-nav__item pages-nav__item--small"><a class="link link--page link--faded" href="#page-buy">Where to buy</a></div>
+		<div class="pages-nav__item pages-nav__item--small"><a class="link link--page link--faded" href="#page-blog">Blog &amp; News</a></div>
+		<div class="pages-nav__item pages-nav__item--small"><a class="link link--page link--faded" href="#page-contact">Contact</a></div>
+		<div class="pages-nav__item pages-nav__item--social">
+			<a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
+			<a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
+			<a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
+			<a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
+		</div> -->
+		<% if (user) { %>
+			<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
+		<% } %>
+	</nav>
+	<!-- /navigation-->
+	<!-- pages stack -->
+	<div class="pages-stack">
+		<!-- page -->
+		<div class="page" id="page-home">
+			<!-- Blueprint header -->
+			<header class="bp-header cf">
+				<% if (user) { %>
+				<h1 class="bp-header__title">VOTR</h1>
+				<hr>
+				<span class="bp-header__present">open<br />voting<br/> platform</span>
+				<br/>
+			</header>
+
+				<div class="container">
+				<center><div>
+							<section>
+								<img src="<%= prof_pic.location %>">
+								<h1 class="bp-header__present__FB"><%= user.displayName %></h1>
+							</section>
+						</div></center>
+				</div>
+					<!-- </div> -->
+				<% } else { %>
+					<h1 class="bp-header__title">VOTR</h1>
+					<hr>
+					</header>
+				<% } %>
+				<br/>
+				<br/>
+				<br/>
+				<!-- <center><p class="info">PESITSouth ACM Student Chapter General Elections 2016</p></center> -->
+
+			<% if (!user) { %>
+			<p><center>Welcome! Please <a href="/login/facebook">log in</a>.</center></p>
+			<% } %>
+			<!-- <img class="poster" src="images/1.jpg" alt="img01" /> -->
+		</div>
+		<!-- /page -->
+		<div class="page" id="page-profile">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">2016 CANDIDATE PROFILES</h1>
+				<hr>
+				<p class="bp-header__desc">Read about this years' candidates here! </p>
+				<p class="info">
+					<ol> 
+						<li>Sandesh Sanjay Gade</li>
+					</ol>
+				</p>
+			</header>
+			<!-- <img class="poster" src="images/6.jpg" alt="img06" /> -->
+		</div>
+		<div class="page" id="page-vote">
+			<header class="bp-header cf">
+				<center><h1 class="bp-header__title">Cast My Vote!</h1></center>
+				<hr>
+				<center><p class="bp-header__desc">PESIT South ACM Student Chapter General Elections 2016</p></center>
+			</header>
+				<div class="container">
+			<center><div><section>
+				<div>
+					<select class="cs-select cs-skin-border">
+						<option value="" disabled selected>Chairman</option>
+						<option value="Person1">Person1</option>
+						<option value="Person2">Person2</option>
+						<option value="Person3">Person3</option>
+					</select>
+				</div>
+				<br />
+				</section>
+				<section>
+				<div>	
+					<select class="cs-select cs-skin-border">
+						<option value="" disabled selected>Vice-Chairman</option>
+						<option value="Person1">Person1</option>
+						<option value="Person2">Person2</option>
+						<option value="Person3">Person3</option>
+					</select>
+				</div>
+				<br />
+				</section>
+				<section>
+				<div>
+					<select class="cs-select cs-skin-border">
+						<option value="" disabled selected>Secretary</option>
+						<option value="Person1">Person1</option>
+						<option value="Person2">Person2</option>
+						<option value="Person3">Person3</option>
+					</select>
+				</div>
+				<br />
+				</section>
+				<section>
+				<div>
+					<select class="cs-select cs-skin-border">
+						<option value="" disabled selected>Treasurer</option>
+						<option value="Person1">Person1</option>
+						<option value="Person2">Person2</option>
+						<option value="Person3">Person3</option>
+					</select>
+				</div>
+				<br />
+				</section>
+				
+				<section>
+					<button class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper">Submit</button>
+				</section>
+			</div></center>
+
+		</div><!-- /container -->
+				<!-- <p class="info">
+					"When you adopt a vegan diet we make a connection, you don't go back, it is not a diet, it is a lifestyle." &mdash; Freelee Frugivore
+				</p> -->
+			<!-- <img class="poster" src="images/2.jpg" alt="img02" /> -->
+		</div>
+		<!-- <div class="page" id="page-software">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Software &amp; Downloads</h1>
+				<p class="bp-header__desc">Based on Ilya Kostin's Dribbble shot <a href="https://dribbble.com/shots/2286042-Stacked-navigation">Stacked navigation</a></p>
+				<p class="info">
+					"I decided to pick the diet that I thought would maximize my chances of long-term survival." &mdash; Al Gore
+				</p>
+			</header>
+			<img class="poster" src="images/3.jpg" alt="img03" />
+		</div>
+		<div class="page" id="page-custom">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Customization &amp; Settings</h1>
+				<p class="bp-header__desc">Based on Ilya Kostin's Dribbble shot <a href="https://dribbble.com/shots/2286042-Stacked-navigation">Stacked navigation</a></p>
+				<p class="info">
+					"You have to make a conscious decision to change for your own well-being, that of your family and your country." &mdash;Bill Clinton
+				</p>
+			</header>
+			<img class="poster" src="images/4.jpg" alt="img04" />
+		</div>
+		<div class="page" id="page-training">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Training &amp; Learning Center</h1>
+				<p class="bp-header__desc">Based on Ilya Kostin's Dribbble shot <a href="https://dribbble.com/shots/2286042-Stacked-navigation">Stacked navigation</a></p>
+				<p class="info">
+					"The moment I began to understand what was going on with the treatment of animals, it led me more and more in the way of the path I am [on] now, which is a complete vegan." &mdash; Bryan Adams
+				</p>
+			</header>
+			<img class="poster" src="images/5.jpg" alt="img05" />
+		</div>
+		<div class="page" id="page-buy">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Where to buy</h1>
+				<p class="bp-header__desc">Based on Ilya Kostin's Dribbble shot <a href="https://dribbble.com/shots/2286042-Stacked-navigation">Stacked navigation</a></p>
+				<p class="info">
+					"When people ask me why I don't eat meat or any other animal products, I say, 'Because they are unhealthy and they are the product of a violent and inhumane industry.'" &mdash;
+				</p>
+			</header>
+			<img class="poster" src="images/6.jpg" alt="img06" />
+		</div>
+		<div class="page" id="page-blog">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Blog &amp; News</h1>
+				<p class="bp-header__desc">Based on Ilya Kostin's Dribbble shot <a href="https://dribbble.com/shots/2286042-Stacked-navigation">Stacked navigation</a></p>
+				<p class="info">
+					"The question is not, 'Can they reason?' nor, 'Can they talk?' but rather, 'Can they suffer?" &mdash; Jeremy Bentham
+				</p>
+			</header>
+			<img class="poster" src="images/1.jpg" alt="img01" />
+		</div>
+		<div class="page" id="page-contact">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Contact</h1>
+				<p class="bp-header__desc">Based on Ilya Kostin's Dribbble shot <a href="https://dribbble.com/shots/2286042-Stacked-navigation">Stacked navigation</a></p>
+				<p class="info">
+					"Man is the only animal that can remain on friendly terms with the victims he intends to eat until he eats them." &mdash; Samuel Butler
+				</p>
+			</header>
+			<img class="poster" src="images/4.jpg" alt="img04" />
+		</div> -->
+	</div>
+	<!-- /pages-stack -->
+	<% if (user) { %>
+	<button class="menu-button"><span>Menu</span></button>
+	<% } %>
+	<script src="js/classie.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/selectFx.js"></script>
+	<script>
+		(function() {
+			[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {	
+				new SelectFx(el);
+			} );
+		})();
+	</script>
+	<script>
+		(function() {
+			var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+			if(isSafari) {
+				document.getElementById('support-note').style.display = 'block';
+			}
+		})();
+	</script>
+</body>
+
+</html>
