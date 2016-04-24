@@ -31,7 +31,13 @@ table {
 		<div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
 		<div class="pages-nav__item"><a class="link link--page" href="#page-vote">Vote</a></div>
 		<div class="pages-nav__item"><a class="link link--page" href="#page-profile">Candidates</a></div>
-		
+		<% if (user){
+			if(user.admin === true) { %>
+			<div class="pages-nav__item"><a class="link link--page" href="#page-nominate">Nominate</a></div>
+		<% 	} 
+		   }	
+		%>
+
 		<% if (user) { %>
 			<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
 		<% } %>
@@ -73,6 +79,12 @@ table {
 			<p><center>Welcome! Please <a href="/login/facebook">log in</a>.</center></p>
 			<% } %>
 			<!-- <img class="poster" src="images/1.jpg" alt="img01" /> -->
+		</div>
+		<div class=page id="page-nominate">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Nominate A Candidate</h1>
+				<hr>
+			</header>
 		</div>
 		<!-- /page -->
 		<div class="page" id="page-profile">
