@@ -24,6 +24,7 @@
     "ejs": "^2.3.3",
     "express": "^4.13.1",
     "express-session": "^1.11.3",
+    "fbgraph": "^1.1.0",
     "morgan": "^1.6.1",
     "passport": "^0.2.2",
     "passport-facebook": "^2.0.0",

@@ -21,6 +21,7 @@ table {
 	<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
 	<link rel="stylesheet" type="text/css" href="css/cs-skin-border.css" />
 	<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<script src="js/modernizr-custom.js"></script>
 	
 </head>
@@ -31,7 +32,13 @@ table {
 		<div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
 		<div class="pages-nav__item"><a class="link link--page" href="#page-vote">Vote</a></div>
 		<div class="pages-nav__item"><a class="link link--page" href="#page-profile">Candidates</a></div>
-		
+		<% if (user){
+			if(user.admin === true) { %>
+			<div class="pages-nav__item"><a class="link link--page" href="#page-nominate">Nominate</a></div>
+		<% 	} 
+		   }	
+		%>
+
 		<% if (user) { %>
 			<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
 		<% } %>
@@ -53,7 +60,7 @@ table {
 				<div class="container">
 				<center><div>
 							<section>
-								<img src="<%= prof_pic.location %>">
+								<img src="<%= prof_pic.location %>" id="profile_pic">
 								<h1 class="bp-header__present__FB"><%= user.displayName %></h1>
 							</section>
 						</div></center>
@@ -73,6 +80,12 @@ table {
 			<p><center>Welcome! Please <a href="/login/facebook">log in</a>.</center></p>
 			<% } %>
 			<!-- <img class="poster" src="images/1.jpg" alt="img01" /> -->
+		</div>
+		<div class=page id="page-nominate">
+			<header class="bp-header cf">
+				<h1 class="bp-header__title">Nominate A Candidate</h1>
+				<hr>
+			</header>
 		</div>
 		<!-- /page -->
 		<div class="page" id="page-profile">
@@ -141,7 +154,7 @@ table {
 				</section>
 				
 				<section>
-					<button class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper">Submit</button>
+					<button class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper" id="vote_submit">Submit</button>
 				</section>
 			</div></center>
 
