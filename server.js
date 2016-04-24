@@ -6,10 +6,18 @@ var CONFIG = require('./config.js');
 var bodyParser = require('body-parser');
 var Firebase = require("firebase");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
+var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 
 var at = ""
 var member_list = [];
 var admin_list = [];
+
+var nominee_list = [];
+
+nomineesRef.on('value', function(data){
+  console.log(data.val());
+  nominee_list = data.val();
+})
 
 // Configure the Facebook strategy for use by Passport.
 //
@@ -64,7 +72,16 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
+<<<<<<< HEAD
 // app.use(require('morgan')('combined'));
+=======
+
+//app.use(require('morgan')('combined'));
+
+// commenting to stop all that logging =P OMG
+// app.use(require('morgan')('combined'));
+
+>>>>>>> 1fa237960b350dfc904c793b36188683a2e75762
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(require('cookie-parser')());
@@ -80,8 +97,7 @@ app.use(passport.session());
 var pic_url = ""
 var uName = ""
 // Define routes.
-app.get('/',
-  function(req, res) {
+app.get('/', function(req, res) {
     var params = { fields: "picture" };
     var res_obj = {}
     graph.get("/me/picture?height=200", function(err, ress) {
@@ -117,7 +133,9 @@ app.get('/',
               else{
                 req.user.admin = false;
               }
-              res.render('home', { user: req.user, prof_pic: pic_url, success: "TRUE" });
+              //var nominees = getNominees();
+              console.log("\n\n\n\nBefore: " + nominee_list);
+              res.render('home', { user: req.user, prof_pic: pic_url, nominees: nominee_list });
               return
             }
             else {
@@ -126,7 +144,7 @@ app.get('/',
             }
           }
         }
-        res.render('home', { user: req.user });
+        res.render('home', { user: req.user ,nominees: nominee_list });
         // console.log(res_g.data["name"]);
         // console.log(res_g.data.name);
         console.log(member_list.length);
@@ -163,10 +181,20 @@ app.get('/logout', function(req, res){
 
 
 app.post('/nominate', function(request,response){
+
   var uid = "/" + request.body.uid + "?fields=name";
   console.log(uid);
   graph.get(uid, function(err, res) {
     //console.log("\n\n\nResponse: " + res + "\n\n\n");
+    var nomineeParam = {};
+    nomineeParam[res.name] = {
+      CScore : 0,
+      VScore: 0,
+      TScore: 0,
+      SScore: 0,
+      Total: 0
+    };
+    nomineesRef.update(nomineeParam);
     response.send(res); // { id: '4', name: 'Mark Zuckerberg'... }
   });
   
@@ -190,3 +218,4 @@ app.post('/castvote', function(req, res){
 app.listen(3000, function(){
   console.log("Server Running on port 3000");
 });
+
