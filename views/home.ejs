@@ -21,6 +21,7 @@ table {
 	<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
 	<link rel="stylesheet" type="text/css" href="css/cs-skin-border.css" />
 	<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<script src="js/modernizr-custom.js"></script>
 </head>
 
@@ -52,7 +53,7 @@ table {
 				<div class="container">
 				<center><div>
 							<section>
-								<img src="<%= prof_pic.location %>">
+								<img src="<%= prof_pic.location %>" id="profile_pic">
 								<h1 class="bp-header__present__FB"><%= user.displayName %></h1>
 							</section>
 						</div></center>
@@ -140,7 +141,7 @@ table {
 				</section>
 				
 				<section>
-					<button class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper">Submit</button>
+					<button class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper" id="vote_submit">Submit</button>
 				</section>
 			</div></center>
 
