@@ -5,6 +5,8 @@ var graph = require('fbgraph');
 var CONFIG = require('./config.js');
 
 var at = ""
+var member_list = [];
+var admin_list = [];
 
 // Configure the Facebook strategy for use by Passport.
 //
@@ -80,7 +82,9 @@ app.get('/',
       console.log("res: %j", ress);
       pic_url = ress; // { picture: "http://profile.ak.fbcdn.net/..." }
       graph.get("/289190546930/members", {limit: 2000, access_token: at}, function(err, res_g) {
-        var member_list = []
+        member_list = [];
+        admin_list = [];
+        var something = false;
         for (var key in res_g.data){
           var obj = res_g.data[key];
           // console.log(obj.name);
