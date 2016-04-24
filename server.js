@@ -6,6 +6,7 @@ var CONFIG = require('./config.js');
 var bodyParser = require('body-parser');
 var Firebase = require("firebase");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
+var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 
 var at = ""
 var member_list = [];
@@ -80,8 +81,7 @@ app.use(passport.session());
 var pic_url = ""
 var uName = ""
 // Define routes.
-app.get('/',
-  function(req, res) {
+app.get('/', function(req, res) {
     var params = { fields: "picture" };
     var res_obj = {}
     graph.get("/me/picture?height=200", function(err, ress) {
@@ -117,6 +117,7 @@ app.get('/',
               else{
                 req.user.admin = false;
               }
+              //var nominees = getNominees();
               res.render('home', { user: req.user, prof_pic: pic_url, success: "TRUE" });
               return
             }
@@ -163,10 +164,20 @@ app.get('/logout', function(req, res){
 
 
 app.post('/nominate', function(request,response){
+
   var uid = "/" + request.body.uid + "?fields=name";
   console.log(uid);
   graph.get(uid, function(err, res) {
     //console.log("\n\n\nResponse: " + res + "\n\n\n");
+    var nomineeParam = {};
+    nomineeParam[res.name] = {
+      CScore : 0,
+      VScore: 0,
+      TScore: 0,
+      SScore: 0,
+      Total: 0
+    };
+    nomineesRef.update(nomineeParam);
     response.send(res); // { id: '4', name: 'Mark Zuckerberg'... }
   });
   
@@ -184,3 +195,4 @@ app.post('/castvote', function(req, res){
 app.listen(3000, function(){
   console.log("Server Running on port 3000");
 });
+
