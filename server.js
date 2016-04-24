@@ -78,7 +78,7 @@ app.get('/',
   function(req, res) {
     var params = { fields: "picture" };
     var res_obj = {}
-    graph.get("/me/picture", function(err, ress) {
+    graph.get("/me/picture?height=200", function(err, ress) {
       console.log("res: %j", ress);
       pic_url = ress; // { picture: "http://profile.ak.fbcdn.net/..." }
       graph.get("/289190546930/members", {limit: 2000, access_token: at}, function(err, res_g) {
@@ -155,6 +155,10 @@ app.get('/logout', function(req, res){
 
 app.get('/admin', function(request,response){
   res.render
+});
+
+app.post('/castvote', function(req, res){
+  res.send(req.body);
 });
 
 app.listen(3000, function(){
