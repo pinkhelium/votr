@@ -2,6 +2,7 @@ var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var graph = require('fbgraph');
+var CONFIG = require('./config.js');
 
 var at = ""
 
@@ -13,9 +14,9 @@ var at = ""
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
 passport.use(new Strategy({
-    clientID: 1005519669533262,
-    clientSecret: '51bba473cfdbccb751ae8c3d74a36387',
-    callbackURL: 'http://localhost:3000/login/facebook/return'
+    clientID: CONFIG.clientID,
+    clientSecret: CONFIG.clientSecret,
+    callbackURL: CONFIG.callbackUrl
   },
   function(accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
@@ -26,7 +27,7 @@ passport.use(new Strategy({
     console.log("AT: -----****** ->" + accessToken);
     graph.setAccessToken(accessToken);
     at = accessToken;
-    graph.setAppSecret('51bba473cfdbccb751ae8c3d74a36387');
+    graph.setAppSecret(CONFIG.graphAppSecret);
     return cb(null, profile);
   }));
 
@@ -61,7 +62,7 @@ app.set('view engine', 'ejs');
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: '51bba473cfdbccb751ae8c3d74a36387', resave: true, saveUninitialized: true }));
+app.use(require('express-session')({ secret: CONFIG.graphAppSecret, resave: true, saveUninitialized: true }));
 app.use(express.static(__dirname + '/public'));
 
 // Initialize Passport and restore authentication state, if any, from the
