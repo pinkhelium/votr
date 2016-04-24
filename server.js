@@ -165,7 +165,7 @@ app.post('/castvote', function(req, res){
   console.log(req.body);
   var db_param = {};
   db_param[uName] = req.body;
-  myFirebaseRef.update({votes: db_param});
+  myFirebaseRef.child('votes').update(db_param);
   res.redirect('/');
   // res.send(req.body);
 });
