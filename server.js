@@ -140,6 +140,7 @@ app.get('/profile',
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
+  console.log("HELLO");
 });
 
 app.listen(3000);
