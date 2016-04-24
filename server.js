@@ -3,6 +3,8 @@ var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var graph = require('fbgraph');
 var CONFIG = require('./config.js');
+var Firebase = require("firebase");
+var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 
 var at = ""
 
