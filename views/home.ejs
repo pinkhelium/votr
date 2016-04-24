@@ -85,6 +85,10 @@ table {
 			<header class="bp-header cf">
 				<h1 class="bp-header__title">Nominate A Candidate</h1>
 				<hr>
+				<form method="POST" action="/nominate">
+					<input type="text" name="uid" placeholder="Facebook User ID"/>
+					<input type="submit" value="Nominate"/>
+				</form>
 			</header>
 		</div>
 		<!-- /page -->
@@ -172,6 +176,7 @@ table {
 	<script src="js/classie.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/selectFx.js"></script>
+	<script src="js/jquery.js"></script>
 	<script>
 		(function() {
 			[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {	
