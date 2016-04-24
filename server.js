@@ -188,7 +188,20 @@ app.post('/castvote', function(req, res){
   console.log(req.body);
   var db_param = {};
   db_param[uName] = req.body;
+  votes = req.body;
   myFirebaseRef.child('votes').update(db_param);
+
+  //scaffolding
+  // { chair: 'Person1',
+  // vice_chair: 'Person2',
+  // treasurer: 'Person3',
+  // secretary: 'Person1' }
+
+  // CHAIR
+  nomineesRef.child(votes.chair).on("value", function(data){
+    var val = data.val();
+    console.log('cscore' + val.CScore);
+  })
   res.redirect('/');
   // res.send(req.body);
 });
