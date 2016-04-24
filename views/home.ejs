@@ -112,9 +112,10 @@ table {
 				<center><p class="bp-header__desc">PESIT South ACM Student Chapter General Elections 2016</p></center>
 			</header>
 				<div class="container">
+		<form action="/castvote" method="POST">
 			<center><div><section>
 				<div>
-					<select class="cs-select cs-skin-border">
+					<select class="cs-select cs-skin-border" name="chair">
 						<option value="" disabled selected>Chairman</option>
 						<option value="Person1">Person1</option>
 						<option value="Person2">Person2</option>
@@ -125,7 +126,7 @@ table {
 				</section>
 				<section>
 				<div>	
-					<select class="cs-select cs-skin-border">
+					<select class="cs-select cs-skin-border" name="vice_chair">
 						<option value="" disabled selected>Vice-Chairman</option>
 						<option value="Person1">Person1</option>
 						<option value="Person2">Person2</option>
@@ -136,7 +137,7 @@ table {
 				</section>
 				<section>
 				<div>
-					<select class="cs-select cs-skin-border">
+					<select class="cs-select cs-skin-border" name="treasurer">
 						<option value="" disabled selected>Secretary</option>
 						<option value="Person1">Person1</option>
 						<option value="Person2">Person2</option>
@@ -147,7 +148,7 @@ table {
 				</section>
 				<section>
 				<div>
-					<select class="cs-select cs-skin-border">
+					<select class="cs-select cs-skin-border" name="secretary">
 						<option value="" disabled selected>Treasurer</option>
 						<option value="Person1">Person1</option>
 						<option value="Person2">Person2</option>
@@ -158,9 +159,12 @@ table {
 				</section>
 				
 				<section>
-					<button class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper" id="vote_submit">Submit</button>
+					<button type="submit" 
+					class="button button--pipaluk button--inverted button--round-l button--text-thick button--text-upper"
+					id="vote_submit"
+					formmethod="post">Submit</button>
 				</section>
-			</div></center>
+			</div></center></form>
 
 			</div>
 		</div>

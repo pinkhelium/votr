@@ -4,6 +4,8 @@ var Strategy = require('passport-facebook').Strategy;
 var graph = require('fbgraph');
 var CONFIG = require('./config.js');
 var bodyParser = require('body-parser');
+var Firebase = require("firebase");
+var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 
 var at = ""
 var member_list = [];
@@ -76,12 +78,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 var pic_url = ""
+var uName = ""
 // Define routes.
 app.get('/',
   function(req, res) {
     var params = { fields: "picture" };
     var res_obj = {}
-    graph.get("/me/picture", function(err, ress) {
+    graph.get("/me/picture?height=200", function(err, ress) {
       console.log("res: %j", ress);
       pic_url = ress; // { picture: "http://profile.ak.fbcdn.net/..." }
       graph.get("/289190546930/members", {limit: 2000, access_token: at}, function(err, res_g) {
@@ -103,6 +106,7 @@ app.get('/',
         console.log(typeof(req.user));
         for (var namekey in req.user){
           if (namekey === "displayName") {
+            uName = req.user[namekey];
             console.log(req.user[namekey]);
             var memberNumber = member_list.indexOf(req.user[namekey]);
             if ( memberNumber != -1) {
@@ -154,6 +158,7 @@ app.get('/profile',
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
+  console.log("HELLO");
 });
 
 
@@ -166,6 +171,15 @@ app.post('/nominate', function(request,response){
   });
   
 })
+
+app.post('/castvote', function(req, res){
+  console.log(req.body);
+  var db_param = {};
+  db_param[uName] = req.body;
+  myFirebaseRef.update({votes: db_param});
+  res.redirect('/');
+  // res.send(req.body);
+});
 
 app.listen(3000, function(){
   console.log("Server Running on port 3000");
