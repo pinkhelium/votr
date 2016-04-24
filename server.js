@@ -64,7 +64,7 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require('morgan')('combined'));
+// app.use(require('morgan')('combined'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(require('cookie-parser')());
@@ -171,6 +171,12 @@ app.post('/nominate', function(request,response){
   });
   
 })
+var testObj = {};
+
+myFirebaseRef.child("nominees").on("value", function(snapshot) {
+  testObj = snapshot.val();  // Alerts "San Francisco"
+  console.log(testObj["Sandesh Gade"]["CScore"]);
+});
 
 app.post('/castvote', function(req, res){
   console.log(req.body);
