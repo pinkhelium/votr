@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var Firebase = require("firebase");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
+var votesRef = new Firebase("https://votr-dev.firebaseio.com/votesRef");
 
 var at = ""
 var member_list = [];
@@ -202,13 +203,47 @@ myFirebaseRef.child("nominees").on("value", function(snapshot) {
   console.log(testObj["Sandesh Gade"]["CScore"]);
 });
 
+var prev_vote_OBJ = {};
+
+
 app.post('/castvote', function(req, res){
+  
+  var child_string = "votes/" + uName;
+  console.log("child_string is: -----> " + child_string);
+  myFirebaseRef.child(child_string).on("value", function(snapshot) {
+    prev_vote_OBJ = snapshot.val();
+    console.log("PREV VOTE ----->>>:" + JSON.stringify(prev_vote_OBJ));
+  });
+
+  if (prev_vote_OBJ != null) { 
+    if(prev_vote_OBJ.chair){
+      csref = nomineesRef.child(prev_vote_OBJ.chair+'/CScore');
+      csref.set( nominee_list[prev_vote_OBJ.chair]['CScore'] - 1);
+    }
+    
+    if(prev_vote_OBJ.vice_chair){
+      vsref = nomineesRef.child(prev_vote_OBJ.vice_chair+'/VScore');
+      vsref.set( nominee_list[prev_vote_OBJ.chair]['VScore'] - 1); 
+    }
+    
+    if(prev_vote_OBJ.treasurer){
+      tsref = nomineesRef.child(prev_vote_OBJ.treasurer+'/TScore');
+      tsref.set( nominee_list[prev_vote_OBJ.chair]['TScore'] - 1);
+    }
+    if(prev_vote_OBJ.secretary){
+      ssref = nomineesRef.child(prev_vote_OBJ.secretary+'/SScore');
+      ssref.set( nominee_list[prev_vote_OBJ.chair]['SScore'] - 1);
+    }
+
+    console.log("PREVIOUS VOTE CLEARED!");
+  }
+
+
   console.log(req.body);
   var db_param = {};
   db_param[uName] = req.body;
   votes = req.body;
   myFirebaseRef.child('votes').update(db_param);
-  
 
   if(votes.chair){
     csref = nomineesRef.child(votes.chair+'/CScore');
