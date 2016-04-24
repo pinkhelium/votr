@@ -12,6 +12,13 @@ var at = ""
 var member_list = [];
 var admin_list = [];
 
+var nominee_list = [];
+
+nomineesRef.on('value', function(data){
+  console.log(data.val());
+  nominee_list = data.val();
+})
+
 // Configure the Facebook strategy for use by Passport.
 //
 // OAuth 2.0-based strategies require a `verify` function which receives the
@@ -65,8 +72,12 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
+
+//app.use(require('morgan')('combined'));
+
 // commenting to stop all that logging =P OMG
 // app.use(require('morgan')('combined'));
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(require('cookie-parser')());
@@ -119,7 +130,8 @@ app.get('/', function(req, res) {
                 req.user.admin = false;
               }
               //var nominees = getNominees();
-              res.render('home', { user: req.user, prof_pic: pic_url, success: "TRUE" });
+              console.log("\n\n\n\nBefore: " + nominee_list);
+              res.render('home', { user: req.user, prof_pic: pic_url, nominees: nominee_list });
               return
             }
             else {
@@ -128,7 +140,7 @@ app.get('/', function(req, res) {
             }
           }
         }
-        res.render('home', { user: req.user });
+        res.render('home', { user: req.user ,nominees: nominee_list });
         // console.log(res_g.data["name"]);
         // console.log(res_g.data.name);
         console.log(member_list.length);

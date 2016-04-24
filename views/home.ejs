@@ -102,6 +102,9 @@ table {
 						<li>Sandesh Sanjay Gade</li>
 					</ol>
 				</p>
+				<% for (var name in nominees) { %>
+					<pre> <%= name %> </pre>
+				<% } %>
 				
 			</header>
 			<!-- <img class="poster" src="images/6.jpg" alt="img06" /> -->
@@ -120,9 +123,9 @@ table {
 						class="cs-select cs-skin-border" 
 						name="chair">
 						<option value="" disabled selected>Chairman</option>
-						<option value="Person1">Person1</option>
-						<option value="Person2">Person2</option>
-						<option value="Person3">Person3</option>
+						<% for (name in nominees) { %>
+							<option value="<%= name %>"><%= name %></option>
+						<% } %>
 					</select>
 				</div>
 				<br />
@@ -131,9 +134,9 @@ table {
 				<div>	
 					<select class="cs-select cs-skin-border" name="vice_chair">
 						<option value="" disabled selected>Vice-Chairman</option>
-						<option value="Person1">Person1</option>
-						<option value="Person2">Person2</option>
-						<option value="Person3">Person3</option>
+						<% for (name in nominees) { %>
+							<option value="<%= name %>"><%= name %></option>
+						<% } %>
 					</select>
 				</div>
 				<br />
@@ -142,9 +145,9 @@ table {
 				<div>
 					<select class="cs-select cs-skin-border" name="treasurer">
 						<option value="" disabled selected>Secretary</option>
-						<option value="Person1">Person1</option>
-						<option value="Person2">Person2</option>
-						<option value="Person3">Person3</option>
+						<% for (name in nominees) { %>
+							<option value="<%= name %>"><%= name %></option>
+						<% } %>
 					</select>
 				</div>
 				<br />
@@ -153,9 +156,9 @@ table {
 				<div>
 					<select class="cs-select cs-skin-border" name="secretary">
 						<option value="" disabled selected>Treasurer</option>
-						<option value="Person1">Person1</option>
-						<option value="Person2">Person2</option>
-						<option value="Person3">Person3</option>
+						<% for (name in nominees) { %>
+							<option value="<%= name %>"><%= name %></option>
+						<% } %>
 					</select>
 				</div>
 				<br />
