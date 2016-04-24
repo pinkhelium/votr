@@ -80,11 +80,18 @@ app.get('/',
       console.log("res: %j", ress);
       pic_url = ress; // { picture: "http://profile.ak.fbcdn.net/..." }
       graph.get("/289190546930/members", {limit: 2000, access_token: at}, function(err, res_g) {
-        var member_list = []
+        var member_list = [];
+        var admin_list = [];
+        var something = false;
         for (var key in res_g.data){
           var obj = res_g.data[key];
+          if(something === false){
+            console.log(obj);
+            something = true;
+          }
           // console.log(obj.name);
           member_list.push(obj.name);
+          admin_list.push(obj);
           // console.log(res_g.data);
         }
 
@@ -92,8 +99,15 @@ app.get('/',
         for (var namekey in req.user){
           if (namekey === "displayName") {
             console.log(req.user[namekey]);
-            if (member_list.indexOf(req.user[namekey]) != -1) {
+            var memberNumber = member_list.indexOf(req.user[namekey]);
+            if ( memberNumber != -1) {
               console.log("ACM MEMBER ACM MEMBER ACM MEMBER!")
+              if(admin_list[memberNumber].administrator === true){
+                req.user.admin = true;
+              }
+              else{
+                req.user.admin = false;
+              }
               res.render('home', { user: req.user, prof_pic: pic_url, success: "TRUE" });
               return
             }
@@ -136,4 +150,10 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.listen(3000);
+app.get('/admin', function(request,response){
+  res.render
+});
+
+app.listen(3000, function(){
+  console.log("Server Running on port 3000");
+});
