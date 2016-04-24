@@ -72,7 +72,12 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
+
 //app.use(require('morgan')('combined'));
+
+// commenting to stop all that logging =P OMG
+// app.use(require('morgan')('combined'));
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(require('cookie-parser')());
