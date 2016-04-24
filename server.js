@@ -3,6 +3,7 @@ var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var graph = require('fbgraph');
 var CONFIG = require('./config.js');
+var bodyParser = require('body-parser');
 
 var at = ""
 var member_list = [];
@@ -62,6 +63,8 @@ app.set('view engine', 'ejs');
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
 app.use(require('morgan')('combined'));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: CONFIG.graphAppSecret, resave: true, saveUninitialized: true }));
@@ -141,6 +144,7 @@ app.get('/login/facebook/return',
     res.redirect('/');
   });
 
+
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
@@ -152,9 +156,16 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/admin', function(request,response){
-  res.render
-});
+
+app.post('/nominate', function(request,response){
+  var uid = "/" + request.body.uid + "?fields=name";
+  console.log(uid);
+  graph.get(uid, function(err, res) {
+    //console.log("\n\n\nResponse: " + res + "\n\n\n");
+    response.send(res); // { id: '4', name: 'Mark Zuckerberg'... }
+  });
+  
+})
 
 app.listen(3000, function(){
   console.log("Server Running on port 3000");
