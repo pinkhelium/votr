@@ -3,6 +3,8 @@ var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var graph = require('fbgraph');
 var CONFIG = require('./config.js');
+var Firebase = require("firebase");
+var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 
 var at = ""
 var member_list = [];
@@ -73,6 +75,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 var pic_url = ""
+var uName = ""
 // Define routes.
 app.get('/',
   function(req, res) {
@@ -100,6 +103,7 @@ app.get('/',
         console.log(typeof(req.user));
         for (var namekey in req.user){
           if (namekey === "displayName") {
+            uName = req.user[namekey];
             console.log(req.user[namekey]);
             var memberNumber = member_list.indexOf(req.user[namekey]);
             if ( memberNumber != -1) {
@@ -158,7 +162,12 @@ app.get('/admin', function(request,response){
 });
 
 app.post('/castvote', function(req, res){
-  res.send(req.body);
+  console.log(req.body);
+  var db_param = {};
+  db_param[uName] = req.body;
+  myFirebaseRef.update({votes: db_param});
+  res.redirect('/');
+  // res.send(req.body);
 });
 
 app.listen(3000, function(){
