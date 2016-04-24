@@ -17,7 +17,7 @@ var nominee_list = [];
 nomineesRef.on('value', function(data){
   console.log(data.val());
   nominee_list = data.val();
-})
+});
 
 // Configure the Facebook strategy for use by Passport.
 //
@@ -202,18 +202,27 @@ app.post('/castvote', function(req, res){
   db_param[uName] = req.body;
   votes = req.body;
   myFirebaseRef.child('votes').update(db_param);
+  
 
-  //scaffolding
-  // { chair: 'Person1',
-  // vice_chair: 'Person2',
-  // treasurer: 'Person3',
-  // secretary: 'Person1' }
+  if(votes.chair){
+    csref = nomineesRef.child(votes.chair+'/CScore');
+    csref.set( nominee_list[votes.chair]['CScore'] + 1);
+  }
+  
+  if(votes.vice_chair){
+    vsref = nomineesRef.child(votes.vice_chair+'/VScore');
+    vsref.set( nominee_list[votes.chair]['VScore'] + 1); 
+  }
+  
+  if(votes.treasurer){
+    tsref = nomineesRef.child(votes.treasurer+'/TScore');
+    tsref.set( nominee_list[votes.chair]['TScore'] + 1);
+  }
+  if(votes.secretary){
+    ssref = nomineesRef.child(votes.secretary+'/SScore');
+    ssref.set( nominee_list[votes.chair]['SScore'] + 1);
+  }
 
-  // CHAIR
-  nomineesRef.child(votes.chair).on("value", function(data){
-    var val = data.val();
-    console.log('cscore' + val.CScore);
-  })
   res.redirect('/');
   // res.send(req.body);
 });
