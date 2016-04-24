@@ -78,7 +78,6 @@ app.set('view engine', 'ejs');
 // commenting to stop all that logging =P OMG
 // app.use(require('morgan')('combined'));
 
->>>>>>> 1fa237960b350dfc904c793b36188683a2e75762
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(require('cookie-parser')());
