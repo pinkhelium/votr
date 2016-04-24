@@ -72,9 +72,6 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-<<<<<<< HEAD
-// app.use(require('morgan')('combined'));
-=======
 
 //app.use(require('morgan')('combined'));
 
