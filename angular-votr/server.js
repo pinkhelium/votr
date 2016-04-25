@@ -9,6 +9,7 @@ var Strategy = require('passport-facebook').Strategy;
 var CONFIG = require('./config.js');
 var C = {};
 
+
 var app = express();
 var port = process.env.PORT || 3000;
 
@@ -80,6 +81,8 @@ app.get('/randomshit', function(request, response){
 	response.send('lets see' + request.user);
 });
 
+
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
 });
+
