@@ -2,12 +2,24 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
+var bodyParser = require('body-parser');
 
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 
 var CONFIG = require('./config.js');
+
+
 var C = {};
+
+var Firebase = require("firebase");
+var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
+var nominee_list = [];
+
+nomineesRef.on('value', function(data){
+  console.log(data.val());
+  nominee_list = data.val();
+});
 
 
 var app = express();
@@ -20,6 +32,12 @@ app.use(session({
 	cookie: { maxAge: 60000 }
 }));
 app.use(flash());
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 
 
@@ -80,6 +98,11 @@ app.get('/randomshit', function(request, response){
 	console.log(request.user);
 	response.send('lets see' + request.user);
 });
+
+app.get('/nominees', function(request,response){
+
+	response.send(nominee_list);
+})
 
 
 app.listen(port, function(){
