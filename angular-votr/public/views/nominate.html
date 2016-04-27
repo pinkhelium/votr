@@ -1,0 +1,39 @@
+<ul ng-if="user.loggedIn == true">
+	<li>
+		<a href="#/">Home</a>
+	</li>
+	<li>
+		<a href="#/vote">Vote</a>
+	</li>
+	<li ng-if="user.admin == true">
+		<a href="#/nominate">Nominate</a>
+	</li>
+	<li>
+		<a href="#/candidates">Candidates</a>
+	</li>
+</ul>
+
+<div ng-if="user.loggedIn == true">
+	<hr/>
+	{{nominateMessage}}
+	<h2>Nominate a Candidate</h2>
+	<input type="text" placeholder="Enter Facebook User ID" ng-model="uid"/>
+	<button ng-click="newNominee(uid)">Nominate</button>
+	<br/>
+	<br/>
+</div>
+
+<hr/>
+<div ng-if="user.loggedIn == true" ng-init="getNominees()">
+	<h2>Nominees</h2>
+	<div ng-repeat="(key,value) in nominees">
+		<span>{{key}} <button ng-click="removeNominee(key)">Remove</button></span>
+		<br/>
+		<br/>
+	</div>
+
+</div>
+
+<div ng-if="user.loggedIn == false">
+	<span>Hello. Please <button ng-click="logUserIn()"> Log In </button> </span>
+</div>

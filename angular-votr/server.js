@@ -3,6 +3,8 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
+var cors = require('cors');
+var graph = require('fbgraph');
 
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
@@ -25,6 +27,7 @@ nomineesRef.on('value', function(data){
 var app = express();
 var port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
 app.use(session({
@@ -50,6 +53,9 @@ passport.use(new Strategy({
   // the VERIFY callback
   function(accessToken, refreshToken, profile, done) {
     console.log("\n\n\nVERIFY CALLBACK:\nAccessToken:" + accessToken);
+  
+    profile.accessToken = accessToken;
+    //console.log(profile);
 
     // graph.setAccessToken(accessToken);
     C.ACCESS_TOKEN = accessToken;
@@ -86,7 +92,7 @@ app.get(
 app.get('/loginsuccess', function(request, response){
 	console.log("IN LOGIN SUCCESS CALL");
 	console.log(request.user);
-	response.send("SUCCESS");
+	response.send("success");
 });
 
 app.get('/loginfailure', function(request, response){
@@ -100,8 +106,25 @@ app.get('/randomshit', function(request, response){
 });
 
 app.get('/nominees', function(request,response){
-
 	response.send(nominee_list);
+})
+
+app.post('/nominees', function(request,response){
+	var uid = "/" + request.body.uid + "?fields=name";
+	//console.log(request);
+	graph.get(uid, {access_token : request.user.accessToken} ,function(err, res) {
+		//console.log("\n\n\nResponse: " + res + "\n\n\n");
+		var nomineeParam = {};
+		nomineeParam[res.name] = {
+			CScore : 0,
+			VScore: 0,
+			TScore: 0,
+			SScore: 0,
+			Total: 0
+		};
+		nomineesRef.update(nomineeParam);
+		response.send("Added Candidate"); // { id: '4', name: 'Mark Zuckerberg'... }
+	});
 })
 
 
