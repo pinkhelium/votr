@@ -127,6 +127,21 @@ app.post('/nominees', function(request,response){
 	});
 })
 
+app.delete('/nominees', function(request,response){
+	var nominee = request.query.nominee;
+	var delRef = new Firebase("https://votr-dev.firebaseio.com/nominees/" + nominee );
+	var onComplete = function(error){
+		if(error){
+			response.send(error);
+		}
+		else{
+			response.send("success");
+		}
+	}
+
+	delRef.remove(onComplete);
+})
+
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);

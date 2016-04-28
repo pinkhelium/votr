@@ -93,7 +93,24 @@ app.controller('NominateCtrl', function($scope,$http,$q){
 
 	//To remove a nominee
 	$scope.removeNominee = function(nominee){
-		console.log(nominee);
+		console.log("Here: " + nominee);
+		$http({
+			url: '/nominees',
+			method: 'DELETE',
+			params: {
+				'nominee' : nominee
+			}
+		}).then(function success(response){
+			if(response.data == "success"){
+				$scope.nominateMessage = "Deleted";
+				getNominees();
+			}
+			else{
+				$scope.nominateMessage = response.data;
+			}
+		}, function error(error){
+			console.log(error);
+		})
 	}
 
 	//To add a nominee
@@ -112,7 +129,7 @@ app.controller('NominateCtrl', function($scope,$http,$q){
 			method: "POST",
 			url: '/nominees',
 			data: {
-				"uid": 1543442411
+				"uid": uid
 			}
 		}).then(function success(response){
 			console.log("addNominee: "+ response.data);
