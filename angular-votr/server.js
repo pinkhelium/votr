@@ -76,7 +76,11 @@ passport.deserializeUser(function(obj, cb) {
 });
 
 
-
+/*
+	Passport Stuff
+	-> /login : Starts the Auth process
+	-> /login/facebook/return : Callback for the auth
+*/
 app.get('/login', passport.authenticate('facebook'));
 
 app.get(
@@ -105,6 +109,13 @@ app.get('/randomshit', function(request, response){
 	response.send('lets see' + request.user);
 });
 
+
+/*
+	Nominees Endpoint:
+		-> GET : Returns all nominees.
+		-> POST : Adds a new nominee. 
+		-> DELETE : Removes a nominee.
+*/
 app.get('/nominees', function(request,response){
 	response.send(nominee_list);
 })
