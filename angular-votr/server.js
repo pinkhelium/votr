@@ -16,6 +16,7 @@ var C = {};
 
 var Firebase = require("firebase");
 var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
+var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var nominee_list = [];
 
 nomineesRef.on('value', function(data){
@@ -179,10 +180,11 @@ app.get('/sess', function(request, response){
 
 */
 
-app.post('/votes', function(request,response){
+app.post('/vote', function(request,response){
 
 	var userName = request.body.user;
 	var vote = request.body.vote;
+	console.log("Vote: " + vote);
 	var child_string = "votes/" + userName;
 	console.log("child_string is: -----> " + child_string);
 	var prev_vote_OBJ = {};
@@ -217,6 +219,30 @@ app.post('/votes', function(request,response){
 		console.log("PREVIOUS VOTE CLEARED!");
 	}
 
+	var db_param = {};
+	db_param[userName] = vote;
+	myFirebaseRef.child('votes').update(db_param);
+
+	if(vote.chair){
+		csref = nomineesRef.child(vote.chair+'/CScore');
+		csref.set( nominee_list[vote.chair]['CScore'] + 1);
+	}
+
+	if(vote.vice_chair){
+		vsref = nomineesRef.child(vote.vice_chair+'/VScore');
+		vsref.set( nominee_list[vote.vice_chair]['VScore'] + 1); 
+	}
+
+	if(vote.treasurer){
+		tsref = nomineesRef.child(vote.treasurer+'/TScore');
+		tsref.set( nominee_list[vote.treasurer]['TScore'] + 1);
+	}
+	if(vote.secretary){
+		ssref = nomineesRef.child(vote.secretary+'/SScore');
+		ssref.set( nominee_list[vote.secretary]['SScore'] + 1);
+	}
+
+	response.send("success");
 });
 
 app.listen(port, function(){

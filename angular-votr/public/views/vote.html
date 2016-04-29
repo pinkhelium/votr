@@ -26,7 +26,7 @@
 		<select ng-model="vote.chair" placeholder="Select Chairperson">
 			<option ng-repeat="(key, value) in nominees">{{key}}</option>
 		</select>
-		<select ng-model="vote.vicechair" placeholder="Select Vice-Chairperson">
+		<select ng-model="vote.vice_chair" placeholder="Select Vice-Chairperson">
 			<option ng-repeat="(key, value) in nominees">{{key}}</option>
 		</select>
 		<select ng-model="vote.treasurer" placeholder="Select Treasurer">
@@ -35,7 +35,7 @@
 		<select ng-model="vote.secretary" placeholder="Select Secretary">
 			<option ng-repeat="(key, value) in nominees">{{key}}</option>
 		</select>
-		<button ng-click="castVote()">Vote</button>
+		<button ng-click="castVote(vote)">Vote</button>
 	</div>
 </div>
 

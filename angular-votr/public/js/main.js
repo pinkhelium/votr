@@ -181,13 +181,13 @@ app.controller('VoteCtrl', function($scope,$http,$q){
 		return deferred.promise;
 	}
 
-	$scope.castVote = function(){
+	$scope.castVote = function(vote){
 		$http({
 			url: '/vote',
 			method: 'POST',
 			data: {
 				user: $scope.user.displayName,
-				vote: $scope.vote
+				vote: vote
 			}
 		}).then(function success(response){
 			if(response.data == "success"){
