@@ -19,6 +19,7 @@ var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var nominee_list = [];
 
 nomineesRef.on('value', function(data){
+  console.log("Nominees On Change:\n\n:");
   console.log(data.val());
   nominee_list = data.val();
 });
@@ -32,7 +33,8 @@ app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
 app.use(session({
 	secret: "YOLOVOTR",
-	cookie: { maxAge: 60000 }
+	cookie: { maxAge: null },
+	saveUninitialized: false
 }));
 app.use(flash());
 
@@ -159,7 +161,18 @@ app.delete('/nominees', function(request,response){
 
 */
 
+/* 
 
+	Endpoint to test session 
+
+*/
+
+app.get('/sess', function(request, response){
+	var s = request.session;
+	var st = "Session contains:\n<br />\n<br />" + s;
+	console.log(s);
+	response.send(s	);
+});
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
