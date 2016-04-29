@@ -35,6 +35,7 @@
 		<select ng-model="vote.secretary" placeholder="Select Secretary">
 			<option ng-repeat="(key, value) in nominees">{{key}}</option>
 		</select>
+		<button ng-click="castVote()">Vote</button>
 	</div>
 </div>
 

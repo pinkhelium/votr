@@ -153,6 +153,13 @@ app.delete('/nominees', function(request,response){
 	delRef.remove(onComplete);
 })
 
+/*
+	User Endpoint:
+		GET : Returns the logged in users details from Facebook
+
+*/
+
+
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
