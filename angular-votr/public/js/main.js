@@ -27,6 +27,7 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 	$scope.logUserIn = $scope.$parent.logUserIn;
 	$scope.user.admin = $scope.$parent.user.admin;
+	$scope.user.displayName = $scope.$parent.user.displayName
 });
 
 app.controller("AppCtrl", function($scope,$http,$q){

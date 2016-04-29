@@ -1,39 +1,32 @@
-<ul ng-if="user.loggedIn == true">
-	<li>
-		<a href="#/">Home</a>
-	</li>
-	<li>
-		<a href="#/vote">Vote</a>
-	</li>
-	<li ng-if="user.admin == true">
-		<a href="#/nominate">Nominate</a>
-	</li>
-	<li>
-		<a href="#/candidates">Candidates</a>
-	</li>
-</ul>
+<nav class="pages-nav" ng-if="user.loggedIn == true">
+	<div class="pages-nav__item"><a class="link link--page" href="#/">Home</a></div>
+	<div class="pages-nav__item"><a class="link link--page" href="#/vote">Vote</a></div>
+	<div class="pages-nav__item"><a class="link link--page" href="#/candidates">Candidates</a></div>
+	<div ng-if="user.admin == true" class="pages-nav__item"><a class="link link--page" href="#/nominate">Nominate</a></div>
 
-<div ng-if="user.loggedIn == true">
-	<hr/>
-	{{nominateMessage}}
-	<h2>Nominate a Candidate</h2>
-	<input type="text" placeholder="Enter Facebook User ID" ng-model="uid"/>
-	<button ng-click="newNominee(uid)">Nominate</button>
-	<br/>
-	<br/>
-</div>
+	<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
+</nav>
 
-<hr/>
-<div ng-if="user.loggedIn == true" ng-init="getNominees()">
-	<h2>Nominees</h2>
-	<div ng-repeat="(key,value) in nominees">
-		<span>{{key}} <button ng-click="removeNominee(key)">Remove</button></span>
+<div class=page id="page-nominate">
+	<header class="bp-header cf" ng-if="user.loggedIn == true">
+		<h1 class="bp-header__title">Nominate A Candidate</h1>
+		<hr>
+		<form method="POST" action="/nominate">
+			<input type="text" name="uid" placeholder="Facebook User ID"/>
+			<input type="submit" value="Nominate"/>
+		</form>
+	</header>
+	<div ng-if="user.loggedIn == false">
+		<h1 class="bp-header__title">VOTR</h1>
+		<hr>
+		<span class="bp-header__present">open<br />voting<br/> platform</span>
 		<br/>
 		<br/>
+		<br/>
+		<br/>
+	<!-- <center><p class="info">PESITSouth ACM Student Chapter General Elections 2016</p></center> -->
+		<p><center>Welcome! Please <a href="/login">log in</a>.</center></p>
 	</div>
-
 </div>
 
-<div ng-if="user.loggedIn == false">
-	<span>Hello. Please <button ng-click="logUserIn()"> Log In </button> </span>
-</div>
+<button ng-if="user.loggedIn == true" class="menu-button"><span>Menu</span></button>

@@ -6,9 +6,39 @@
 		<script src="js/angular.min.js"></script>
 		<script type="text/javascript" src="js/angular-route.min.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+		<script src="js/modernizr-custom.js"></script>
+		<script src="js/classie.js"></script>
+		<script src="js/mainTemplate.js"></script>
+		<script src="js/selectFx.js"></script>
+
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="css/demo.css" /> -->
+		<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
+		<link rel="stylesheet" type="text/css" href="css/cs-skin-border.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
 	</head>
 
 	<body ng-controller="AppCtrl">
 		<div ng-view=""></div>
+		<script>
+			(function() {
+				[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {	
+					new SelectFx(el);
+				} );
+			})();
+		</script>
+		<script>
+			(function() {
+				var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+				if(isSafari) {
+					document.getElementById('support-note').style.display = 'block';
+				}
+			})();
+		</script>
 	</body>
 </html>

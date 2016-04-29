@@ -1,20 +1,45 @@
-<ul ng-if="user.loggedIn == true">
-	<li>
-		<a href="#/">Home</a>
-	</li>
-	<li>
-		<a href="/login">Login (testing)</a>
-	</li>
-	<li>
-		<a href="#/vote">Vote</a>
-	</li>
-	<li ng-if="user.admin == true">
-		<a href="#/nominate">Nominate</a>
-	</li>
-	<li>
-		<a href="#/candidates">Candidates</a>
-	</li>
-</ul>
-<div ng-if="user.loggedIn == false">
-	<span>Hello. Please <button ng-click="logUserIn()"> Log In </button> </span>
+<nav class="pages-nav" ng-if="user.loggedIn == true">
+	<div class="pages-nav__item"><a class="link link--page" href="#/">Home</a></div>
+	<div class="pages-nav__item"><a class="link link--page" href="#/vote">Vote</a></div>
+	<div class="pages-nav__item"><a class="link link--page" href="#/candidates">Candidates</a></div>
+	<div ng-if="user.admin == true" class="pages-nav__item"><a class="link link--page" href="#/nominate">Nominate</a></div>
+
+	<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
+</nav>
+
+<div class="page" id="page-home">
+	<!-- Blueprint header -->
+	<header class="bp-header cf">
+		<div ng-if="user.loggedIn == true">
+			<h1 class="bp-header__title">VOTR</h1>
+			<hr>
+			<span class="bp-header__present">open<br />voting<br/> platform</span>
+			<br/>
+			<div class="container">
+				<center>
+					<div>
+						<section>
+							<img src="{{user.prof_pic_location}}" id="profile_pic">
+							<h1 class="bp-header__present__FB">{{user.displayName}}</h1>
+						</section>
+					</div>
+				</center>
+			</div>
+		</div>
+			<!-- </div> -->
+		<div ng-if="user.loggedIn == false">
+			<h1 class="bp-header__title">VOTR</h1>
+			<hr>
+			<span class="bp-header__present">open<br />voting<br/> platform</span>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+		<!-- <center><p class="info">PESITSouth ACM Student Chapter General Elections 2016</p></center> -->
+			<p><center>Welcome! Please <a href="/login">log in</a>.</center></p>
+		</div>
+	</header>
+	<!-- <img class="poster" src="images/1.jpg" alt="img01" /> -->
 </div>
+
+<button ng-if="user.loggedIn == true" class="menu-button"><span>Menu</span></button>
