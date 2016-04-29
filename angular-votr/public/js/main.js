@@ -26,6 +26,7 @@ app.controller("MainCtrl", function($scope,$http){
 	//$scope.pageName = $scope.$parent.pageName;
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.admin = $scope.$parent.user.admin;
 });
 
 app.controller("AppCtrl", function($scope,$http,$q){
@@ -33,6 +34,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.nominees = {};
 	$scope.user.loggedIn = true;
 	$scope.user.admin = true;
+	$scope.user.displayName = "Abinav Seelan";
 	$scope.logUserIn = function(){
 		// console.log("Here")
 		// var promise = loginCall();
@@ -66,6 +68,7 @@ app.controller('NominateCtrl', function($scope,$http,$q){
 	//Inherited for logging in the user
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.admin = $scope.$parent.user.admin;
 	//$scope.uid = 0;
 	//To get all the nominees
 	$scope.getNominees = function(){
@@ -151,6 +154,8 @@ app.controller('VoteCtrl', function($scope,$http,$q){
 	//Inherited for logging in the user
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.displayName = $scope.$parent.user.displayName;
+	$scope.user.admin = $scope.$parent.user.admin;
 
 	//$scope.getNominees = $scope.$parent.getNominees;
 	$scope.getNominees = function(){
@@ -174,6 +179,26 @@ app.controller('VoteCtrl', function($scope,$http,$q){
 			deferred.reject(error);
 		})
 		return deferred.promise;
+	}
+
+	$scope.castVote = function(){
+		$http({
+			url: '/vote',
+			method: 'POST',
+			data: {
+				user: $scope.user.displayName,
+				vote: $scope.vote
+			}
+		}).then(function success(response){
+			if(response.data == "success"){
+				$scope.voteMessage = "Vote Cast";
+			}
+			else{
+				$scope.voteMessage = "Something Went Wrong";
+			}
+		}, function error(error){
+			$scope.voteMessage = error;
+		})
 	}
 
 });

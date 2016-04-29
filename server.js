@@ -239,7 +239,7 @@ app.post('/castvote', function(req, res){
   }
 
 
-  console.log(req.body);
+  console.log("Request Body: " + req.body);
   var db_param = {};
   db_param[uName] = req.body;
   votes = req.body;

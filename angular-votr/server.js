@@ -174,6 +174,51 @@ app.get('/sess', function(request, response){
 	response.send(s	);
 });
 
+/*
+	Endpoint to cast vote
+
+*/
+
+app.post('/votes', function(request,response){
+
+	var userName = request.body.user;
+	var vote = request.body.vote;
+	var child_string = "votes/" + userName;
+	console.log("child_string is: -----> " + child_string);
+	var prev_vote_OBJ = {};
+	//To get the previous vote cast
+	myFirebaseRef.child(child_string).on("value", function(snapshot) {
+		prev_vote_OBJ = snapshot.val();
+		console.log("PREV VOTE ----->>>:" + JSON.stringify(prev_vote_OBJ));
+	});
+
+	//To revert previous change
+
+	if (prev_vote_OBJ != null) { 
+		if(prev_vote_OBJ.chair){
+			var csref = nomineesRef.child(prev_vote_OBJ.chair+'/CScore');
+			csref.set( nominee_list[prev_vote_OBJ.chair]['CScore'] - 1);
+		}
+
+		if(prev_vote_OBJ.vice_chair){
+			var vsref = nomineesRef.child(prev_vote_OBJ.vice_chair+'/VScore');
+			vsref.set( nominee_list[prev_vote_OBJ.chair]['VScore'] - 1); 
+		}
+
+		if(prev_vote_OBJ.treasurer){
+			var tsref = nomineesRef.child(prev_vote_OBJ.treasurer+'/TScore');
+			tsref.set( nominee_list[prev_vote_OBJ.chair]['TScore'] - 1);
+		}
+		if(prev_vote_OBJ.secretary){
+			var ssref = nomineesRef.child(prev_vote_OBJ.secretary+'/SScore');
+			ssref.set( nominee_list[prev_vote_OBJ.chair]['SScore'] - 1);
+		}
+
+		console.log("PREVIOUS VOTE CLEARED!");
+	}
+
+});
+
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
 });
