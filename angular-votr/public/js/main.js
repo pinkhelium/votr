@@ -33,35 +33,58 @@ app.controller("MainCtrl", function($scope,$http){
 app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.user = {};
 	$scope.nominees = {};
-	$scope.user.loggedIn = true;
-	$scope.user.admin = true;
-	$scope.user.displayName = "Abinav Seelan";
-	$scope.logUserIn = function(){
-		// console.log("Here")
-		// var promise = loginCall();
-		// promise.then(function(data){
-		// 	if(data=="success"){
-		// 		console.log("Here")
-		// 		$user.loggedIn = true;
-		// 		$location.path('/home')
-		// 	}
-		// })
-		//function that hits the passport endpoint
-	}
+	$scope.user.loggedIn = false;
+	$scope.user.admin = false;
+	$scope.user.displayName = "";
 
-	var loginCall = function(){
+	// $scope.logUserIn = function(){
+	// 	// console.log("Here")
+	// 	// var promise = loginCall();
+	// 	// promise.then(function(data){
+	// 	// 	if(data=="success"){
+	// 	// 		console.log("Here")
+	// 	// 		$user.loggedIn = true;
+	// 	// 		$location.path('/home')
+	// 	// 	}
+	// 	// })
+	// 	//function that hits the passport endpoint
+	// }
+
+	// var loginCall = function(){
+	// 	var deferred = $q.defer();
+	// 	$http({
+	// 		method: 'GET',
+	// 		'url': '/login',
+	// 	}).then(function success(response){
+	// 		deferred.resolve(response.data);
+	// 	}, function error(error){
+	// 		deferred.reject(error);
+	// 	})
+
+	// 	return deferred.promise;
+	// }
+
+	$scope.getUser = function(){
 		var deferred = $q.defer();
 		$http({
 			method: 'GET',
-			'url': '/login',
+			url: '/getSession'
 		}).then(function success(response){
-			deferred.resolve(response.data);
-		}, function error(error){
-			deferred.reject(error);
-		})
+			console.log("function getUser: success");
+			console.log(response);
+			$scope.user.loggedIn = response.data.loggedIn;
+			$scope.user.admin = response.data.admin;
+			$scope.user.displayName = response.data.displayName;
+			console.log("$scope.user: ");
+			console.log($scope.user);
 
-		return deferred.promise;
-	}
+		}, function error(response){
+			console.log("function getUser: error");
+			console.log(error);
+		});
+	};
+	$scope.getUser();
+
 });
 
 app.controller('NominateCtrl', function($scope,$http,$q){

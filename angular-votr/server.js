@@ -89,7 +89,7 @@ app.get('/login', passport.authenticate('facebook'));
 app.get(
 	'/login/facebook/return',
 	passport.authenticate('facebook', {
-		successRedirect: '/loginsuccess',
+		successRedirect: '/#/',
 		failureRedirect: '/loginfailure',
 		failureFlash: 'Failed to login',
 		successFlash: 'Login Success! Welcome'
@@ -173,6 +173,25 @@ app.get('/sess', function(request, response){
 	var st = "Session contains:\n<br />\n<br />" + s;
 	console.log(s);
 	response.send(s	);
+});
+
+app.get('/getSession', function(request, response){
+	var s = request.session;
+	var details = {};
+	details.loggedIn = false;
+	details.admin = false;
+	details.displayName = null;
+	details.id = null;
+
+	if(s.flash){
+		if(s.flash.success){
+			details.loggedIn = true;
+			details.admin = false;
+			details.displayName = s.passport.user.displayName;
+			details.id = s.passport.user.id;	
+		}		
+	}
+	response.json(details);
 });
 
 /*
