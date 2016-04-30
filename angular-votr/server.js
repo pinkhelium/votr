@@ -23,6 +23,14 @@ nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");
   console.log(data.val());
   nominee_list = data.val();
+  for(nominee in nominee_list){
+  	//console.log("\n\n\nNOMINEE: " + nominee_list[nominee].CScore);
+  	var userPictureUrl = "/" + nominee_list[nominee].uid + "/picture";
+  	graph.get(userPictureUrl,function(err,response){
+  		//console.log(response);
+  		nominee_list[nominee].picUrl = response.location;
+  	})
+  }
 });
 
 
@@ -124,12 +132,14 @@ app.get('/nominees', function(request,response){
 })
 
 app.post('/nominees', function(request,response){
-	var uid = "/" + request.body.uid + "?fields=name";
+	var uid = parseInt(request.body.uid);
+	var uidUrl = "/" + request.body.uid + "?fields=name";
 	//console.log(request);
-	graph.get(uid, {access_token : request.user.accessToken} ,function(err, res) {
+	graph.get(uidUrl, {access_token : request.user.accessToken} ,function(err, res) {
 		//console.log("\n\n\nResponse: " + res + "\n\n\n");
 		var nomineeParam = {};
 		nomineeParam[res.name] = {
+			uid: uid,
 			CScore : 0,
 			VScore: 0,
 			TScore: 0,
