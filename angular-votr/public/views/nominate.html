@@ -7,14 +7,24 @@
 	<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
 </nav>
 
-<div class=page id="page-nominate">
+<div class=page id="page-nominate" ng-init="getNominees()">
 	<header class="bp-header cf" ng-if="user.loggedIn == true">
 		<h1 class="bp-header__title">Nominate A Candidate</h1>
 		<hr>
-		<form method="POST" action="/nominate">
-			<input type="text" name="uid" placeholder="Facebook User ID"/>
-			<input type="submit" value="Nominate"/>
+		{{uid}}
+		<form>
+			<input type="text" ng-model="uid" placeholder="Facebook User ID"/>
+			<button ng-click="newNominee(uid)">Add Nominee</button>
 		</form>
+		<br/>
+		<br/>
+		<br/>
+		<h2 class="bp-header__title">Nominees</h2>
+		<div ng-repeat="(key,value) in nominees">
+			<h3 class="bp-header__title">{{key}}</h3>
+			<button ng-click="removeNominee(key)">Remove {{key}}</button>
+		</div>
+		
 	</header>
 	<div ng-if="user.loggedIn == false">
 		<h1 class="bp-header__title">VOTR</h1>
