@@ -176,19 +176,6 @@ app.delete('/nominees', function(request,response){
 
 */
 
-/* 
-
-	Endpoint to test session 
-
-*/
-
-app.get('/sess', function(request, response){
-	var s = request.session;
-	var st = "Session contains:\n<br />\n<br />" + s;
-	console.log(s);
-	response.send(s	);
-});
-
 app.get('/user', function(request, response){
 	var s = request.session;
 	var details = {};
@@ -220,6 +207,19 @@ app.get('/user/picture', function(request, response){
 			response.send(success);
 		}
 	});
+});
+
+/* 
+
+	Endpoint to test session 
+
+*/
+
+app.get('/sess', function(request, response){
+	var s = request.session;
+	var st = "Session contains:\n<br />\n<br />" + s;
+	console.log(s);
+	response.send(s	);
 });
 
 /*
