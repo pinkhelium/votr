@@ -24,7 +24,7 @@
 			{{vote}}
 		</pre>
 		<select ng-model="vote.chair" placeholder="Select Chairperson">
-			<option ng-repeat="(key, value) in nominees">{{key}}</option>
+			<option ng-repeat="(key, value) in nominees"><img src={{value.picUrl}}/>{{key}}</option>
 		</select>
 		<select ng-model="vote.vice_chair" placeholder="Select Vice-Chairperson">
 			<option ng-repeat="(key, value) in nominees">{{key}}</option>

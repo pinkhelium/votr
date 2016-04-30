@@ -23,6 +23,14 @@ nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");
   console.log(data.val());
   nominee_list = data.val();
+  for(nominee in nominee_list){
+  	//console.log("\n\n\nNOMINEE: " + nominee_list[nominee].CScore);
+  	var userPictureUrl = "/" + nominee_list[nominee].uid + "/picture";
+  	graph.get(userPictureUrl,function(err,response){
+  		//console.log(response);
+  		nominee_list[nominee].picUrl = response.location;
+  	})
+  }
 });
 
 
@@ -89,7 +97,7 @@ app.get('/login', passport.authenticate('facebook'));
 app.get(
 	'/login/facebook/return',
 	passport.authenticate('facebook', {
-		successRedirect: '/loginsuccess',
+		successRedirect: '/#/',
 		failureRedirect: '/loginfailure',
 		failureFlash: 'Failed to login',
 		successFlash: 'Login Success! Welcome'
@@ -112,6 +120,10 @@ app.get('/randomshit', function(request, response){
 	response.send('lets see' + request.user);
 });
 
+app.get('/logout', function(request, response){
+  request.logout();
+  response.redirect('/#/');
+});
 
 /*
 	Nominees Endpoint:
@@ -124,12 +136,14 @@ app.get('/nominees', function(request,response){
 })
 
 app.post('/nominees', function(request,response){
-	var uid = "/" + request.body.uid + "?fields=name";
+	var uid = parseInt(request.body.uid);
+	var uidUrl = "/" + request.body.uid + "?fields=name";
 	//console.log(request);
-	graph.get(uid, {access_token : request.user.accessToken} ,function(err, res) {
+	graph.get(uidUrl, {access_token : request.user.accessToken} ,function(err, res) {
 		//console.log("\n\n\nResponse: " + res + "\n\n\n");
 		var nomineeParam = {};
 		nomineeParam[res.name] = {
+			uid: uid,
 			CScore : 0,
 			VScore: 0,
 			TScore: 0,
@@ -161,6 +175,39 @@ app.delete('/nominees', function(request,response){
 		GET : Returns the logged in users details from Facebook
 
 */
+
+app.get('/user', function(request, response){
+	var s = request.session;
+	var details = {};
+	details.loggedIn = false;
+	details.admin = false;
+	details.displayName = null;
+	details.id = null;
+
+	if(s.flash){
+		if(s.flash.success){
+			details.loggedIn = true;
+			details.admin = false;
+			details.displayName = s.passport.user.displayName;
+			details.id = s.passport.user.id;	
+		}		
+	}
+	response.json(details);
+});
+
+app.get('/user/picture', function(request, response){
+	var reqURL = '/me/picture?height=200&access_token='+request.session.passport.user.accessToken;
+	
+	graph.get(reqURL, function(error, success){
+		if(error){
+			console.log(error);
+			response.send("Error occurred while fetching Profile Picture: "+error);
+		}
+		else{
+			response.send(success);
+		}
+	});
+});
 
 /* 
 

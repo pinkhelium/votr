@@ -18,8 +18,8 @@
 			<div class="container">
 				<center>
 					<div>
-						<section>
-							<img src="{{user.prof_pic_location}}" id="profile_pic">
+						<section ng-show="user.loggedIn">
+							<img src="{{user.picture.location}}" id="profile_pic">
 							<h1 class="bp-header__present__FB">{{user.displayName}}</h1>
 						</section>
 					</div>
