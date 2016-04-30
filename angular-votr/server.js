@@ -120,6 +120,10 @@ app.get('/randomshit', function(request, response){
 	response.send('lets see' + request.user);
 });
 
+app.get('/logout', function(request, response){
+  request.logout();
+  response.redirect('/#/');
+});
 
 /*
 	Nominees Endpoint:
@@ -172,20 +176,7 @@ app.delete('/nominees', function(request,response){
 
 */
 
-/* 
-
-	Endpoint to test session 
-
-*/
-
-app.get('/sess', function(request, response){
-	var s = request.session;
-	var st = "Session contains:\n<br />\n<br />" + s;
-	console.log(s);
-	response.send(s	);
-});
-
-app.get('/getSession', function(request, response){
+app.get('/user', function(request, response){
 	var s = request.session;
 	var details = {};
 	details.loggedIn = false;
@@ -202,6 +193,33 @@ app.get('/getSession', function(request, response){
 		}		
 	}
 	response.json(details);
+});
+
+app.get('/user/picture', function(request, response){
+	var reqURL = '/me/picture?height=200&access_token='+request.session.passport.user.accessToken;
+	
+	graph.get(reqURL, function(error, success){
+		if(error){
+			console.log(error);
+			response.send("Error occurred while fetching Profile Picture: "+error);
+		}
+		else{
+			response.send(success);
+		}
+	});
+});
+
+/* 
+
+	Endpoint to test session 
+
+*/
+
+app.get('/sess', function(request, response){
+	var s = request.session;
+	var st = "Session contains:\n<br />\n<br />" + s;
+	console.log(s);
+	response.send(s	);
 });
 
 /*
