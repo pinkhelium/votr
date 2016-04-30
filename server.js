@@ -120,7 +120,9 @@ app.get('/', function(req, res) {
         for (var namekey in req.user){
           if (namekey === "displayName") {
             uName = req.user[namekey];
-            console.log(req.user[namekey]);
+            uID = req.user["id"];
+            console.log("USER IS: ---> " + req.user[namekey]);
+            console.log("USER ID IS: > " + req.user["id"]);
             var memberNumber = member_list.indexOf(req.user[namekey]);
             if ( memberNumber != -1) {
               console.log("ACM MEMBER ACM MEMBER ACM MEMBER!")
@@ -155,7 +157,7 @@ app.get('/login',
   });
 
 app.get('/login/facebook',
-  passport.authenticate('facebook'));
+  passport.authenticate('facebook', {scope: "email"}));
 
 app.get('/login/facebook/return', 
   passport.authenticate('facebook', { failureRedirect: '/' }),
@@ -179,17 +181,20 @@ app.get('/logout', function(req, res){
 
 app.post('/nominate', function(request,response){
 
-  var uid = "/" + request.body.uid + "?fields=name";
+  var uid = "/" + request.body.uid + "?fields=name,email";
   console.log(uid);
   graph.get(uid, function(err, res) {
-    //console.log("\n\n\nResponse: " + res + "\n\n\n");
+    console.log("\n\n\nResponse: " + JSON.stringify(res) + "\n\n\n");
+    // console.log(res.email);
     var nomineeParam = {};
     nomineeParam[res.name] = {
       CScore : 0,
       VScore: 0,
       TScore: 0,
       SScore: 0,
-      Total: 0
+      Total: 0,
+      uid: request.body.uid
+      // email: res.email
     };
     nomineesRef.update(nomineeParam);
     response.send(res); // { id: '4', name: 'Mark Zuckerberg'... }
@@ -200,7 +205,7 @@ var testObj = {};
 
 myFirebaseRef.child("nominees").on("value", function(snapshot) {
   testObj = snapshot.val();  // Alerts "San Francisco"
-  console.log(testObj["Sandesh Gade"]["CScore"]);
+  // console.log(testObj["Sandesh Gade"]["CScore"]);
 });
 
 var prev_vote_OBJ = {};
@@ -208,9 +213,10 @@ var prev_vote_OBJ = {};
 
 app.post('/castvote', function(req, res){
   
-  var child_string = "votes/" + uName;
-  console.log("child_string is: -----> " + child_string);
-  myFirebaseRef.child(child_string).on("value", function(snapshot) {
+  // var child_string = "votes/" + uName;
+  // var child_string = "votes/" + uID + "/" + uName;
+  // console.log("child_string is: -----> " + child_string);
+  myFirebaseRef.child('votes').child(uID).on("value", function(snapshot) {
     prev_vote_OBJ = snapshot.val();
     console.log("PREV VOTE ----->>>:" + JSON.stringify(prev_vote_OBJ));
   });
@@ -241,8 +247,9 @@ app.post('/castvote', function(req, res){
 
   
   var db_param = {};
-  db_param[uName] = req.body;
   votes = req.body;
+  votes["voter_name"] = uName;
+  db_param[uID] = votes;
   myFirebaseRef.child('votes').update(db_param);
 
   if(votes.chair){
