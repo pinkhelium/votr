@@ -42,7 +42,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		var deferred = $q.defer();
 		$http({
 			method: 'GET',
-			url: '/getSession'
+			url: '/user'
 		}).then(function success(response){
 			console.log("function getUser: success");
 			console.log(response);

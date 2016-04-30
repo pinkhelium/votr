@@ -189,7 +189,7 @@ app.get('/sess', function(request, response){
 	response.send(s	);
 });
 
-app.get('/getSession', function(request, response){
+app.get('/user', function(request, response){
 	var s = request.session;
 	var details = {};
 	details.loggedIn = false;
