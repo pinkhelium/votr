@@ -1,5 +1,5 @@
 
-var app = angular.module('votrApp',['ngRoute']);
+var app = angular.module('votrApp',['ngRoute','mgcrea.ngStrap']);
 
 app.config(function($routeProvider){
 	$routeProvider
