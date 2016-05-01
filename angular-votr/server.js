@@ -104,20 +104,8 @@ app.get(
 	})
 );
 
-app.get('/loginsuccess', function(request, response){
-	console.log("IN LOGIN SUCCESS CALL");
-	console.log(request.user);
-	response.send("success");
-});
-
 app.get('/loginfailure', function(request, response){
-	response.send("LOGINFAIL");
-});
-
-app.get('/randomshit', function(request, response){
-	console.log('HI');
-	console.log(request.user);
-	response.send('lets see' + request.user);
+	response.send("Failed to log you in via Facebook. Please check your credentials.");
 });
 
 app.get('/logout', function(request, response){
@@ -171,9 +159,17 @@ app.delete('/nominees', function(request,response){
 })
 
 /*
-	User Endpoint:
-		GET : Returns the logged in users details from Facebook
+	User Endpoints:
+		get /user
+			get details of logged in user through the session
 
+		get /user/picture
+			queries graph api with user's access token to get 
+			their profile picture
+
+		get /user/permissions
+			queries graph api with user's access token to see 
+			if they are valid members & admins or not
 */
 
 app.get('/user', function(request, response){
@@ -196,6 +192,12 @@ app.get('/user', function(request, response){
 });
 
 app.get('/user/picture', function(request, response){
+	
+	if(!request.session.flash){
+		response.status(400).send("Error: User not logged in.");
+		return;
+	}
+
 	var reqURL = '/me/picture?height=200&access_token='+request.session.passport.user.accessToken;
 	
 	graph.get(reqURL, function(error, success){
@@ -205,6 +207,49 @@ app.get('/user/picture', function(request, response){
 		}
 		else{
 			response.send(success);
+		}
+	});
+});
+
+app.get('/user/permissions', function(request, response){
+
+	if(!request.session.flash){
+		response.status(400).send("Error: User not logged in.");
+		return;
+	}
+
+	var reqURL = '/289190546930/members?limit=2000&access_token='+request.session.passport.user.accessToken;
+	var currentUser = request.session.passport.user;
+	var returnPermissions = {
+		isValidACMMember: false,
+		isAdmin: false,
+		id:"",
+		displayName:""
+	};
+
+	graph.get(reqURL, function(error, success){
+		if(error){
+			response.status(500).send(error);
+		}
+		else {
+			var member_list = success.data;
+			for(var key in member_list){
+				if(member_list[key].id == currentUser.id){
+					console.log("Found the user "+currentUser.displayName+" in the member list");
+					console.log("VALID ACM GROUP MEMBER: ALLOWED TO VOTE");
+
+					returnPermissions.isValidACMMember = true;
+
+					if(member_list[key].administrator == true){
+						returnPermissions.isAdmin = true;
+					}
+
+					returnPermissions.id = member_list[key].id;
+					returnPermissions.displayName = member_list[key].name;
+				}
+			}
+			response.json(returnPermissions);
+			console.log("Sent response:\n"+returnPermissions);
 		}
 	});
 });
