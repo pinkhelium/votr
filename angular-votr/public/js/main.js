@@ -23,6 +23,10 @@ app.config(function($routeProvider){
 			templateUrl: './views/prevote.html',
 			controller: 'PrevoteCtrl'
 		})
+		.when('/result', {
+			templateUrl: './views/result.html',
+			controller: 'ResultCtrl'
+		})
 });
 
 
@@ -147,6 +151,72 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		console.log("LoginError:" + data);
 	});
 });
+
+
+app.controller('ResultCtrl', function($scope,$q,$http){
+
+
+	$scope.populateTable= function(){
+
+		var promise = getData();
+
+		promise.then(function success(data){
+			for(key in data){
+				var newEntry = [];
+				newEntry.push(key);
+				newEntry.push(data[key].CScore);
+				newEntry.push(data[key].VScore);
+				newEntry.push(data[key].TScore);
+				newEntry.push(data[key].SScore);
+
+				dataSet.push(newEntry);
+				console.log(dataSet);
+			}
+		})
+
+	}
+
+	var getData = function(){
+		var deferred = $q.defer();
+
+		$http({
+			'url':'/tabledata',
+			'method': 'GET',
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		} , function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+	google.charts.load('current', {'packages':['bar']});
+	google.charts.setOnLoadCallback(drawChart);
+	var dataSet = [
+	  ['Nominee', 'CScore', 'VScore', 'TScore', 'SScore']
+	]
+
+	$scope.add = function(){
+	  drawChart();
+	}
+
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable(dataSet);
+		var options = {
+		  chart: {
+		    title: 'Company Performance',
+		    subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+		  },
+		  bars: 'horizontal' // Required for Material Bar Charts.
+		};
+
+		var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+		chart.draw(data, options);
+		}
+
+})
+
 
 app.controller('NominateCtrl', function($scope,$http,$q){
 
