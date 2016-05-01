@@ -43,7 +43,8 @@ app.use(cookieParser());
 app.use(session({
 	secret: "YOLOVOTR",
 	cookie: { maxAge: null },
-	saveUninitialized: false
+	saveUninitialized: false,
+	resave: false
 }));
 app.use(flash());
 
