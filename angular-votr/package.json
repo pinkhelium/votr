@@ -10,8 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "async": "^2.0.0-rc.3",
     "async-waterfall": "^0.1.5",
+=======
+    "async": "^1.5.2",
+>>>>>>> 86fff3c536038d106c9ee25c8e1760656f58233e
     "body-parser": "^1.15.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.1",
