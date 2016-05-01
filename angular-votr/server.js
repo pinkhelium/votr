@@ -262,6 +262,18 @@ app.delete('/nominees', function(request,response){
 })
 
 /*
+
+	Table Data Endpoint:
+		-> GET /tabledata : Returns result data
+
+*/
+
+app.get("/tabledata", function(request,response){
+	
+	response.send(nominee_list);
+})
+
+/*
 	User Endpoints:
 		get /user
 			get details of logged in user through the session

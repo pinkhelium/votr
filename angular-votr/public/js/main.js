@@ -1,5 +1,5 @@
 
-var app = angular.module('votrApp',['ngRoute']);
+var app = angular.module('votrApp',['ngRoute','zingchart-angularjs']);
 
 app.config(function($routeProvider){
 	$routeProvider
@@ -149,7 +149,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 });
 
 
-app.controller('ResultCtrl', function($scope){
+app.controller('ResultCtrl', function($scope,$q,$http){
 
 })
 
