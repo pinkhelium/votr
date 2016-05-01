@@ -187,6 +187,7 @@ app.post('/nominate', function(request,response){
 	var candidateName = request.body.candidateName;
 
 	var prev_candidate_vote_obj = {};
+	console.log(request.user.id);
 
 	//To get the previous vote
 	candidateVoteRef.child(request.user.id).on("value", function(data){
