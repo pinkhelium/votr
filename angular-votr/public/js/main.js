@@ -23,6 +23,10 @@ app.config(function($routeProvider){
 			templateUrl: './views/prevote.html',
 			controller: 'PrevoteCtrl'
 		})
+		.when('/result', {
+			templateUrl: './views/result.html',
+			controller: 'ResultCtrl'
+		})
 });
 
 
@@ -143,6 +147,12 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		console.log("LoginError:" + data);
 	});
 });
+
+
+app.controller('ResultCtrl', function($scope){
+
+})
+
 
 app.controller('NominateCtrl', function($scope,$http,$q){
 
