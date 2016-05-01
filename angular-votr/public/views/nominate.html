@@ -1,33 +1,36 @@
-<div class=page id="page-nominate" ng-init="getNominees()">
-	<header class="bp-header cf" ng-if="user.loggedIn == true">
-		<h1 class="bp-header__title">Nominate A Candidate</h1>
-		<hr>
+<div ng-if="user.loggedIn == true" ng-init="getNominees()">
+	<header>
+		<center><h1>Nominate A Candidate</h1></center>
+	</header>
+		<!-- <hr> -->
+	<br />
 		{{uid}}
 		<form>
-			<input type="text" ng-model="uid" placeholder="Facebook User ID"/>
-			<button ng-click="newNominee(uid)">Add Nominee</button>
+			<table>
+				<tr>
+					<td style="text-align: left">
+						<input type="text" ng-model="uid" placeholder="Facebook User ID"/>
+					</td>
+					<td style="text-align: right">
+						<button ng-click="newNominee(uid)">Add Nominee</button>
+					</td>	
+				</tr>
+			</table>
 		</form>
-		<br/>
-		<br/>
-		<br/>
-		<h2 class="bp-header__title">Nominees</h2>
-		<div ng-repeat="(key,value) in nominees">
-			<h3 class="bp-header__title">{{key}}</h3>
-			<button ng-click="removeNominee(key)">Remove {{key}}</button>
-		</div>
-		
-	</header>
-	<div ng-if="user.loggedIn == false">
-		<h1 class="bp-header__title">VOTR</h1>
-		<hr>
-		<span class="bp-header__present">open<br />voting<br/> platform</span>
-		<br/>
-		<br/>
-		<br/>
-		<br/>
-	<!-- <center><p class="info">PESITSouth ACM Student Chapter General Elections 2016</p></center> -->
-		<p><center>Welcome! Please <a href="/login">log in</a>.</center></p>
-	</div>
-</div>
+		<center><div>
+		<div>
+			<table style="border-collapse: separate;" ng-repeat="(key,value) in nominees">
+				<tr>
+					<td style="text-align: left">
+						<span>{{key}}</span>
+					</td>
+					<td style="text-align: right">
+						<button ng-click="removeNominee(key)">Remove</button>
+					</td>	
+				</tr>
+			</table>
 
-<button ng-if="user.loggedIn == true" class="menu-button"><span>Menu</span></button>
+			
+		</div>
+		</div></center>
+</div>

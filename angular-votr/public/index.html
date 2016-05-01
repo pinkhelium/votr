@@ -1,59 +1,72 @@
-<!DOCTYPE html>
-
+<!DOCTYPE HTML>
 <html ng-app="votrApp">
 	<head>
-		<title>Votr | An Open Source Voting Platform</title>
+		<title>VOTR by pinkHelium</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<script src="js/angular.min.js"></script>
 		<script type="text/javascript" src="js/angular-route.min.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
-		<script src="js/modernizr-custom.js"></script>
-		<script src="js/classie.js"></script>
-		<script src="js/mainTemplate.js"></script>
-		<script src="js/selectFx.js"></script>
 
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="css/demo.css" />
-		<link rel="stylesheet" type="text/css" href="css/component.css" />
-		<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
-		<!-- <link rel="stylesheet" type="text/css" href="css/demo.css" /> -->
-		<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
-		<link rel="stylesheet" type="text/css" href="css/cs-skin-border.css" />
-		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
-		<link rel="stylesheet" type="text/css" href="css/main.css" />
-
-		
 	</head>
-
 	<body ng-controller="AppCtrl">
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-		<nav class="pages-nav" ng-if="user.loggedIn == true">
-			<div class="pages-nav__item"><a class="link link--page" href="#/">Home</a></div>
-			<div class="pages-nav__item"><a class="link link--page" href="#/vote">Vote</a></div>
-			<div class="pages-nav__item"><a class="link link--page" href="#/candidates">Candidates</a></div>
-			<div ng-if="user.admin == true" class="pages-nav__item"><a class="link link--page" href="#/nominate">Nominate</a></div>
-			<div ng-if="user.admin == true" class="pages-nav__item"><a class="link link--page" href="#/result">Result</a></div>
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
 
-			<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
-		</nav>
-		<div ng-view=""></div>
-		<script>
-			(function() {
-				[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {	
-					new SelectFx(el);
-				} );
-			})();
-		</script>
-		<script>
-			(function() {
-				var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-				if(isSafari) {
-					document.getElementById('support-note').style.display = 'block';
-				}
-			})();
-		</script>
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="title"><h1>VOTR</h1>by pinkHelium <hr></span>
+								</a>
+
+							<!-- Nav -->
+								<nav ng-if="user.loggedIn == true">
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="#/">Home</a></li>
+							<li><a href="#/prevote">Member Nominate</a></li>
+							<li><a href="#/nominate">Admin Nominate</a></li>
+							<li><a href="#/candidates">Candidates</a></li>
+							<li><a href="#/vote">Vote</a></li>
+							<li><a href="#/result">Result</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner" ng-view="">
+							
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
 
 	</body>
 </html>

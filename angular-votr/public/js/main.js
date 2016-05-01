@@ -194,7 +194,7 @@ app.controller('ResultCtrl', function($scope,$q,$http){
 	google.charts.load('current', {'packages':['bar']});
 	google.charts.setOnLoadCallback(drawChart);
 	var dataSet = [
-	  ['Nominee', 'CScore', 'VScore', 'TScore', 'SScore']
+	  ['', 'CScore', 'VScore', 'TScore', 'SScore']
 	]
 
 	$scope.add = function(){
@@ -204,10 +204,6 @@ app.controller('ResultCtrl', function($scope,$q,$http){
 	function drawChart() {
 		var data = google.visualization.arrayToDataTable(dataSet);
 		var options = {
-		  chart: {
-		    title: 'ACM Elections',
-		    subtitle: 'Results',
-		  },
 		  bars: 'horizontal' // Required for Material Bar Charts.
 		};
 

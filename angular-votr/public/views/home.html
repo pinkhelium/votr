@@ -1,38 +1,16 @@
-
-
-<div class="page" id="page-home">
-	<!-- Blueprint header -->
-	<header class="bp-header cf">
-		<div ng-if="user.loggedIn == true">
-			<h1 class="bp-header__title">VOTR</h1>
-			<hr>
-			<span class="bp-header__present">open<br />voting<br/> platform</span>
-			<br/>
-			<div class="container">
-				<center>
-					<div>
-						<section>
-							<img src="{{user.picture.location}}" id="profile_pic">
-							<h1 class="bp-header__present__FB">{{user.displayName}}</h1>
-						</section>
-					</div>
-				</center>
-			</div>
-		</div>
-			<!-- </div> -->
-		<div ng-if="user.loggedIn == false">
-			<h1 class="bp-header__title">VOTR</h1>
-			<hr>
-			<span class="bp-header__present">open<br />voting<br/> platform</span>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-		<!-- <center><p class="info">PESITSouth ACM Student Chapter General Elections 2016</p></center> -->
-			<p><center>Welcome! Please <a href="/login">log in</a>.</center></p>
-		</div>
+<div ng-if="user.loggedIn == false">
+	<header>
+		<center><h1><a href="/login">sign in here</a>.</h1></center>
+		
+		<!-- <hr> -->
 	</header>
-	<!-- <img class="poster" src="images/1.jpg" alt="img01" /> -->
+		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
 </div>
 
-<button ng-if="user.loggedIn == true" class="menu-button"><span>Menu</span></button>
+<div ng-if="user.loggedIn == true">
+	
+	<center><section>
+		<img src="{{user.picture.location}}" id="profile_pic">
+		<h2>{{user.displayName}}</h2>
+	</section></center>
+</div>
