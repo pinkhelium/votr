@@ -125,6 +125,10 @@ app.get('/logout', function(request, response){
   response.redirect('/#/');
 });
 
+app.get("/tabledata", function(request,response){
+	response.send(nominee_list);
+})
+
 
 /*
 	

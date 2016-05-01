@@ -1,13 +1,3 @@
-<nav class="pages-nav" ng-if="user.loggedIn == true">
-	<div class="pages-nav__item"><a class="link link--page" href="#/">Home</a></div>
-	<div class="pages-nav__item"><a class="link link--page" href="#/vote">Vote</a></div>
-	<div class="pages-nav__item"><a class="link link--page" href="#/candidates">Candidates</a></div>
-	<div ng-if="user.admin == true" class="pages-nav__item"><a class="link link--page" href="#/nominate">Nominate</a></div>
-	<div ng-if="user.admin == true" class="pages-nav__item"><a class="link link--page" href="#/result">Result</a></div>
-
-	<div class="pages-nav__item"><a class="link" href="/logout">Logout</a></div>
-</nav>
-
 <div class=page id="page-nominate" ng-init="getNominees()">
 	<header class="bp-header cf" ng-if="user.loggedIn == true">
 		<h1 class="bp-header__title">Nominate A Candidate</h1>

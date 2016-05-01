@@ -168,6 +168,7 @@ app.controller('ResultCtrl', function($scope,$q,$http){
 				dataSet.push(newEntry);
 				console.log(dataSet);
 			}
+			drawChart();
 		})
 
 	}
@@ -200,8 +201,8 @@ app.controller('ResultCtrl', function($scope,$q,$http){
 		var data = google.visualization.arrayToDataTable(dataSet);
 		var options = {
 		  chart: {
-		    title: 'Company Performance',
-		    subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+		    title: 'ACM Elections',
+		    subtitle: 'Results',
 		  },
 		  bars: 'horizontal' // Required for Material Bar Charts.
 		};
