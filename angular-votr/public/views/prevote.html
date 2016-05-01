@@ -1,0 +1,25 @@
+<div ng-if="user.loggedIn == true">
+	<div ng-init="getCandidates()">
+		<select ng-model="candidateName">
+			<option ng-repeat="(key,value) in candidates">{{key}}</option>
+		</select>
+		<button ng-click="voteCandidate(candidateName)">Nominate</button>
+	</div>
+	<br/>
+	<br/>
+	<input type="text" ng-model="candidateName" placeholder="Enter Candidate's Name" />
+	<button ng-click="addCandidate(candidateName)">Add Candidate</button>
+	{{candidateName}}
+</div>
+
+<div ng-if="user.loggedIn == false">
+	<h1 class="bp-header__title">VOTR</h1>
+	<hr>
+	<span class="bp-header__present">open<br />voting<br/> platform</span>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+<!-- <center><p class="info">PESITSouth ACM Student Chapter General Elections 2016</p></center> -->
+	<p><center>Welcome! Please <a href="/login">log in</a>.</center></p>
+</div>

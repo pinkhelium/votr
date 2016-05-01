@@ -17,7 +17,14 @@ var C = {};
 var Firebase = require("firebase");
 var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
+var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
+var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes")
 var nominee_list = [];
+var candidateList = [];
+
+candidateRef.on("value", function(data){
+	candidateList = data.val();
+})
 
 nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");
@@ -123,6 +130,100 @@ app.get('/randomshit', function(request, response){
 app.get('/logout', function(request, response){
   request.logout();
   response.redirect('/#/');
+});
+
+
+/*
+	
+	Pre-voting Stuff:
+		Candidates Endpoints:
+			-> GET /candidates : Returns all candidates
+			-> POST /candidates : Adds a new candidate
+			-> POST /nominate : Cast a nomination vote
+
+*/
+
+app.get('/candidates', function(request,response){
+
+	response.send(candidateList);
+
+});
+
+app.post('/candidates', function(request,response){
+
+	//To add a new candidate
+	var candidateParam = {};
+	var candidateName = request.body.candidateName;
+	//console.log(request.body);
+	candidateParam[candidateName] = {
+		count: 1
+	};
+
+	candidateRef.update(candidateParam);
+	response.send("Success");
+
+});
+
+
+
+app.post('/nominate', function(request,response){
+
+	//To vote for a candidate
+
+	// var prev_candidate_vote_obj = {};
+	// console.log("REQ USER: " + JSON.stringify(request.user));
+
+
+	// var child_string = "candidatevotes/" + request.user.id;
+
+	// myFirebaseRef.child(child_string).on("value", function(data){
+	// 	prev_candidate_vote_obj = data.val();
+	// })
+
+	// if(prev_candidate_vote_obj != null){
+	// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
+	// 	candidateRef.child(prev_candidate_vote_obj.name).child("count").set(candidateList[prev_candidate_vote_obj.name] - 1);
+	// }
+
+	// var newEntry = {};
+	// newEntry.name = request.user.displayName;
+	// newEntry.candidateName = request.body.candidateName;
+
+	// candidateVoteRef.child(request.user.id).update(newEntry);
+
+	// candidateRef.child(request.body.candidateName).child("count").set(candidateList[request.body.candidateName] + 1);	
+
+	// response.send("Success");
+
+	var candidateName = request.body.candidateName;
+
+	var prev_candidate_vote_obj = {};
+
+	//To get the previous vote
+	candidateVoteRef.child(request.user.id).on("value", function(data){
+		prev_candidate_vote_obj = data.val();
+	});
+
+	if(prev_candidate_vote_obj != null){
+		console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
+		candidateRef.child(prev_candidate_vote_obj.name).child("count").set(candidateList[prev_candidate_vote_obj.name] - 1);
+	}
+
+	//To add the new vote
+	candidateRef.child(candidateName).child("count").set(candidateList[candidateName].count + 1);
+
+	//Remove previous vote
+	
+
+	var newEntry = {};
+	newEntry[request.user.id] = {
+		name: candidateName,
+		voter_name: request.user.displayName
+	};
+
+	candidateVoteRef.update(newEntry);
+
+
 });
 
 /*
@@ -267,7 +368,12 @@ app.post('/vote', function(request,response){
 	}
 
 	var db_param = {};
-	db_param[userName] = vote;
+	
+
+	
+	vote["voter_name"] = userName;
+	var uID = request.user["id"];
+	db_param[uID] = vote
 	myFirebaseRef.child('votes').update(db_param);
 
 	if(vote.chair){

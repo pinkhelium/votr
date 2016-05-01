@@ -1,5 +1,5 @@
 
-var app = angular.module('votrApp',['ngRoute','mgcrea.ngStrap']);
+var app = angular.module('votrApp',['ngRoute']);
 
 app.config(function($routeProvider){
 	$routeProvider
@@ -18,6 +18,10 @@ app.config(function($routeProvider){
 		.when('/nominate', {
 			templateUrl: './views/nominate.html',
 			controller: 'NominateCtrl'
+		})
+		.when('/prevote', {
+			templateUrl: './views/prevote.html',
+			controller: 'PrevoteCtrl'
 		})
 });
 
@@ -188,6 +192,61 @@ app.controller('NominateCtrl', function($scope,$http,$q){
 
 
 });
+
+app.controller('PrevoteCtrl', function($scope,$q,$http){
+	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
+
+	$scope.getCandidates = function(){
+		var promise = serverCall();
+		promise.then(function success(data){
+			$scope.candidates = data;
+		});
+	}
+
+	var serverCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			url: '/candidates',
+			method: "GET"
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		} ,function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
+	$scope.addCandidate = function(candidateName){
+
+		$http({
+			url: "/candidates",
+			method: "POST",
+			data: {
+				candidateName : candidateName
+			}
+		}).then(function success(response){
+			console.log(response.data);
+		}, function error(error){
+			console.log(error);
+		})
+	}
+
+	$scope.voteCandidate = function(candidateName){
+		$http({
+			url: '/nominate',
+			method: "POST",
+			data: {
+				candidateName: candidateName
+			}
+		}).then(function success(response){
+			console.log(response.data);
+		}, function error(error){
+			console.log(error);
+		})
+	}
+})
 
 app.controller('VoteCtrl', function($scope,$http,$q){
 
