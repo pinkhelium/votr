@@ -37,7 +37,10 @@ app.controller("MainCtrl", function($scope,$http){
 app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.user = {};
 	$scope.nominees = {};
+
+	//Setting default user object
 	$scope.user.loggedIn = false;
+	$scope.user.isValidACMMember = false;
 	$scope.user.admin = false;
 	$scope.user.displayName = "";
 	$scope.user.picture = {};
