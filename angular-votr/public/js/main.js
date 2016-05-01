@@ -124,39 +124,24 @@ app.controller("AppCtrl", function($scope,$http,$q){
 			$scope.user.isValidACMMember = data.isValidACMMember;
 			console.log("$scope.user.admin: " + $scope.user.admin);
 			console.log("$scope.user.isValidACMMember: " + $scope.user.isValidACMMember);
-
-			var detailsPromise = $scope.getMoreDetails();
-
-			detailsPromise.then(function success(data){
-				console.log("Success picture");
-				console.log(data);
-				$scope.user.picture = data;
-			}, function error(data){
-				console.log("Error picture");
-				console.log(data);
-			});
-
 		}, function error(data){
 			console.log("PermissionsError:"+data);
 		});
+
+
+		var detailsPromise = $scope.getMoreDetails();
+		detailsPromise.then(function success(data){
+			console.log("Picture got successfully.");
+			console.log(data);
+			$scope.user.picture = data;
+		}, function error(data){
+			console.log("PictureError");
+			console.log(data);
+		});
+
 	}, function error(data){
 		console.log("LoginError:" + data);
 	});
-
-			var detailsPromise = $scope.getMoreDetails();
-
-			detailsPromise.then(function success(data){
-				console.log("Success picture");
-				console.log(data);
-				$scope.user.picture = data;
-			}, function error(data){
-				console.log("Error picture");
-				console.log(data);
-			});
-
-
-
-
 });
 
 app.controller('NominateCtrl', function($scope,$http,$q){
