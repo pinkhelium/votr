@@ -85,30 +85,63 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		return deferred.promise;
 	};
 
+	$scope.getUserPermissions = function(){
+		var deferred = $q.defer();
+		if($scope.user.loggedIn == true){
+
+			$http({
+				method: 'GET',
+				url: '/user/permissions'
+			}).then(function success(response){
+				console.log("function getUserPermissions: success");
+				console.log(response);
+				deferred.resolve(response.data);
+			}, function error(response){
+				console.log("function getUserPermissions: error");
+				console.log(response);
+				deferred.reject(response);
+			});
+
+		}
+		else{
+			deferred.reject("UserNotLoggedIn");
+		}
+		return deferred.promise;
+	};
+
 	var loginPromise = $scope.getUser();
 	loginPromise.then(function success(data){
 
 		$scope.user.loggedIn = data.loggedIn;
 		$scope.user.admin = data.admin;
 		$scope.user.displayName = data.displayName;
-		console.log("$scope.user: ");
-		console.log($scope.user);
+
+		var permissionsPromise = $scope.getUserPermissions();
+		permissionsPromise.then(function success(data){
+			console.log("Permissions got successfully.");
+			console.log(data);
+			$scope.user.admin = data.isAdmin;
+			$scope.user.isValidACMMember = data.isValidACMMember;
+			console.log("$scope.user.admin: " + $scope.user.admin);
+			console.log("$scope.user.isValidACMMember: " + $scope.user.isValidACMMember);
+		}, function error(data){
+			console.log("PermissionsError:"+data);
+		});
+
 
 		var detailsPromise = $scope.getMoreDetails();
-
 		detailsPromise.then(function success(data){
-			console.log("Success picture");
+			console.log("Picture got successfully.");
 			console.log(data);
 			$scope.user.picture = data;
 		}, function error(data){
-			console.log("Error picture");
+			console.log("PictureError");
 			console.log(data);
 		});
 
 	}, function error(data){
-		console.log("Error:" + data);
+		console.log("LoginError:" + data);
 	});
-
 });
 
 app.controller('NominateCtrl', function($scope,$http,$q){
