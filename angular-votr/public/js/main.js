@@ -31,7 +31,9 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 	$scope.logUserIn = $scope.$parent.logUserIn;
 	$scope.user.admin = $scope.$parent.user.admin;
-	$scope.user.displayName = $scope.$parent.user.displayName
+	$scope.user.displayName = $scope.$parent.user.displayName;
+	$scope.user.isValidACMMember = $scope.$parent.user.isValidACMMember;
+	$scope.user.picture = $scope.$parent.user.picture;
 });
 
 app.controller("AppCtrl", function($scope,$http,$q){
@@ -43,7 +45,9 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.user.isValidACMMember = false;
 	$scope.user.admin = false;
 	$scope.user.displayName = "";
-	$scope.user.picture = {};
+	$scope.user.picture = {
+		location: '/images/ui-anim_basic_16x16.gif'
+	};
 
 	$scope.getUser = function(){
 		var deferred = $q.defer();
