@@ -12,6 +12,7 @@ var Strategy = require('passport-facebook').Strategy;
 var CONFIG = require('./config.js');
 
 var waterfall = require('async-waterfall');
+var fb_msg_post = require('./facebook_message_poster');
 
 
 var C = {};
@@ -71,7 +72,8 @@ app.use(bodyParser.json())
 passport.use(new Strategy({
     clientID: CONFIG.clientID,
     clientSecret: CONFIG.clientSecret,
-    callbackURL: CONFIG.callbackUrl
+    callbackURL: CONFIG.callbackUrl,
+    scope: CONFIG.scope
   },
   // the VERIFY callback
   function(accessToken, refreshToken, profile, done) {
@@ -80,7 +82,7 @@ passport.use(new Strategy({
     profile.accessToken = accessToken;
     //console.log(profile);
 
-    // graph.setAccessToken(accessToken);
+    graph.setAccessToken(accessToken);
     C.ACCESS_TOKEN = accessToken;
     // graph.setAppSecret(CONFIG.graphAppSecret);
     return done(null, profile);
@@ -122,6 +124,14 @@ app.get('/loginfailure', function(request, response){
 
 app.get('/logout', function(request, response){
   request.logout();
+ //  var wallPost = {
+	//   person: "http://samples.ogp.me/1017909491627613"
+	// };
+
+	// graph.post("me/votr-actions:vote_for", wallPost, function(err, res) {
+	//   // returns the post id
+	//   console.log(res); // { id: xxxxx}
+	// });
   response.redirect('/#/');
 });
 
@@ -322,7 +332,7 @@ app.get('/user/picture', function(request, response){
 		return;
 	}
 
-	var reqURL = '/me/picture?height=200&access_token='+request.session.passport.user.accessToken;
+	var reqURL = '/me/picture?height=300&access_token='+request.session.passport.user.accessToken;
 	
 	graph.get(reqURL, function(error, success){
 		if(error){
