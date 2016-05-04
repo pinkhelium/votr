@@ -18,19 +18,32 @@
 		</tr>
 	</table>
 	</div>
-	<center><div>
+<div ng-if="user.loggedIn == true">
+	<center>
 		<div>
-			<table style="border-collapse: separate;">
-				<tr>
-					<td style="text-align: left">
-						<input type="text" ng-model="candidateName" placeholder="Enter Candidate's Name" />
-					</td>
-					<td style="text-align: right">
-						<button ng-click="addCandidate(candidateName)">Add Candidate</button>
-					</td>	
-				</tr>
-			</table>
+			<div>
+				<table style="border-collapse: separate;">
+					<tr>
+						<td style="text-align: left">
+							<input type="text" ng-model="candidateName" placeholder="Enter Candidate's Name" />
+						</td>
+						<td style="text-align: right">
+							<button ng-click="addCandidate(candidateName)">Add Candidate</button>
+						</td>	
+					</tr>
+				</table>
 
-			
+				
+			</div>
 		</div>
-	</div></center>
+	</center>
+</div>
+
+<div ng-if="user.loggedIn == false">
+	<header>
+		<center><h1><a href="/login">sign in here</a>.</h1></center>
+		
+		<!-- <hr> -->
+	</header>
+		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
+</div>
