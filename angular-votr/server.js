@@ -197,32 +197,6 @@ app.post('/candidates', function(request,response){
 
 app.post('/nominate', function(request,response){
 
-	//To vote for a candidate
-
-	// var prev_candidate_vote_obj = {};
-	// console.log("REQ USER: " + JSON.stringify(request.user));
-
-
-	// var child_string = "candidatevotes/" + request.user.id;
-
-	// myFirebaseRef.child(child_string).on("value", function(data){
-	// 	prev_candidate_vote_obj = data.val();
-	// })
-
-	// if(prev_candidate_vote_obj != null){
-	// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
-	// 	candidateRef.child(prev_candidate_vote_obj.name).child("count").set(candidateList[prev_candidate_vote_obj.name] - 1);
-	// }
-
-	// var newEntry = {};
-	// newEntry.name = request.user.displayName;
-	// newEntry.candidateName = request.body.candidateName;
-
-	// candidateVoteRef.child(request.user.id).update(newEntry);
-
-	// candidateRef.child(request.body.candidateName).child("count").set(candidateList[request.body.candidateName] + 1);	
-
-
 	var candidateName = request.body.candidateName;
 
 	// var prev_candidate_vote_obj = {};
