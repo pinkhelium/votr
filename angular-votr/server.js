@@ -153,9 +153,6 @@ app.post('/candidates', function(request,response){
 	//To add a new candidate
 	var candidateParam = {};
 	//To get the previous vote
-	candidateVoteRef.child(request.user.id).on("value", function(data){
-		prev_candidate_vote_obj = data.val();
-	});
 	var candidateName = request.body.candidateName;
 	//console.log(request.body);
 	candidateParam[candidateName] = {
@@ -163,6 +160,37 @@ app.post('/candidates', function(request,response){
 	};
 
 	candidateRef.update(candidateParam);
+
+	var prev_candidate_vote_snapshot = {};
+	
+	waterfall([
+		function(callback){
+			candidateVoteRef.child(request.user.id).once("value", function(data){
+				prev_candidate_vote_snapshot = data.val();
+				console.log(JSON.stringify(data.val()));
+				console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
+
+				callback(null, prev_candidate_vote_snapshot);
+			});
+		},
+		function(prev_candidate_vote_snapshot, callback){
+			console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
+			if(prev_candidate_vote_snapshot != null){
+			// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
+				console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
+				candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
+			}
+
+			var newEntry = {};
+			newEntry[request.user.id] = {
+				name: candidateName,
+				voter_name: request.user.displayName
+			};
+
+			console.log("GONNA DIE HERE ALL ALONE");
+			candidateVoteRef.update(newEntry);
+		}
+	]);
 	response.send("Success");
 
 });
