@@ -1,60 +1,65 @@
 <div ng-if="user.loggedIn == true" ng-init="getNominees()">
-	<header>
-		<center><h1>Cast My Vote!</h1></center>
-	</header>
-	<!-- <pre>
-		{{nominees}}
-	</pre>
-	<pre>
-		{{vote}}
-	</pre> -->
-	<table style="border-collapse: separate;">
-		<tr>
-			<td>
-				<div class="select-wrapper">
-				<select ng-model="vote.chair" placeholder="Select Chairperson">
-					<option value="" disabled selected>CHAIRMAN</option>
-					<option ng-repeat="(key, value) in nominees"><img src={{value.picUrl}}/>{{key}}</option>
-				</select>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="select-wrapper">
-				<select ng-model="vote.vice_chair" placeholder="Select Vice-Chairperson">
-					<option value="" disabled selected>VICE-CHAIRMAN</option>
-					<option ng-repeat="(key, value) in nominees">{{key}}</option>
-				</select>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="select-wrapper">
-				<select ng-model="vote.treasurer" placeholder="Select Treasurer">
-					<option value="" disabled selected>SECRETARY</option>
-					<option ng-repeat="(key, value) in nominees">{{key}}</option>
-				</select>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="select-wrapper">
-				<select ng-model="vote.secretary" placeholder="Select Secretary">
-					<option value="" disabled selected>TREASURER</option>
-					<option ng-repeat="(key, value) in nominees">{{key}}</option>
-				</select>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td style="text-align: center ">
-				<button class="button special big fit" ng-click="castVote(vote)">Vote</button>
-			</td>
-		</tr>
-	</table>
+	<div ng-if="user.isValidACMMember==true">
+		<header>
+			<center><h1>Cast My Vote!</h1></center>
+		</header>
+		<!-- <pre>
+			{{nominees}}
+		</pre>
+		<pre>
+			{{vote}}
+		</pre> -->
+		<table style="border-collapse: separate;">
+			<tr>
+				<td>
+					<div class="select-wrapper">
+					<select ng-model="vote.chair" placeholder="Select Chairperson">
+						<option value="" disabled selected>CHAIRMAN</option>
+						<option ng-repeat="(key, value) in nominees"><img src={{value.picUrl}}/>{{key}}</option>
+					</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="select-wrapper">
+					<select ng-model="vote.vice_chair" placeholder="Select Vice-Chairperson">
+						<option value="" disabled selected>VICE-CHAIRMAN</option>
+						<option ng-repeat="(key, value) in nominees">{{key}}</option>
+					</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="select-wrapper">
+					<select ng-model="vote.treasurer" placeholder="Select Treasurer">
+						<option value="" disabled selected>SECRETARY</option>
+						<option ng-repeat="(key, value) in nominees">{{key}}</option>
+					</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="select-wrapper">
+					<select ng-model="vote.secretary" placeholder="Select Secretary">
+						<option value="" disabled selected>TREASURER</option>
+						<option ng-repeat="(key, value) in nominees">{{key}}</option>
+					</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: center ">
+					<button class="button special big fit" ng-click="castVote(vote)">Vote</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div ng-if="user.isValidACMMember == false">
+		<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote. <br/><br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
+	</div>
 </div>
 
 <div ng-if="user.loggedIn == false">

@@ -44,10 +44,10 @@
 						<ul>
 							<li><a href="#/">Home</a></li>
 							<li><a href="#/prevote">Member Nominate</a></li>
-							<li><a href="#/nominate">Admin Nominate</a></li>
+							<li ng-if="user.admin == true"><a href="#/nominate">Admin Nominate</a></li>
 							<li><a href="#/candidates">Candidates</a></li>
 							<li><a href="#/vote">Vote</a></li>
-							<li><a href="#/result">Result</a></li>
+							<li ng-if="user.admin == true"><a href="#/result">Result</a></li>
 							<li><a href="/logout">Logout</a></li>
 						</ul>
 					</nav>
