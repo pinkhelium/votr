@@ -6,6 +6,7 @@ Hi there! **votr** is an open voting platform developed for the PESIT South ACM 
 
 * [About](#about)
 * [Requirements and Dependencies](#req)
+* [Instructions to Setup](#setup)
 
 <a name="about"/>
 ## About
@@ -16,3 +17,6 @@ Tiramisu topping chocolate lollipop dragée. Chocolate bonbon chocolate cake cro
 ## Requirements & Dependencies
 
 Brownie croissant jelly beans. Muffin cheesecake oat cake lemon drops. Wafer pastry marshmallow sweet pie jelly-o macaroon. Cake gummies donut macaroon donut. Bear claw tart cake pastry cupcake. Icing tiramisu candy cookie. Cookie apple pie cheesecake marzipan chupa chups jelly. Biscuit soufflé fruitcake danish fruitcake chupa chups. Powder cake chupa chups macaroon jelly muffin macaroon. Soufflé powder candy canes. Chupa chups oat cake jujubes jelly beans. Powder powder icing cake cheesecake. Chupa chups tootsie roll dragée pastry candy canes pie sugar plum. Candy cookie sugar plum cheesecake liquorice bonbon toffee chupa chups.
+
+<a name="setup"/>
+## Setup
