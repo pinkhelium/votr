@@ -415,7 +415,7 @@ app.post('/vote', function(request,response){
 	console.log("child_string is: -----> " + child_string);
 	var prev_vote_OBJ = {};
 	//To get the previous vote cast
-	myFirebaseRef.child(child_string).on("value", function(snapshot) {
+	myFirebaseRef.child(child_string).once("value", function(snapshot) {
 		prev_vote_OBJ = snapshot.val();
 		console.log("PREV VOTE ----->>>:" + JSON.stringify(prev_vote_OBJ));
 	});
