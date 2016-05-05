@@ -449,7 +449,7 @@ app.post('/vote', function(request,response){
 	
 
 	
-	vote["voter_name"] = userName;
+	vote["voter_name"] = request.body.user;
 	var uID = request.user["id"];
 	db_param[uID] = vote
 	myFirebaseRef.child('votes').update(db_param);
