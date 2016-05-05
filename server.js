@@ -408,10 +408,10 @@ app.get('/sess', function(request, response){
 
 app.post('/vote', function(request,response){
 
-	var userName = request.body.user;
+	var userID = request.user["id"];
 	var vote = request.body.vote;
 	console.log("Vote: " + vote);
-	var child_string = "votes/" + userName;
+	var child_string = "votes/" + userID;
 	console.log("child_string is: -----> " + child_string);
 	var prev_vote_OBJ = {};
 	//To get the previous vote cast
