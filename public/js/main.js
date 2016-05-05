@@ -38,6 +38,7 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.displayName = $scope.$parent.user.displayName;
 	$scope.user.isValidACMMember = $scope.$parent.user.isValidACMMember;
 	$scope.user.picture = $scope.$parent.user.picture;
+	$scope.voteMessage = "";
 });
 
 app.controller("AppCtrl", function($scope,$http,$q){
@@ -356,7 +357,7 @@ app.controller('PrevoteCtrl', function($scope,$q,$http){
 	}
 })
 
-app.controller('VoteCtrl', function($scope,$http,$q){
+app.controller('VoteCtrl', function($scope,$http,$q,$location){
 
 
 	//Inherited for logging in the user
@@ -399,11 +400,12 @@ app.controller('VoteCtrl', function($scope,$http,$q){
 			}
 		}).then(function success(response){
 			if(response.data == "success"){
-				$scope.voteMessage = "Vote Cast";
+				$scope.$parent.voteMessage = "Vote Successfully Cast";
 			}
 			else{
-				$scope.voteMessage = "Something Went Wrong";
+				$scope.$parent.voteMessage = "Something Went Wrong";
 			}
+			$location.path("/")
 		}, function error(error){
 			$scope.voteMessage = error;
 		})
