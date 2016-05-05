@@ -1,1 +1,0 @@
-Just to have a commit before brining angular to the front

@@ -1,221 +1,411 @@
-/**
- * main.js
- * http://www.codrops.com
- *
- * Licensed under the MIT license.
- * http://www.opensource.org/licenses/mit-license.php
- * 
- * Copyright 2015, Codrops
- * http://www.codrops.com
- */
-;(function(window) {
 
-	'use strict';
+var app = angular.module('votrApp',['ngRoute']);
 
-	var support = { transitions: Modernizr.csstransitions },
-		// transition end event name
-		transEndEventNames = { 'WebkitTransition': 'webkitTransitionEnd', 'MozTransition': 'transitionend', 'OTransition': 'oTransitionEnd', 'msTransition': 'MSTransitionEnd', 'transition': 'transitionend' },
-		transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
-		onEndTransition = function( el, callback ) {
-			var onEndCallbackFn = function( ev ) {
-				if( support.transitions ) {
-					if( ev.target != this ) return;
-					this.removeEventListener( transEndEventName, onEndCallbackFn );
-				}
-				if( callback && typeof callback === 'function' ) { callback.call(this); }
-			};
-			if( support.transitions ) {
-				el.addEventListener( transEndEventName, onEndCallbackFn );
-			}
-			else {
-				onEndCallbackFn();
-			}
-		},
-		// the pages wrapper
-		stack = document.querySelector('.pages-stack'),
-		// the page elements
-		pages = [].slice.call(stack.children),
-		// total number of page elements
-		pagesTotal = pages.length,
-		// index of current page
-		current = 0,
-		// menu button
-		menuCtrl = document.querySelector('button.menu-button'),
-		// the navigation wrapper
-		nav = document.querySelector('.pages-nav'),
-		// the menu nav items
-		navItems = [].slice.call(nav.querySelectorAll('.link--page')),
-		// check if menu is open
-		isMenuOpen = false;
+app.config(function($routeProvider){
+	$routeProvider
+		.when('/',{
+			templateUrl: "./views/home.html",
+			controller: "MainCtrl"
+		})
+		.when('/dashboard', {
+			templateUrl: "./views/dashboard.html",
+			controller: "MainCtrl",
+		})
+		.when('/vote', {
+			templateUrl: './views/vote.html',
+			controller: 'VoteCtrl'
+		})
+		.when('/nominate', {
+			templateUrl: './views/nominate.html',
+			controller: 'NominateCtrl'
+		})
+		.when('/prevote', {
+			templateUrl: './views/prevote.html',
+			controller: 'PrevoteCtrl'
+		})
+		.when('/result', {
+			templateUrl: './views/result.html',
+			controller: 'ResultCtrl'
+		})
+});
 
-	function init() {
-		buildStack();
-		initEvents();
-	}
 
-	function buildStack() {
-		var stackPagesIdxs = getStackPagesIdxs();
+app.controller("MainCtrl", function($scope,$http){
+	//$scope.pageName = $scope.$parent.pageName;
+	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
+	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.admin = $scope.$parent.user.admin;
+	$scope.user.displayName = $scope.$parent.user.displayName;
+	$scope.user.isValidACMMember = $scope.$parent.user.isValidACMMember;
+	$scope.user.picture = $scope.$parent.user.picture;
+});
 
-		// set z-index, opacity, initial transforms to pages and add class page--inactive to all except the current one
-		for(var i = 0; i < pagesTotal; ++i) {
-			var page = pages[i],
-				posIdx = stackPagesIdxs.indexOf(i);
+app.controller("AppCtrl", function($scope,$http,$q){
+	$scope.user = {};
+	$scope.nominees = {};
 
-			if( current !== i ) {
-				classie.add(page, 'page--inactive');
+	//Setting default user object
+	$scope.user.loggedIn = false;
+	$scope.user.isValidACMMember = false;
+	$scope.user.admin = false;
+	$scope.user.displayName = "";
+	$scope.user.picture = {
+		location: '/images/ui-anim_basic_16x16.gif'
+	};
 
-				if( posIdx !== -1 ) {
-					// visible pages in the stack
-					page.style.WebkitTransform = 'translate3d(0,100%,0)';
-					page.style.transform = 'translate3d(0,100%,0)';
-				}
-				else {
-					// invisible pages in the stack
-					page.style.WebkitTransform = 'translate3d(0,75%,-300px)';
-					page.style.transform = 'translate3d(0,75%,-300px)';		
-				}
-			}
-			else {
-				classie.remove(page, 'page--inactive');
-			}
+	$scope.getUser = function(){
+		var deferred = $q.defer();
+		$http({
+			method: 'GET',
+			url: '/user'
+		}).then(function success(response){
+			console.log("function getUser: success");
+			console.log(response);
+			deferred.resolve(response.data);
 
-			page.style.zIndex = i < current ? parseInt(current - i) : parseInt(pagesTotal + current - i);
-			
-			if( posIdx !== -1 ) {
-				page.style.opacity = parseFloat(1 - 0.1 * posIdx);
-			}
-			else {
-				page.style.opacity = 0;
-			}
-		}
-	}
+		}, function error(response){
+			console.log("function getUser: error");
+			console.log(response);
+			deferred.reject(response);
+		});
+		return deferred.promise;
+	};
 
-	// event binding
-	function initEvents() {
-		// menu button click
-		menuCtrl.addEventListener('click', toggleMenu);
-
-		// navigation menu clicks
-		navItems.forEach(function(item) {
-			// which page to open?
-			var pageid = item.getAttribute('href').slice(1);
-			item.addEventListener('click', function(ev) {
-				ev.preventDefault();
-				openPage(pageid);
+	$scope.getMoreDetails = function(){
+		var deferred = $q.defer();
+		if($scope.user.loggedIn == true){
+			$http({
+				method: 'GET',
+				url: '/user/picture'	
+			}).then(function success(response){
+				console.log("function getMoreDetails: success");
+				console.log(response);
+				deferred.resolve(response.data);
+			}, function error(response){
+				console.log("function getMoreDetails: error");
+				console.log(response);
+				deferred.reject(response);
 			});
-		});
+		}
+		else{
+			deferred.reject("UserNotLoggedIn");
+		}
+		return deferred.promise;
+	};
 
-		// clicking on a page when the menu is open triggers the menu to close again and open the clicked page
-		pages.forEach(function(page) {
-			var pageid = page.getAttribute('id');
-			page.addEventListener('click', function(ev) {
-				if( isMenuOpen ) {
-					ev.preventDefault();
-					openPage(pageid);
-				}
+	$scope.getUserPermissions = function(){
+		var deferred = $q.defer();
+		if($scope.user.loggedIn == true){
+
+			$http({
+				method: 'GET',
+				url: '/user/permissions'
+			}).then(function success(response){
+				console.log("function getUserPermissions: success");
+				console.log(response);
+				deferred.resolve(response.data);
+			}, function error(response){
+				console.log("function getUserPermissions: error");
+				console.log(response);
+				deferred.reject(response);
 			});
+
+		}
+		else{
+			deferred.reject("UserNotLoggedIn");
+		}
+		return deferred.promise;
+	};
+
+	var loginPromise = $scope.getUser();
+	loginPromise.then(function success(data){
+
+		$scope.user.loggedIn = data.loggedIn;
+		$scope.user.admin = data.admin;
+		$scope.user.displayName = data.displayName;
+
+		var permissionsPromise = $scope.getUserPermissions();
+		permissionsPromise.then(function success(data){
+			console.log("Permissions got successfully.");
+			console.log(data);
+			$scope.user.admin = data.isAdmin;
+			$scope.user.isValidACMMember = data.isValidACMMember;
+			console.log("$scope.user.admin: " + $scope.user.admin);
+			console.log("$scope.user.isValidACMMember: " + $scope.user.isValidACMMember);
+		}, function error(data){
+			console.log("PermissionsError:"+data);
 		});
 
-		// keyboard navigation events
-		document.addEventListener( 'keydown', function( ev ) {
-			if( !isMenuOpen ) return; 
-			var keyCode = ev.keyCode || ev.which;
-			if( keyCode === 27 ) {
-				closeMenu();
+
+		var detailsPromise = $scope.getMoreDetails();
+		detailsPromise.then(function success(data){
+			console.log("Picture got successfully.");
+			console.log(data);
+			$scope.user.picture = data;
+		}, function error(data){
+			console.log("PictureError");
+			console.log(data);
+		});
+
+	}, function error(data){
+		console.log("LoginError:" + data);
+	});
+});
+
+
+app.controller('ResultCtrl', function($scope,$q,$http){
+
+
+	$scope.populateTable= function(){
+
+		var promise = getData();
+
+		promise.then(function success(data){
+			for(key in data){
+				var newEntry = [];
+				newEntry.push(key);
+				newEntry.push(data[key].CScore);
+				newEntry.push(data[key].VScore);
+				newEntry.push(data[key].TScore);
+				newEntry.push(data[key].SScore);
+
+				dataSet.push(newEntry);
+				console.log(dataSet);
 			}
-		} );
+			drawChart();
+		})
+
 	}
 
-	// toggle menu fn
-	function toggleMenu() {
-		if( isMenuOpen ) {
-			closeMenu();
-		}
-		else {
-			openMenu();
-			isMenuOpen = true;
-		}
+	var getData = function(){
+		var deferred = $q.defer();
+
+		$http({
+			'url':'/tabledata',
+			'method': 'GET',
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		} , function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+	google.charts.load('current', {'packages':['bar']});
+	google.charts.setOnLoadCallback(drawChart);
+	var dataSet = [
+	  ['', 'CScore', 'VScore', 'TScore', 'SScore']
+	]
+
+	$scope.add = function(){
+	  drawChart();
 	}
 
-	// opens the menu
-	function openMenu() {
-		// toggle the menu button
-		classie.add(menuCtrl, 'menu-button--open')
-		// stack gets the class "pages-stack--open" to add the transitions
-		classie.add(stack, 'pages-stack--open');
-		// reveal the menu
-		classie.add(nav, 'pages-nav--open');
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable(dataSet);
+		var options = {
+		  bars: 'horizontal' // Required for Material Bar Charts.
+		};
 
-		// now set the page transforms
-		var stackPagesIdxs = getStackPagesIdxs();
-		for(var i = 0, len = stackPagesIdxs.length; i < len; ++i) {
-			var page = pages[stackPagesIdxs[i]];
-			page.style.WebkitTransform = 'translate3d(0, 75%, ' + parseInt(-1 * 200 - 50*i) + 'px)'; // -200px, -230px, -260px
-			page.style.transform = 'translate3d(0, 75%, ' + parseInt(-1 * 200 - 50*i) + 'px)';
+		var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+		chart.draw(data, options);
 		}
+
+})
+
+
+app.controller('NominateCtrl', function($scope,$http,$q){
+
+	//Inherited for logging in the user
+	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
+	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.admin = $scope.$parent.user.admin;
+	//$scope.uid = 0;
+	//To get all the nominees
+	$scope.getNominees = function(){
+		var promise = nomineesCall();
+
+		promise.then(function success(data){
+			$scope.nominees = data;
+		})
 	}
 
-	// closes the menu
-	function closeMenu() {
-		// same as opening the current page again
-		openPage();
+	var nomineesCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			method: 'GET',
+			url: '/nominees',
+		}).then(function success(response){
+			console.log(response);
+			deferred.resolve(response.data);
+		}, function(error){
+			deferred.reject(error);
+		})
+		return deferred.promise;
 	}
 
-	// opens a page
-	function openPage(id) {
-		var futurePage = id ? document.getElementById(id) : pages[current],
-			futureCurrent = pages.indexOf(futurePage),
-			stackPagesIdxs = getStackPagesIdxs(futureCurrent);
+	//To remove a nominee
+	$scope.removeNominee = function(nominee){
+		console.log("Here: " + nominee);
+		$http({
+			url: '/nominees',
+			method: 'DELETE',
+			params: {
+				'nominee' : nominee
+			}
+		}).then(function success(response){
+			if(response.data == "success"){
+				$scope.nominateMessage = "Deleted";
+				getNominees();
+			}
+			else{
+				$scope.nominateMessage = response.data;
+			}
+		}, function error(error){
+			console.log(error);
+		})
+	}
 
-		// set transforms for the new current page
-		futurePage.style.WebkitTransform = 'translate3d(0, 0, 0)';
-		futurePage.style.transform = 'translate3d(0, 0, 0)';
-		futurePage.style.opacity = 1;
-
-		// set transforms for the other items in the stack
-		for(var i = 0, len = stackPagesIdxs.length; i < len; ++i) {
-			var page = pages[stackPagesIdxs[i]];
-			page.style.WebkitTransform = 'translate3d(0,100%,0)';
-			page.style.transform = 'translate3d(0,100%,0)';
-		}
-
-		// set current
-		if( id ) {
-			current = futureCurrent;
-		}
-		
-		// close menu..
-		classie.remove(menuCtrl, 'menu-button--open');
-		classie.remove(nav, 'pages-nav--open');
-		onEndTransition(futurePage, function() {
-			classie.remove(stack, 'pages-stack--open');
-			// reorganize stack
-			buildStack();
-			isMenuOpen = false;
+	//To add a nominee
+	$scope.newNominee = function(uid){
+		console.log(uid);
+		var promise = addNominee(uid);
+		promise.then(function success(data){
+			$scope.nominateMessage = data
 		});
 	}
 
-	// gets the current stack pages indexes. If any of them is the excludePage then this one is not part of the returned array
-	function getStackPagesIdxs(excludePageIdx) {
-		var nextStackPageIdx = current + 1 < pagesTotal ? current + 1 : 0,
-			nextStackPageIdx_2 = current + 2 < pagesTotal ? current + 2 : 1,
-			idxs = [],
+	var addNominee = function(uid){
+		var deferred = $q.defer();
+		console.log(uid);
+		$http({
+			method: "POST",
+			url: '/nominees',
+			data: {
+				"uid": uid
+			}
+		}).then(function success(response){
+			console.log("addNominee: "+ response.data);
+			deferred.resolve(response.data);
+		} , function error(error){
+			console.log("addNominee(Error): " + error);
+			deferred.reject(error);
+		})
 
-			excludeIdx = excludePageIdx || -1;
-
-		if( excludePageIdx != current ) {
-			idxs.push(current);
-		}
-		if( excludePageIdx != nextStackPageIdx ) {
-			idxs.push(nextStackPageIdx);
-		}
-		if( excludePageIdx != nextStackPageIdx_2 ) {
-			idxs.push(nextStackPageIdx_2);
-		}
-
-		return idxs;
+		return deferred.promise;
 	}
 
-	init();
 
-})(window);
+});
+
+app.controller('PrevoteCtrl', function($scope,$q,$http){
+	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
+
+	$scope.getCandidates = function(){
+		var promise = serverCall();
+		promise.then(function success(data){
+			$scope.candidates = data;
+		});
+	}
+
+	var serverCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			url: '/candidates',
+			method: "GET"
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		} ,function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
+	$scope.addCandidate = function(candidateName){
+
+		$http({
+			url: "/candidates",
+			method: "POST",
+			data: {
+				candidateName : candidateName
+			}
+		}).then(function success(response){
+			console.log(response.data);
+		}, function error(error){
+			console.log(error);
+		})
+	}
+
+	$scope.voteCandidate = function(candidateName){
+		$http({
+			url: '/nominate',
+			method: "POST",
+			data: {
+				candidateName: candidateName
+			}
+		}).then(function success(response){
+			console.log(response.data);
+		}, function error(error){
+			console.log(error);
+		})
+	}
+})
+
+app.controller('VoteCtrl', function($scope,$http,$q){
+
+
+	//Inherited for logging in the user
+	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
+	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.displayName = $scope.$parent.user.displayName;
+	$scope.user.admin = $scope.$parent.user.admin;
+
+	//$scope.getNominees = $scope.$parent.getNominees;
+	$scope.getNominees = function(){
+		var promise = nomineesCall();
+
+		promise.then(function success(data){
+			$scope.nominees = data;
+		})
+	}
+
+	var nomineesCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			method: 'GET',
+			url: '/nominees',
+		}).then(function success(response){
+			console.log(response);
+			deferred.resolve(response.data);
+		}, function(error){
+			deferred.reject(error);
+		})
+		return deferred.promise;
+	}
+
+	$scope.castVote = function(vote){
+		$http({
+			url: '/vote',
+			method: 'POST',
+			data: {
+				user: $scope.user.displayName,
+				vote: vote
+			}
+		}).then(function success(response){
+			if(response.data == "success"){
+				$scope.voteMessage = "Vote Cast";
+			}
+			else{
+				$scope.voteMessage = "Something Went Wrong";
+			}
+		}, function error(error){
+			$scope.voteMessage = error;
+		})
+	}
+
+});
