@@ -215,7 +215,7 @@ app.controller('ResultCtrl', function($scope,$q,$http){
 })
 
 
-app.controller('NominateCtrl', function($scope,$http,$q){
+app.controller('NominateCtrl', function($scope,$http,$q,$route){
 
 	//Inherited for logging in the user
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
@@ -258,7 +258,7 @@ app.controller('NominateCtrl', function($scope,$http,$q){
 		}).then(function success(response){
 			if(response.data == "success"){
 				$scope.nominateMessage = "Deleted";
-				getNominees();
+				$route.reload();
 			}
 			else{
 				$scope.nominateMessage = response.data;
@@ -274,6 +274,7 @@ app.controller('NominateCtrl', function($scope,$http,$q){
 		var promise = addNominee(uid);
 		promise.then(function success(data){
 			$scope.nominateMessage = data
+			$route.reload();
 		});
 	}
 
