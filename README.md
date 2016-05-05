@@ -2,6 +2,7 @@
 
 > **votr** is an open voting platform developed for the PESIT South ACM Student Chapter's General Elections.
 
+<a name="contents"/>
 ## Contents
 
 * [About](#about)
@@ -14,6 +15,7 @@
 
 A project by [pink**helium**](https://github.com/pinkhelium) - [Sandesh Gade](https://github.com/cyberbeast), [Abinav Seelan](https://github.com/abinavseelan) and [Aditi Mohanty](https://github.com/rheaditi).
 
+[To Top](#contents)
 
 <a name="feat"/>
 ## Features
@@ -23,6 +25,8 @@ A project by [pink**helium**](https://github.com/pinkhelium) - [Sandesh Gade](ht
 * Admin user support (admins of the facebook group)
 * Candidates & Rules pages
 
+[To Top](#contents)
+
 <a name="req"/>
 ## Behind the Scenes
 
@@ -31,7 +35,7 @@ A project by [pink**helium**](https://github.com/pinkhelium) - [Sandesh Gade](ht
 * Facebook Graph API
 * AngularJS || ejs
 
-
+[To Top](#contents)
 
 <a name="setup"/>
 ## Setup Locally
@@ -40,10 +44,14 @@ A project by [pink**helium**](https://github.com/pinkhelium) - [Sandesh Gade](ht
 2. Clone this repository
 3. Create a config.js file at the root of this project with the following contents:  
   ```js
+  // get these values from your app settings after registering your app on https://developers.facebook.com
   var clientID = '<<CLIENT_ID_HERE>>';
   var clientSecret = '<<CLIENT_SECRET_HERE>>';
-  var callbackUrl = 'http://localhost:3000/login/facebook/return'; //change this to your actual domain on deployment
   var graphAppSecret = '<<GRAPH_API_APP_SECRET_HERE>>';
+  
+  // change 'callbackUrl' value to your actual domain on deployment
+  // for example: 'http://www.example.com/login/facebook/return'
+  var callbackUrl = 'http://localhost:3000/login/facebook/return'; 
   
   module.exports.clientID = clientID;
   module.exports.clientSecret = clientSecret;
@@ -53,3 +61,4 @@ A project by [pink**helium**](https://github.com/pinkhelium) - [Sandesh Gade](ht
 4. Run `npm install` to install all the dependencies
 5. `npm start` to run the app locally.
   
+[To Top](#contents)
