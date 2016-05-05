@@ -38,7 +38,6 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.displayName = $scope.$parent.user.displayName;
 	$scope.user.isValidACMMember = $scope.$parent.user.isValidACMMember;
 	$scope.user.picture = $scope.$parent.user.picture;
-	$scope.voteMessage = "";
 });
 
 app.controller("AppCtrl", function($scope,$http,$q){
