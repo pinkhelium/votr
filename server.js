@@ -22,14 +22,22 @@ var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
 var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes")
+var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes")
 var nominee_list = [];
 var candidateList = [];
+var Votes = {};
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
 	console.log("CANDIDATES_LIST_STRUCTURE_WITH_COUNT");
 	console.log(JSON.stringify(candidateList));
-})
+});
+
+voteRef.on("value", function(data){
+	Votes = data.val();
+	console.log("Acquiring Votes...");
+	console.log(JSON.stringify(Votes));
+});
 
 nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");
@@ -398,7 +406,7 @@ app.get('/sess', function(request, response){
 	var s = request.session;
 	var st = "Session contains:\n<br />\n<br />" + s;
 	console.log(s);
-	response.send(s	);
+	response.send(s);
 });
 
 /*
@@ -411,16 +419,26 @@ app.post('/vote', function(request,response){
 	var userID = request.user["id"];
 	var vote = request.body.vote;
 	console.log("Vote: " + vote);
-	var child_string = "votes/" + userID;
-	console.log("child_string is: -----> " + child_string);
-	var prev_vote_OBJ = {};
-	//To get the previous vote cast
-	myFirebaseRef.child(child_string).once("value", function(snapshot) {
-		prev_vote_OBJ = snapshot.val();
-		console.log("PREV VOTE ----->>>:" + JSON.stringify(prev_vote_OBJ));
-	});
 
-	//To revert previous change
+	var child_string = "votes/" + userID;
+	console.log("child_string is: ----->" + child_string);
+	
+	//To get the previous vote cast
+	var prev_vote_OBJ = {};
+	
+	if (userID in Votes){
+		prev_vote_OBJ = Votes[userID];
+	}
+
+	console.log("--------------------------------------------------------------------------------");
+	console.log("CAPTURE PREVIOUS VOTE");
+	console.log("--------------------------------------------------------------------------------");
+	console.log("--------------------------------------------------------------------------------");
+	console.log(JSON.stringify(prev_vote_OBJ));
+	console.log("--------------------------------------------------------------------------------");
+	// myFirebaseRef.child(child_string).once("value", function(snapshot) {
+	// 	prev_vote_OBJ = snapshot.val();
+	// });
 
 	if (prev_vote_OBJ != null) { 
 		if(prev_vote_OBJ.chair){
@@ -430,25 +448,23 @@ app.post('/vote', function(request,response){
 
 		if(prev_vote_OBJ.vice_chair){
 			var vsref = nomineesRef.child(prev_vote_OBJ.vice_chair+'/VScore');
-			vsref.set( nominee_list[prev_vote_OBJ.chair]['VScore'] - 1); 
+			vsref.set( nominee_list[prev_vote_OBJ.vice_chair]['VScore'] - 1); 
 		}
 
 		if(prev_vote_OBJ.treasurer){
 			var tsref = nomineesRef.child(prev_vote_OBJ.treasurer+'/TScore');
-			tsref.set( nominee_list[prev_vote_OBJ.chair]['TScore'] - 1);
+			tsref.set( nominee_list[prev_vote_OBJ.treasurer]['TScore'] - 1);
 		}
+
 		if(prev_vote_OBJ.secretary){
 			var ssref = nomineesRef.child(prev_vote_OBJ.secretary+'/SScore');
-			ssref.set( nominee_list[prev_vote_OBJ.chair]['SScore'] - 1);
+			ssref.set( nominee_list[prev_vote_OBJ.secretary]['SScore'] - 1);
 		}
 
 		console.log("PREVIOUS VOTE CLEARED!");
 	}
 
 	var db_param = {};
-	
-
-	
 	vote["voter_name"] = request.body.user;
 	var uID = request.user["id"];
 	db_param[uID] = vote
@@ -457,7 +473,7 @@ app.post('/vote', function(request,response){
 	if(vote.chair){
 		csref = nomineesRef.child(vote.chair+'/CScore');
 		csref.set( nominee_list[vote.chair]['CScore'] + 1);
-	}
+	} 
 
 	if(vote.vice_chair){
 		vsref = nomineesRef.child(vote.vice_chair+'/VScore');
@@ -468,10 +484,19 @@ app.post('/vote', function(request,response){
 		tsref = nomineesRef.child(vote.treasurer+'/TScore');
 		tsref.set( nominee_list[vote.treasurer]['TScore'] + 1);
 	}
+
 	if(vote.secretary){
 		ssref = nomineesRef.child(vote.secretary+'/SScore');
 		ssref.set( nominee_list[vote.secretary]['SScore'] + 1);
-	}
+	} 
+	
+	prev_vote_OBJ = Votes[userID];
+	console.log("--------------------------------------------------------------------------------");
+	console.log("NEW VOTE");
+	console.log("--------------------------------------------------------------------------------");
+	console.log("--------------------------------------------------------------------------------");
+	console.log(JSON.stringify(prev_vote_OBJ));
+	console.log("--------------------------------------------------------------------------------");
 
 	response.send("success");
 });
