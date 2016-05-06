@@ -153,6 +153,18 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$route){
 		})
 	} 
 
+	$scope.voteMode = function(){
+		$http({
+			url: '/votetypecount',
+			method: 'POST'
+		}).then(function success(response){
+			$scope.votrType = response.data;
+			$scope.$parent.votrType = response.data;
+		}, function error(error){
+			console.log(error);
+		})
+	}
+
 })
 
 app.controller("AppCtrl", function($scope,$http,$q){
@@ -528,5 +540,5 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 })
 
 app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
-	
+
 })

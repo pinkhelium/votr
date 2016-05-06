@@ -25,6 +25,7 @@ var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevo
 var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
 var voteTypeCountRef = new Firebase("https://votr-dev.firebaseio.com/type/voteTypeCount");
 var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/type/votrType");
+var adminSettingsRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings");
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
@@ -411,19 +412,6 @@ app.get('/user/permissions', function(request, response){
 	});
 });
 
-/* 
-
-	Endpoint to test session 
-
-*/
-
-app.get('/sess', function(request, response){
-	var s = request.session;
-	var st = "Session contains:\n<br />\n<br />" + s;
-	console.log(s);
-	response.send(s);
-});
-
 /*
 	Endpoint to cast vote
 
@@ -527,11 +515,41 @@ app.post("/pitch", function(request,response){
 })
 
 app.get('/votetypecount', function(request,response){
-	console.log("here votrtypecount " + voteTypeCount);
+	//console.log("here votrtypecount " + voteTypeCount);
 	response.send(voteTypeCount + "");
 })
 
 app.get('/votrtype', function(request,response){
+	response.send(votrType);
+})
+
+app.post('/votetypecount', function(request,response){
+	var userID = request.user.id;
+	var newEntry = {};
+	newEntry[userID] = {
+		vote: "yes",
+		name: request.user.displayName
+	};
+
+	var prev_obj = {};
+
+	adminSettingsRef.child(userID).once("value", function(snapshot){
+		prev_obj = snapshot.val();
+	})
+	if(prev_obj != null){
+		console.log("PREVIOUS OBJECT!!!")
+	}
+	else{
+		voteTypeCountRef.set(voteTypeCount + 1);
+	}
+
+	
+	if(voteTypeCount >= 3){
+		votrTypeRef.set("vote");
+	}
+
+	adminSettingsRef.update(newEntry);
+
 	response.send(votrType);
 })
 
