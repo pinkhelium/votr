@@ -1,6 +1,14 @@
 #profile_pic {
 	border-radius: 50%;
 }
+
+#profile_pic_mini {
+	border-radius:50%;
+	width: 65px;
+	margin-top: -57px;
+	margin-right: 8px;
+}
+
 .button#vote_submit {
 	display: inline-block;
 	float: none;
