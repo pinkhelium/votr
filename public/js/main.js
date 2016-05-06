@@ -160,11 +160,44 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.user.loggedIn = false;
 	$scope.user.isValidACMMember = false;
 	$scope.user.admin = false;
+	$scope.user.nominee = false;
 	$scope.user.displayName = "";
 	$scope.user.picture = {
 		location: '/images/ui-anim_basic_16x16.gif'
 	};
 
+
+	var isNominee = function(){
+		var deferred = $q.defer();
+
+		$http({
+			method: 'GET',
+			url: '/nominees'
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		}, function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
+
+	$scope.checkNominee = function(){
+		var promise = isNominee();
+		promise.then(function success(data){
+			for (key in data){
+				if(key === $scope.user.displayName){
+					$scope.user.nominee = true;
+					console.log("IS NOMINEE");
+				}
+			}
+		})
+	}
+
+	
+
+	
 	$scope.getUser = function(){
 		var deferred = $q.defer();
 		$http({
@@ -235,7 +268,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		$scope.user.loggedIn = data.loggedIn;
 		$scope.user.admin = data.admin;
 		$scope.user.displayName = data.displayName;
-
+		$scope.checkNominee();
 		var permissionsPromise = $scope.getUserPermissions();
 		permissionsPromise.then(function success(data){
 			console.log("Permissions got successfully.");
@@ -435,4 +468,32 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location){
 
 });
 
-app.controller('')
+app.controller('CandidateCtrl', function($scope,$http,$q,$route,$location){
+	$scope.user.displayName = $scope.$parent.user.displayName;
+	$scope.user.picture = $scope.$parent.user.picture;
+
+	$scope.addPitch = function(pitch){
+		console.log("here: " + pitch);
+		$http({
+			method: "POST",
+			url: '/pitch',
+			data: {
+				pitch: pitch,
+				picture: $scope.user.picture
+			}
+		}).then(function success(response){
+			console.log(response.data);
+			if(response.data == "Success"){
+				$scope.$parent.voteMessage = "Pitch Successfully Added";
+				$location.path("/");
+			}
+			else{
+				$scope.$parent.voteMessage = "Something Went Wrong!";
+				$location.path("/");
+			}
+			
+		}, function error(error){
+			console.log("AddDescription: " + error);
+		})
+	}
+})

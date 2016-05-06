@@ -300,7 +300,9 @@ app.post('/nominees', function(request,response){
 			VScore: 0,
 			TScore: 0,
 			SScore: 0,
-			Total: 0
+			Total: 0,
+			pitch: "",
+			profilePicture: ""
 		};
 		nomineesRef.update(nomineeParam);
 		response.send("Added Candidate"); // { id: '4', name: 'Mark Zuckerberg'... }
@@ -522,6 +524,16 @@ app.post('/vote', function(request,response){
 
 	response.send("success");
 });
+
+app.post("/pitch", function(request,response){
+	var pitch = request.body.pitch;
+	var userName = request.user.displayName;
+	var picture = request.body.picture;
+
+	nomineesRef.child(userName).child("profilePicture").set(picture.location);
+	nomineesRef.child(userName).child("pitch").set(pitch);
+	response.send("Success");
+})
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);

@@ -1,7 +1,14 @@
 <div ng-if="user.loggedIn == true">
 	<div ng-if="user.nominee == true">
 		<!-- Ask for description -->
-		<h1>Hey {{}}
+		<h1>Hey {{user.displayName}}! </h1>
+		<br/>
+		<br/>
+		<center><p>Please fill in your pitch</p>
+		<textarea ng-model="pitch" rows="10" placeholder="Your Pitch"></textarea>
+		<br/>
+		<br/>
+		<button ng-click="addPitch(pitch)">Add Pitch</button>
 	</div>
 	<div ng-if="user.nominee == false">
 		<!--Show all candidates-->
