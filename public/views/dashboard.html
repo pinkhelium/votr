@@ -1,0 +1,49 @@
+<div ng-if="user.loggedIn == true" ng-init="getNominees()">
+	<div ng-if="user.admin == true">
+		<header>
+			<center><h1>Nominate A Candidate</h1></center>
+		</header>
+			<!-- <hr> -->
+		<br />
+			<form>
+				<table>
+					<tr>
+						<td style="text-align: left">
+							<input type="text" ng-model="uid" placeholder="Facebook User ID"/>
+						</td>
+						<td style="text-align: right">
+							<button class="button special" ng-click="newNominee(uid)">Add Nominee</button>
+						</td>	
+					</tr>
+				</table>
+			</form>
+			<center>
+			<div>
+				<div>
+					<table style="border-collapse: separate;" ng-repeat="(key,value) in nominees">
+						<tr>
+							<td style="text-align: left">
+								<span>{{key}}</span>
+							</td>
+							<td style="text-align: right">
+								<button class="button special" ng-click="removeNominee(key)">Remove</button>
+							</td>	
+						</tr>
+					</table>
+				</div>
+			</div>
+		</center>
+	</div>
+	<div ng-if="user.admin == false">
+		<center><p>You Shall Not Pass!</p></center>
+	</div>
+</div>
+
+<div ng-if="user.loggedIn == false">
+	<header>
+		<center><h1><a href="/login">sign in here</a>.</h1></center>
+		
+		<!-- <hr> -->
+	</header>
+		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
+</div>

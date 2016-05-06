@@ -23,9 +23,11 @@ var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
 var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes")
 var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes")
+var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/votrtype");
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
+var votrType = "";
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
@@ -38,6 +40,10 @@ voteRef.on("value", function(data){
 	console.log("Acquiring Votes...");
 	console.log(JSON.stringify(Votes));
 });
+
+votrTypeRef.on("value",function (snapshot){
+	votrType = snapshot.val();
+})
 
 nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");
@@ -145,6 +151,22 @@ app.get('/logout', function(request, response){
 
 app.get("/tabledata", function(request,response){
 	response.send(nominee_list);
+})
+
+
+
+
+app.get("/votrtype", function(request,response){
+
+	response.send(votrType);
+
+})
+
+app.post("/votrtype", function(request,response){
+
+	votrTypeRef.set(request.body.votrType);
+	response.send("Set Successfully");
+	
 })
 
 

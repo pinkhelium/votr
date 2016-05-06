@@ -9,23 +9,19 @@ app.config(function($routeProvider){
 		})
 		.when('/dashboard', {
 			templateUrl: "./views/dashboard.html",
-			controller: "MainCtrl",
+			controller: "DashboardCtrl",
 		})
 		.when('/vote', {
 			templateUrl: './views/vote.html',
 			controller: 'VoteCtrl'
 		})
-		.when('/nominate', {
-			templateUrl: './views/nominate.html',
-			controller: 'NominateCtrl'
+		.when('/result', {
+			templateUrl: './views/result.html',
+			controller: 'ResultCtrl'
 		})
 		.when('/prevote', {
 			templateUrl: './views/prevote.html',
 			controller: 'PrevoteCtrl'
-		})
-		.when('/result', {
-			templateUrl: './views/result.html',
-			controller: 'ResultCtrl'
 		})
 });
 
@@ -40,7 +36,119 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.picture = $scope.$parent.user.picture;
 });
 
+app.controller("DashboardCtrl", function($scope,$http,$q,$route){
+
+	//Nominate Part
+
+	//Inherited for logging in the user
+	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
+	$scope.logUserIn = $scope.$parent.logUserIn;
+	$scope.user.admin = $scope.$parent.user.admin;
+	$scope.votrType = $scope.$parent.votrType;
+	//$scope.uid = 0;
+	//To get all the nominees
+	$scope.getNominees = function(){
+		var promise = nomineesCall();
+
+		promise.then(function success(data){
+			$scope.nominees = data;
+		})
+	}
+
+	var nomineesCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			method: 'GET',
+			url: '/nominees',
+		}).then(function success(response){
+			console.log(response);
+			deferred.resolve(response.data);
+		}, function(error){
+			deferred.reject(error);
+		})
+		return deferred.promise;
+	}
+
+	//To remove a nominee
+	$scope.removeNominee = function(nominee){
+		console.log("Here: " + nominee);
+		$http({
+			url: '/nominees',
+			method: 'DELETE',
+			params: {
+				'nominee' : nominee
+			}
+		}).then(function success(response){
+			if(response.data == "success"){
+				$scope.nominateMessage = "Deleted";
+				$route.reload();
+			}
+			else{
+				$scope.nominateMessage = response.data;
+			}
+		}, function error(error){
+			console.log(error);
+		})
+	}
+
+	//To add a nominee
+	$scope.newNominee = function(uid){
+		console.log(uid);
+		var promise = addNominee(uid);
+		promise.then(function success(data){
+			$scope.nominateMessage = data
+			$route.reload();
+		});
+	}
+
+	var addNominee = function(uid){
+		var deferred = $q.defer();
+		console.log(uid);
+		$http({
+			method: "POST",
+			url: '/nominees',
+			data: {
+				"uid": uid
+			}
+		}).then(function success(response){
+			console.log("addNominee: "+ response.data);
+			deferred.resolve(response.data);
+		} , function error(error){
+			console.log("addNominee(Error): " + error);
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
+})
+
 app.controller("AppCtrl", function($scope,$http,$q){
+
+	//Call to check what type of votr session this is.
+	$scope.getTypeOfVotr = function(){
+		var promise = votrType();
+		promise.then(function success(data){
+			$scope.votrType = data;
+		})
+	}
+
+	var votrType = function(){
+
+		var deferred = $q.defer();
+		$http({
+			url: '/votrtype',
+			method: 'GET',
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		}, function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
 	$scope.user = {};
 	$scope.nominees = {};
 
@@ -153,9 +261,8 @@ app.controller("AppCtrl", function($scope,$http,$q){
 });
 
 
-app.controller('ResultCtrl', function($scope,$q,$http){
-
-
+app.controller('ResultCtrl', function($scope,$http,$q){
+	//Results
 	$scope.populateTable= function(){
 
 		var promise = getData();
@@ -210,96 +317,8 @@ app.controller('ResultCtrl', function($scope,$q,$http){
 		var chart = new google.charts.Bar(document.getElementById('barchart_material'));
 
 		chart.draw(data, options);
-		}
-
+	}
 })
-
-
-app.controller('NominateCtrl', function($scope,$http,$q,$route){
-
-	//Inherited for logging in the user
-	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
-	$scope.logUserIn = $scope.$parent.logUserIn;
-	$scope.user.admin = $scope.$parent.user.admin;
-	//$scope.uid = 0;
-	//To get all the nominees
-	$scope.getNominees = function(){
-		var promise = nomineesCall();
-
-		promise.then(function success(data){
-			$scope.nominees = data;
-		})
-	}
-
-	var nomineesCall = function(){
-		var deferred = $q.defer();
-
-		$http({
-			method: 'GET',
-			url: '/nominees',
-		}).then(function success(response){
-			console.log(response);
-			deferred.resolve(response.data);
-		}, function(error){
-			deferred.reject(error);
-		})
-		return deferred.promise;
-	}
-
-	//To remove a nominee
-	$scope.removeNominee = function(nominee){
-		console.log("Here: " + nominee);
-		$http({
-			url: '/nominees',
-			method: 'DELETE',
-			params: {
-				'nominee' : nominee
-			}
-		}).then(function success(response){
-			if(response.data == "success"){
-				$scope.nominateMessage = "Deleted";
-				$route.reload();
-			}
-			else{
-				$scope.nominateMessage = response.data;
-			}
-		}, function error(error){
-			console.log(error);
-		})
-	}
-
-	//To add a nominee
-	$scope.newNominee = function(uid){
-		console.log(uid);
-		var promise = addNominee(uid);
-		promise.then(function success(data){
-			$scope.nominateMessage = data
-			$route.reload();
-		});
-	}
-
-	var addNominee = function(uid){
-		var deferred = $q.defer();
-		console.log(uid);
-		$http({
-			method: "POST",
-			url: '/nominees',
-			data: {
-				"uid": uid
-			}
-		}).then(function success(response){
-			console.log("addNominee: "+ response.data);
-			deferred.resolve(response.data);
-		} , function error(error){
-			console.log("addNominee(Error): " + error);
-			deferred.reject(error);
-		})
-
-		return deferred.promise;
-	}
-
-
-});
 
 app.controller('PrevoteCtrl', function($scope,$q,$http){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
