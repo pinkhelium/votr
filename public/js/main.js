@@ -23,6 +23,10 @@ app.config(function($routeProvider){
 			templateUrl: './views/prevote.html',
 			controller: 'PrevoteCtrl'
 		})
+		.when('/candidate', {
+			templateUrl: './views/candidate.html',
+			controller: 'CandidateCtrl'
+		})
 });
 
 
@@ -430,3 +434,5 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location){
 	}
 
 });
+
+app.controller('')
