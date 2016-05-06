@@ -45,6 +45,7 @@
 							<li><a href="#/">Home</a></li>
 							<li ng-if="votrType == 'prevote'"><a href="#/prevote">Member Nominate</a></li>
 							<li><a href="#/candidate">Candidates</a></li>
+							<li ng-if="user.nominee == true"><a href="#/candidatedashboard">Candidate Dashboard</a></li>
 							<li ng-if="votrType == 'vote'"><a href="#/vote">Vote</a></li>
 							<li ng-if="user.admin == true"><a href="#/dashboard">Dashboard</a></li>
 							<li ng-if="user.admin == true"><a href="#/result">Result</a></li> 
