@@ -1,46 +1,51 @@
-<div ng-if="user.loggedIn == true" ng-init="getCandidates()">
-	<div ng-if="user.isValidACMMember == true">
-	<header>
-		<center><h1>Nominate A Candidate</h1></center>
-	</header>
-		<!-- <hr> -->
-	<br />
-	<table>
-		<tr>
-			<td style="text-align: left">
-				<div class="select-wrapper">
-					<select ng-model="candidateName">
-						<option value="" disabled selected>Current Nominees (Click Here)</option>
-						<option ng-repeat="(key,value) in candidates">{{key}}</option>
-					</select>
+<div ng-if="votrType == 'prevote'">
+	<div ng-if="user.loggedIn == true" ng-init="getCandidates()">
+		<div ng-if="user.isValidACMMember == true">
+		<header>
+			<center><h1>Nominate A Candidate</h1></center>
+		</header>
+			<!-- <hr> -->
+		<br />
+		<table>
+			<tr>
+				<td style="text-align: left">
+					<div class="select-wrapper">
+						<select ng-model="candidateName">
+							<option value="" disabled selected>Current Nominees (Click Here)</option>
+							<option ng-repeat="(key,value) in candidates">{{key}}</option>
+						</select>
+					</div>
+				</td>
+				<td style="text-align: right">
+					<button class="button special" ng-click="voteCandidate(candidateName)">Nominate</button>
+				</td>
+			</tr>
+		</table>
+		</div>
+		<br />
+		<div ng-if="user.loggedIn == true">
+			<center>
+				<div>
+					<table style="border-collapse: separate;">
+						<tr>
+							<td style="text-align: left">
+								<input type="text" ng-model="candidateName" placeholder="Enter Candidate's Name" />
+							</td>
+							<td style="text-align: right">
+								<button class="button special" ng-click="addCandidate(candidateName)">Add Candidate</button>
+							</td>	
+						</tr>
+					</table>
 				</div>
-			</td>
-			<td style="text-align: right">
-				<button class="button special" ng-click="voteCandidate(candidateName)">Nominate</button>
-			</td>
-		</tr>
-	</table>
+			</center>
+		</div>
+		<div ng-if="user.isValidACMMember == false">
+			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote. <br/><br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
+		</div>
 	</div>
-	<br />
-	<div ng-if="user.loggedIn == true">
-		<center>
-			<div>
-				<table style="border-collapse: separate;">
-					<tr>
-						<td style="text-align: left">
-							<input type="text" ng-model="candidateName" placeholder="Enter Candidate's Name" />
-						</td>
-						<td style="text-align: right">
-							<button class="button special" ng-click="addCandidate(candidateName)">Add Candidate</button>
-						</td>	
-					</tr>
-				</table>
-			</div>
-		</center>
-	</div>
-	<div ng-if="user.isValidACMMember == false">
-		<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote. <br/><br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
-	</div>
+</div>
+<div ng-if="votrType == 'vote'">
+	<center><p>You Shall Not Pass!</p></center>
 </div>
 
 <div ng-if="user.loggedIn == false">
