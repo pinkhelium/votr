@@ -27,6 +27,10 @@ app.config(function($routeProvider){
 			templateUrl: './views/candidatedashboard.html',
 			controller: 'CandidateDashboardCtrl'
 		})
+		.when('/candidates', {
+			templateUrl: './views/candidates.html',
+			controller: 'CandidatesCtrl'
+		})
 });
 
 
@@ -126,6 +130,41 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$route){
 		return deferred.promise;
 	}
 
+
+	//Switching between VOTR-types
+
+	$scope.votrType = $scope.$parent.votrType;
+	
+	$scope.getVoteTypeCount = function(){
+		$http({
+			url: '/votetypecount',
+			method: 'GET'
+		}).then(function success(response){
+			$scope.voteTypeCount = response.data;
+			console.log($scope.votetypecount);
+			if($scope.votrType == "prevote"){
+				$scope.prevote = "ON";
+				$scope.vote = "OFF";
+			}
+			else{
+				$scope.prevote = "OFF";
+				$scope.vote="ON";
+			}
+		})
+	} 
+
+	$scope.voteMode = function(){
+		$http({
+			url: '/votetypecount',
+			method: 'POST'
+		}).then(function success(response){
+			$scope.votrType = response.data;
+			$scope.$parent.votrType = response.data;
+		}, function error(error){
+			console.log(error);
+		})
+	}
+
 })
 
 app.controller("AppCtrl", function($scope,$http,$q){
@@ -134,6 +173,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.getTypeOfVotr = function(){
 		var promise = votrType();
 		promise.then(function success(data){
+			console.log("Data: " + data);
 			$scope.votrType = data;
 		})
 	}
@@ -269,6 +309,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		$scope.user.admin = data.admin;
 		$scope.user.displayName = data.displayName;
 		$scope.checkNominee();
+		$scope.getTypeOfVotr();
 		var permissionsPromise = $scope.getUserPermissions();
 		permissionsPromise.then(function success(data){
 			console.log("Permissions got successfully.");
@@ -496,4 +537,8 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 			console.log("AddDescription: " + error);
 		})
 	}
+})
+
+app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
+
 })

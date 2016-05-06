@@ -21,13 +21,23 @@ var Firebase = require("firebase");
 var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
-var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes")
-var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes")
-var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/votrtype");
+var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes");
+var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
+var voteTypeCountRef = new Firebase("https://votr-dev.firebaseio.com/type/voteTypeCount");
+var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/type/votrType");
+var adminSettingsRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings");
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
-var votrType = "";
+var votrTypeCount = 0;
+
+voteTypeCountRef.on("value", function(snapshot){
+	voteTypeCount = snapshot.val();
+})
+
+votrTypeRef.on("value", function(snapshot){
+	votrType = snapshot.val();
+})
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
@@ -41,9 +51,6 @@ voteRef.on("value", function(data){
 	console.log(JSON.stringify(Votes));
 });
 
-votrTypeRef.on("value",function (snapshot){
-	votrType = snapshot.val();
-})
 
 nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");
@@ -153,21 +160,6 @@ app.get("/tabledata", function(request,response){
 	response.send(nominee_list);
 })
 
-
-
-
-app.get("/votrtype", function(request,response){
-
-	response.send(votrType);
-
-})
-
-app.post("/votrtype", function(request,response){
-
-	votrTypeRef.set(request.body.votrType);
-	response.send("Set Successfully");
-	
-})
 
 
 /*
@@ -420,19 +412,6 @@ app.get('/user/permissions', function(request, response){
 	});
 });
 
-/* 
-
-	Endpoint to test session 
-
-*/
-
-app.get('/sess', function(request, response){
-	var s = request.session;
-	var st = "Session contains:\n<br />\n<br />" + s;
-	console.log(s);
-	response.send(s);
-});
-
 /*
 	Endpoint to cast vote
 
@@ -533,6 +512,45 @@ app.post("/pitch", function(request,response){
 	nomineesRef.child(userName).child("profilePicture").set(picture.location);
 	nomineesRef.child(userName).child("pitch").set(pitch);
 	response.send("Success");
+})
+
+app.get('/votetypecount', function(request,response){
+	//console.log("here votrtypecount " + voteTypeCount);
+	response.send(voteTypeCount + "");
+})
+
+app.get('/votrtype', function(request,response){
+	response.send(votrType);
+})
+
+app.post('/votetypecount', function(request,response){
+	var userID = request.user.id;
+	var newEntry = {};
+	newEntry[userID] = {
+		vote: "yes",
+		name: request.user.displayName
+	};
+
+	var prev_obj = {};
+
+	adminSettingsRef.child(userID).once("value", function(snapshot){
+		prev_obj = snapshot.val();
+	})
+	if(prev_obj != null){
+		console.log("PREVIOUS OBJECT!!!")
+	}
+	else{
+		voteTypeCountRef.set(voteTypeCount + 1);
+	}
+
+	
+	if(voteTypeCount >= 3){
+		votrTypeRef.set("vote");
+	}
+
+	adminSettingsRef.update(newEntry);
+
+	response.send(votrType);
 })
 
 app.listen(port, function(){

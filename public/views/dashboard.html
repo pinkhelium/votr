@@ -36,7 +36,7 @@
 					</div>
 				</center>
 			</div>
-			<div class="4u">
+			<div class="4u" ng-init="getVoteTypeCount()">
 				<header>
 					<center><h1>Settings</h1></center>
 				</header>
@@ -44,11 +44,11 @@
 				<br />
 				<center>
 				<div class="6u 12u$(small)">
-					<button class="button special small" ng-click="">PRE MODE: ON</button>
+					<h3> PRE MODE: {{prevote}}</h3>
 				</div>
 				<br />
 				<div class="6u$ 12u$(small)">
-					<button class="button special small" ng-click="">VOTE MODE: ON</button>
+					<button class="button special small" ng-click="voteMode()">VOTE MODE: {{vote}} ({{voteTypeCount}})</button>
 				</div>
 				</center>
 			</div>
