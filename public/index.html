@@ -25,9 +25,10 @@
 						<div class="inner">
 
 							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<img ng-if="user.loggedIn == true" src="{{user.picture.location}}" id="profile_pic_mini">
-									<span class="title"><h1>VOTR</h1>by pinkHelium <hr></span>
+								
+								<a href="/#/" class="logo">
+									<span class="symbol"><img ng-if="user.loggedIn == true" src="{{user.picture.location}}" id="profile_pic_mini"></span>
+									<span class="title">votr<span ng-if="user.loggedIn == true"> : {{user.displayName}}</span></span>
 								</a>
 
 							<!-- Nav -->
