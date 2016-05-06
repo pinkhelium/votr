@@ -1,38 +1,58 @@
 <div ng-if="user.loggedIn == true" ng-init="getNominees()">
-	<div ng-if="user.admin == true">
-		<header>
-			<center><h1>Nominate A Candidate</h1></center>
-		</header>
-			<!-- <hr> -->
-		<br />
-			<form>
-				<table>
-					<tr>
-						<td style="text-align: left">
-							<input type="text" ng-model="uid" placeholder="Facebook User ID"/>
-						</td>
-						<td style="text-align: right">
-							<button class="button special" ng-click="newNominee(uid)">Add Nominee</button>
-						</td>	
-					</tr>
-				</table>
-			</form>
-			<center>
-			<div>
-				<div>
-					<table style="border-collapse: separate;" ng-repeat="(key,value) in nominees">
+	<div class="box alt" ng-if="user.admin == true">
+		<div class="row uniform">
+			<div class="8u">
+				<header>
+					<center><h1>Nominate A Candidate</h1></center>
+				</header>
+					<!-- <hr> -->
+				<br />
+				<form>
+					<table>
 						<tr>
 							<td style="text-align: left">
-								<span>{{key}}</span>
+								<input type="text" ng-model="uid" placeholder="Facebook User ID"/>
 							</td>
 							<td style="text-align: right">
-								<button class="button special" ng-click="removeNominee(key)">Remove</button>
+								<button class="button special" ng-click="newNominee(uid)">Add Nominee</button>
 							</td>	
 						</tr>
 					</table>
-				</div>
+				</form>
+				<center>
+					<div>
+						<div>
+							<table style="border-collapse: separate;" ng-repeat="(key,value) in nominees">
+								<tr>
+									<td style="text-align: left">
+										<span>{{key}}</span>
+									</td>
+									<td style="text-align: right">
+										<button class="button special" ng-click="removeNominee(key)">Remove</button>
+									</td>	
+								</tr>
+							</table>
+						</div>
+					</div>
+				</center>
 			</div>
-		</center>
+			<div class="4u">
+				<header>
+					<center><h1>Settings</h1></center>
+				</header>
+					<!-- <hr> -->
+				<br />
+				<center>
+				<div class="6u 12u$(small)">
+					<button class="button special small" ng-click="">PRE MODE: ON</button>
+				</div>
+				<br />
+				<div class="6u$ 12u$(small)">
+					<button class="button special small" ng-click="">VOTE MODE: ON</button>
+				</div>
+				</center>
+			</div>
+		</div>
 	</div>
 	<div ng-if="user.admin == false">
 		<center><p>You Shall Not Pass!</p></center>
