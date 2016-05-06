@@ -1,6 +1,12 @@
 #profile_pic {
 	border-radius: 50%;
 }
+
+#profile_pic_mini {
+	border-radius:50%;
+	width: 80px;
+}
+
 .button#vote_submit {
 	display: inline-block;
 	float: none;
