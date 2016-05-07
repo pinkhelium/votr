@@ -27,6 +27,7 @@ var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevo
 var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
 var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/votrType");
 var masterPasswordRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/masterPassword");
+var massMessageRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/massMessage");
 
 
 /* FIREBASE AUTHENTICATION TOKEN GENERATOR */
@@ -38,11 +39,18 @@ var nominee_list = [];
 var candidateList = [];
 var Votes = {};
 var votrType = "";
-var masterPassword = ""
+var masterPassword = "";
+var massMessage = "";
 
 /* GLOBAL REFERENCE LISTENERS */
 votrTypeRef.on("value", function(snapshot){
 	votrType = snapshot.val();
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
+});
+
+massMessageRef.on("value", function(snapshot){
+	massMessage = snapshot.val();
 }, function(error){
 	console.log("Firebase reference failed due to: " + error);
 });
@@ -556,6 +564,16 @@ app.post('/changemode', function(request,response){
 		response.send("Password Incorrect");
 	}
 });
+
+app.get("/message", function(request,response){
+	response.send(massMessage);
+})
+
+app.post("/message", function(request,response){
+	var message = request.body.message;
+	massMessageRef.set(message);
+	response.send("success");
+})
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
