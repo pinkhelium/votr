@@ -125,7 +125,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster,$rout
 			console.log("addNominee: "+ response.data);
 			deferred.resolve(response.data);
 		} , function error(error){
-			console.log("addNominee(Error): " + error);
+			toaster.pop("error","Adding Nominee",error.data);
 			deferred.reject(error);
 		})
 
