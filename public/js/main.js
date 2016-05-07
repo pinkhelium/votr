@@ -1,5 +1,5 @@
 
-var app = angular.module('votrApp',['ngRoute']);
+var app = angular.module('votrApp',['ngRoute', 'toaster']);
 
 app.config(function($routeProvider){
 	$routeProvider
@@ -44,7 +44,7 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.picture = $scope.$parent.user.picture;
 });
 
-app.controller("DashboardCtrl", function($scope,$http,$q,$location){
+app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster){
 
 	//Nominate Part
 
@@ -138,16 +138,18 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location){
 	$scope.votrModeChange = function(masterPassword){
 		var promise = changeMode(masterPassword);
 		promise.then(function success(data){
-			$scope.$parent.voteMessage = "VOTR Type Change Successful";
+
 			if($scope.votrType == 'prevote'){
 				$scope.$parent.votrType = 'vote';
+				toaster.pop("success","VOTR Type", "VOTR Type Changed to vote");
 			}
 			else if($scope.votrType == 'vote'){
 				$scope.$parent.votrType = 'prevote';
+				toaster.pop("success","VOTR Type", "VOTR Type Changed to prevote")
 			}
 			$location.path("/");
 		}, function error(error){
-			$scope.$parent.voteMessage = "Something went wrong";
+			toaster.pop("error","VOTR Type", "Something Went Wrong" );
 			console.log(error);
 			$location.path('/');
 		})
@@ -189,11 +191,11 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location){
 				message: message
 			}
 		}).then(function success(response){
-			$scope.$parent.voteMessage = "Mass Message Added";
+			toaster.pop("success","Message From Admin", "Added Successfully");
 			$scope.$parent.massMessage = message;
 			$location.path('/');
 		}, function error(){
-			$scope.$parent.voteMessage = "Something went wrong";
+			toaster.pop("error","Message From Admin", "Something Went Wrong");
 			$location.path('/')
 		})
 	}
@@ -290,7 +292,6 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		})
 	}
 
-	
 
 	
 	$scope.getUser = function(){
@@ -456,7 +457,7 @@ app.controller('ResultCtrl', function($scope,$http,$q){
 	}
 })
 
-app.controller('PrevoteCtrl', function($scope,$q,$http,$location){
+app.controller('PrevoteCtrl', function($scope,$q,$http,$location,toaster){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 
 	$scope.getCandidates = function(){
@@ -491,12 +492,12 @@ app.controller('PrevoteCtrl', function($scope,$q,$http,$location){
 			}
 		}).then(function success(response){
 			console.log(response.data);
-			$scope.$parent.voteMessage = "Candidate Added";
+			toaster.pop("success","Adding Candidate", "Candidate Added");
 			$location.path('/');
 
 		}, function error(error){
 			console.log(error);
-			$scope.$parent.voteMessage = "Something went wrong";
+			toaster.pop("error","Adding Candidate", "Something Went Wrong");
 			$location.path('/');
 		})
 	}
@@ -510,17 +511,17 @@ app.controller('PrevoteCtrl', function($scope,$q,$http,$location){
 			}
 		}).then(function success(response){
 			console.log(response.data);
-			$scope.$parent.voteMessage = "Candidate Nominated";
+			toaster.pop("success","Nominate Candidate", "Candidate Nominated");
 			$location.path('/');
 		}, function error(error){
 			console.log(error);
-			$scope.$parent.voteMessage = "Something went wrong";
+			toaster.pop("error","Nominate Candidate", "Something Went Wrong");
 			$location.path('/');
 		})
 	}
 })
 
-app.controller('VoteCtrl', function($scope,$http,$q,$location){
+app.controller('VoteCtrl', function($scope,$http,$q,$location,toaster){
 
 
 	//Inherited for logging in the user
@@ -563,10 +564,10 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location){
 			}
 		}).then(function success(response){
 			if(response.data == "success"){
-				$scope.$parent.voteMessage = "Vote Successfully Cast";
+				toaster.pop("success","Voting", "Vote Cast Successfully");
 			}
 			else{
-				$scope.$parent.voteMessage = "Something went wrong";
+				toaster.pop("error","Voting", "Something Went Wrong");
 			}
 			$location.path("/")
 		}, function error(error){
@@ -576,7 +577,7 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location){
 
 });
 
-app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$location){
+app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$location,toaster){
 	$scope.user.displayName = $scope.$parent.user.displayName;
 	$scope.user.picture = $scope.$parent.user.picture;
 
@@ -592,7 +593,8 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 		}).then(function success(response){
 			console.log(response.data);
 			if(response.data == "Success"){
-				$scope.$parent.voteMessage = "Pitch Successfully Added";
+				//$scope.$parent.voteMessage = "Pitch Successfully Added";
+				toaster.pop('success', "title", "Pitch Added");
 				$location.path("/");
 			}
 			else{

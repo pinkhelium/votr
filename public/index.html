@@ -7,10 +7,12 @@
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="css/toaster.css"/>
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<script src="js/angular.min.js"></script>
 		<script type="text/javascript" src="js/angular-route.min.js"></script>
+		<script type="text/javascript" src="js/toaster.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -57,6 +59,7 @@
 					</nav>
 
 				<!-- Main -->
+					<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
 					<div id="main">
 						<div class="inner" ng-view="">
 							
