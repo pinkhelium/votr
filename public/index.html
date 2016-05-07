@@ -55,10 +55,11 @@
 							<li><a href="#/">Home</a></li>
 							<li ng-if="votrType == 'prevote'"><a href="#/prevote">Member Nominate</a></li>
 							<li ng-if="votrType == 'vote'"><a href="#/candidates">Candidates</a></li>
-							<li ng-if="user.nominee == true"><a href="#/candidatedashboard">Candidate Dashboard</a></li>
+							<li ng-if="user.nominee == true && votrType == 'vote' "><a href="#/candidatedashboard">Candidate Dashboard</a></li>
 							<li ng-if="votrType == 'vote'"><a href="#/vote">Vote</a></li>
+							<!-- <li ng-if="votrType == 'prevote'"><a href="#/nominationsResults">Nomination Results</a></li> -->
 							<li ng-if="user.admin == true"><a href="#/dashboard">Dashboard</a></li>
-							<li ng-if="user.admin == true"><a href="#/result">Result</a></li> 
+							<li ng-if="user.admin == true && votrType=='vote'"><a href="#/result">Result</a></li> 
 							<li><a href="/logout">Logout</a></li>
 						</ul>
 					</nav>
@@ -79,6 +80,7 @@
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
+			<script src="js/jqcloud.min.js"></script>
 
 	</body>
 </html>

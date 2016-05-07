@@ -1,7 +1,6 @@
 <div ng-if="user.loggedIn == false">
 	<header>
 		<center><h1><a href="/login">sign in here</a>.</h1></center>
-		
 		<!-- <hr> -->
 	</header>
 		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
@@ -26,13 +25,11 @@
 				<!-- <p><span class="image left"><img src="{{user.picture.url}}" alt="" id="profile_pic2" /></span><h1 style="margin-top: -170px; margin-left: 220px; background-color: white; position: relative; z-index: 10; text-align: left"> &nbsp&nbsp&nbsp&nbsp{{user.displayName}}</h1></p> -->
 			</div>
 
-			
-
-
 		</div>	
 	</div>
 		<!-- <img src="{{user.picture.url}}" id="profile_pic"> -->
 		
+		<h3>{{massMessage}}</h3>
 		<!-- <img src="{{user.cover.source}}" alt=""> -->
 		<div ng-if="user.isValidACMMember == false">
 			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote.<br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>

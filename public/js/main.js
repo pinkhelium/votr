@@ -1,4 +1,3 @@
-
 var app = angular.module('votrApp',['ngRoute', 'toaster']);
 
 app.config(function($routeProvider){
@@ -31,8 +30,11 @@ app.config(function($routeProvider){
 			templateUrl: './views/candidates.html',
 			controller: 'CandidatesCtrl'
 		})
+		.when('/nominationsResults', {
+			templateUrl: './views/nominationResults.html',
+			controller: 'NominationResultsCtrl'
+		})
 });
-
 
 app.controller("MainCtrl", function($scope,$http){
 	//$scope.pageName = $scope.$parent.pageName;
@@ -44,7 +46,7 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.picture = $scope.$parent.user.picture;
 });
 
-app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster){
+app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster,$route){
 
 	//Nominate Part
 
@@ -199,8 +201,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster){
 			$location.path('/')
 		})
 	}
-
-})
+});
 
 app.controller("AppCtrl", function($scope,$http,$q){
 
@@ -401,7 +402,6 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	});
 });
 
-
 app.controller('ResultCtrl', function($scope,$http,$q){
 	//Results
 	$scope.populateTable= function(){
@@ -459,7 +459,7 @@ app.controller('ResultCtrl', function($scope,$http,$q){
 
 		chart.draw(data, options);
 	}
-})
+});
 
 app.controller('PrevoteCtrl', function($scope,$q,$http,$location,toaster){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
@@ -578,12 +578,35 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location,toaster){
 			$scope.voteMessage = error;
 		})
 	}
-
 });
 
 app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$location,toaster){
 	$scope.user.displayName = $scope.$parent.user.displayName;
 	$scope.user.picture = $scope.$parent.user.picture;
+
+	$scope.getPitch = function(){
+		var promise = pitch();
+		promise.then(function success(data){
+			console.log("HERE PITCH");
+			$scope.pitch = data;
+		})
+	}
+
+	var pitch = function(){
+
+		var deferred = $q.defer();
+
+		$http({
+			url: '/pitch',
+			method: 'GET'
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		}, function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
 
 	$scope.addPitch = function(pitch){
 		console.log("here: " + pitch);
@@ -598,11 +621,11 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 			console.log(response.data);
 			if(response.data == "Success"){
 				//$scope.$parent.voteMessage = "Pitch Successfully Added";
-				toaster.pop('success', "title", "Pitch Added");
+				toaster.pop('success', "Pitch", "Added");
 				$location.path("/");
 			}
 			else{
-				$scope.$parent.voteMessage = "Something went wrong";
+				toaster.pop('error', "Pitch", "Something Went Wrong");
 				$location.path("/");
 			}
 			
@@ -610,7 +633,7 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 			console.log("AddDescription: " + error);
 		})
 	}
-})
+});
 
 app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 
@@ -636,5 +659,8 @@ app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 		})
 		return deferred.promise;
 	}
+});
 
-})
+app.controller('NominationResultsCtrl', function($http,$scope,$q){
+
+});
