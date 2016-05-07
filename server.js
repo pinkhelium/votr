@@ -20,8 +20,8 @@ var FirebaseTokenGenerator = require("firebase-token-generator");
 var C = {};
 
 /* FIREBASE REFERENCES */
-var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
+var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
 var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes");
 var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
@@ -29,11 +29,8 @@ var voteTypeCountRef = new Firebase("https://votr-dev.firebaseio.com/type/voteTy
 var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/type/votrType");
 var adminSettingsRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings");
 
-/* FIREBASE AUTHENTICATION */
-
+/* FIREBASE AUTHENTICATION TOKEN GENERATOR */
 var tokenGenerator = new FirebaseTokenGenerator(CONFIG.firebaseAppSecret);
-var token = tokenGenerator.createToken({ uid: "1", some: "arbitrary", data: "here" });
-
 
 /* GLOBAL OBJECTS */
 var nominee_list = [];
@@ -51,19 +48,19 @@ votrTypeRef.on("value", function(snapshot){
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
-	console.log("CANDIDATES_LIST_STRUCTURE_WITH_COUNT");
-	console.log(JSON.stringify(candidateList));
+	// console.log("CANDIDATES_LIST_STRUCTURE_WITH_COUNT");
+	// console.log(JSON.stringify(candidateList));
 });
 
 voteRef.on("value", function(data){
 	Votes = data.val();
-	console.log("Acquiring Votes...");
-	console.log(JSON.stringify(Votes));
+	// console.log("Acquiring Votes...");
+	// console.log(JSON.stringify(Votes));
 });
 
 nomineesRef.on('value', function(data){
-  console.log("Nominees On Change:\n\n:");
-  console.log(data.val());
+  // console.log("Nominees On Change:\n\n:");
+  // console.log(data.val());
   nominee_list = data.val();
   for(nominee in nominee_list){
   	//console.log("\n\n\nNOMINEE: " + nominee_list[nominee].CScore);
@@ -560,9 +557,23 @@ app.post('/votetypecount', function(request,response){
 	adminSettingsRef.update(newEntry);
 
 	response.send(votrType);
-})
+});
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
+	// uid field is required, rest of the fields are arbitrary/as per requirement
+    // the fields are available as part of the auth object under secuirty & rules in your firebase dashboard
+	CONFIG.token = tokenGenerator.createToken({ uid: "1", from: "node-server", clientID: CONFIG.clientID });
+	console.log("Created a client token: " + CONFIG.token );
+
+    myFirebaseRef.authWithCustomToken(CONFIG.token, function(error, authData) {
+	  if (error) {
+	    console.log("Authentication Failed!", error);
+	  } else {
+	    console.log("Authenticated successfully with payload:", authData);
+	  }
+	});
+	console.log("Ref Auth Request Sent");
 });
+
 
