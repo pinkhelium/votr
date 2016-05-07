@@ -536,9 +536,17 @@ app.post("/pitch", function(request,response){
 	var userName = request.user.displayName;
 	var picture = request.body.picture;
 
-	nomineesRef.child(userName).child("profilePicture").set(picture.location);
+	nomineesRef.child(userName).child("profilePicture").set(picture.url);
 	nomineesRef.child(userName).child("pitch").set(pitch);
 	response.send("Success");
+})
+
+app.get("/pitch", function(request,response){
+	var userName = request.user.displayName;
+	
+	nomineesRef.child(userName).child("pitch").once("value", function(snapshot){
+		response.send(snapshot.val());
+	})
 })
 
 

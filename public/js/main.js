@@ -46,7 +46,7 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.picture = $scope.$parent.user.picture;
 });
 
-app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster){
+app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster,$route){
 
 	//Nominate Part
 
@@ -584,6 +584,30 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 	$scope.user.displayName = $scope.$parent.user.displayName;
 	$scope.user.picture = $scope.$parent.user.picture;
 
+	$scope.getPitch = function(){
+		var promise = pitch();
+		promise.then(function success(data){
+			console.log("HERE PITCH");
+			$scope.pitch = data;
+		})
+	}
+
+	var pitch = function(){
+
+		var deferred = $q.defer();
+
+		$http({
+			url: '/pitch',
+			method: 'GET'
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		}, function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
 	$scope.addPitch = function(pitch){
 		console.log("here: " + pitch);
 		$http({
@@ -597,11 +621,11 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 			console.log(response.data);
 			if(response.data == "Success"){
 				//$scope.$parent.voteMessage = "Pitch Successfully Added";
-				toaster.pop('success', "title", "Pitch Added");
+				toaster.pop('success', "Pitch", "Added");
 				$location.path("/");
 			}
 			else{
-				$scope.$parent.voteMessage = "Something went wrong";
+				toaster.pop('error', "Pitch", "Something Went Wrong");
 				$location.path("/");
 			}
 			
