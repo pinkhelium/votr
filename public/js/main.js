@@ -190,6 +190,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location){
 			}
 		}).then(function success(response){
 			$scope.$parent.voteMessage = "Mass Message Added";
+			$scope.$parent.massMessage = message;
 			$location.path('/');
 		}, function error(){
 			$scope.$parent.voteMessage = "Something went wrong";
