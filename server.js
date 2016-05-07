@@ -348,7 +348,7 @@ app.delete('/nominees', function(request,response){
 		get /user
 			get details of logged in user through the session
 
-		get /user/picture
+		get /user/more
 			queries graph api with user's access token to get 
 			their profile picture
 
@@ -376,14 +376,14 @@ app.get('/user', function(request, response){
 	response.json(details);
 });
 
-app.get('/user/picture', function(request, response){
+app.get('/user/more', function(request, response){
 	
 	if(!request.session.flash){
 		response.status(400).send("Error: User not logged in.");
 		return;
 	}
 
-	var reqURL = '/me/picture?height=300&access_token='+request.session.passport.user.accessToken;
+	var reqURL = '/me/?fields=picture.height(300),cover&access_token='+request.session.passport.user.accessToken;
 	
 	graph.get(reqURL, function(error, success){
 		if(error){

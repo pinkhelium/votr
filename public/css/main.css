@@ -1,12 +1,15 @@
 #profile_pic {
 	border-radius: 50%;
-	width: 200px;
+	width: 300px;
+	position: relative;
+	z-index: -5000;
 }
 
 #profile_pic_mini {
 	border-radius:50%;
-	width: 65px;
+	width: 80px;
 	margin-left: 4px;
+	z-index: 1555;
 }
 
 #profile_pic_candidate {
@@ -23,4 +26,8 @@
 
 .logo > .title {
 	display: block;
+	/*border-top: 1px solid black;*/
+	/*border-bottom: 1px solid black;*/
+	margin-top: -2.0em;
+	background-color: white;
 }
