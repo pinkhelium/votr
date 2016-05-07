@@ -550,7 +550,7 @@ app.listen(port, function(){
 	console.log("Server running on port: " + port);
 	// uid field is required, rest of the fields are arbitrary/as per requirement
     // the fields are available as part of the auth object under secuirty & rules in your firebase dashboard
-	CONFIG.token = tokenGenerator.createToken({ uid: "1", from: "node-server", clientID: CONFIG.clientID });
+	CONFIG.token = tokenGenerator.createToken({ uid: "@dm!n", from: "node-server", clientID: CONFIG.firebaseClientID });
 	console.log("Created a client token: " + CONFIG.token );
 
     myFirebaseRef.authWithCustomToken(CONFIG.token, function(error, authData) {

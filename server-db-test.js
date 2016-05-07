@@ -9,12 +9,13 @@ var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var votesRef = new Firebase("https://votr-dev.firebaseio.com/votesRef");
 
-var nominee_list = [];
+var CONFIG = require('./config.js');
 
-nomineesRef.on('value', function(data){
-  console.log(data.val());
-  nominee_list = data.val();
-});
+var FirebaseTokenGenerator = require("firebase-token-generator");
+
+/* FIREBASE AUTHENTICATION TOKEN GENERATOR */
+var tokenGenerator = new FirebaseTokenGenerator(CONFIG.firebaseAppSecret);
+var nominee_list = [];
 
 var app = express();
 
@@ -32,13 +33,29 @@ app.use(express.static(__dirname + '/public'));
 // Define routes.
 app.get('/hey', function(req, res) {
     nomineesRef.on('value', function(data){
-      console.log(data.val());
+      // console.log(data.val());
       res.send(data.val());
+    }, function(error){
+    	console.log('error: '+error );
+    	res.send(error);
     });
     // res.send('success bitch');
-  });
+});
 
-app.listen(3000, function(){
-  console.log("Server Running on port 3000");
+app.listen(3001, function(){
+  // uid field is required, rest of the fields are arbitrary/as per requirement
+    // the fields are available as part of the auth object under secuirty & rules in your firebase dashboard
+	CONFIG.token = tokenGenerator.createToken({ uid: "@dm!n", from: "node-server", clientID: CONFIG.firebaseClientID });
+	console.log("Created a client token: " + CONFIG.token );
+
+    nomineesRef.authWithCustomToken(CONFIG.token, function(error, authData) {
+	  if (error) {
+	    console.log("Authentication Failed!", error);
+	  } else {
+	    console.log("Authenticated successfully with payload:", authData);
+	  }
+	});
+	console.log("Ref Auth Request Sent");
+  console.log("Server Running on port 3001");
 });
 

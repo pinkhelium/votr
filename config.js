@@ -5,8 +5,10 @@ var clientSecret = '51bba473cfdbccb751ae8c3d74a36387';
 var callbackUrl = 'http://localhost:3000/login/facebook/return';
 var graphAppSecret = '51bba473cfdbccb751ae8c3d74a36387';
 
+
 /* Firebase Secrets */
 var firebaseAppSecret = 'uu4Ovpf73ZlY7J3iMswaNdeoIcpJDMAL1BdyVy6U';
+var firebaseClientID = String(clientID);
 
 
 /* ALL EXPORTS */
@@ -15,3 +17,4 @@ module.exports.clientSecret = clientSecret;
 module.exports.callbackUrl = callbackUrl;
 module.exports.graphAppSecret = graphAppSecret;
 module.exports.firebaseAppSecret = firebaseAppSecret;
+module.exports.firebaseClientID = firebaseClientID;
