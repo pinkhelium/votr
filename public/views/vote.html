@@ -67,7 +67,7 @@
 		</div>
 	</div>
 </div>
-<div ng-if="votrType == 'prevote">
+<div ng-if="votrType == 'prevote' || user.isValidACMMember==false">
 	<center><p>You Shall Not Pass!</p></center>
 </div>
 

@@ -23,7 +23,8 @@
 		</table>
 		</div>
 		<br />
-		<div ng-if="user.loggedIn == true">
+		
+		<div ng-if="user.isValidACMMember == true">
 			<center>
 				<div>
 					<table style="border-collapse: separate;">
@@ -39,6 +40,7 @@
 				</div>
 			</center>
 		</div>
+		
 		<div ng-if="user.isValidACMMember == false">
 			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote. <br/><br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
 		</div>
