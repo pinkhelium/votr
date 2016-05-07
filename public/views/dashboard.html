@@ -55,6 +55,10 @@
 				</center>
 			</div>
 		</div>
+		<textarea ng-model="message" rows="10" placeholder="Mass Message"></textarea>
+		<br/>
+		<br/>
+		<button ng-click="addMassMessage(message)">Add Mass Message</button>
 	</div>
 	<div ng-if="user.admin == false">
 		<center><p>You Shall Not Pass!</p></center>

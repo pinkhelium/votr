@@ -8,10 +8,16 @@
 </div>
 
 <div ng-if="user.loggedIn == true">
-	<center><p style="color: #23CF5F">{{voteMessage}}</p></center>
 	<center><section>
 		<img src="{{user.picture.location}}" id="profile_pic">
-		<h1><b>{{user.displayName}}</b></h1>
+		<h1 ng-if="!voteMessage"><b>{{user.displayName}}</b></h1>
+		<div ng-if="voteMessage">
+			<h1><b>{{user.displayName}}</b></h1>
+			<h3 ng-if="voteMessage != 'Something went wrong'"><b style="color: #23CF5F">{{voteMessage}}</b></h3>
+			<h3 ng-if="voteMessage == 'Something went wrong'"><b style="color: #F23F3B">{{voteMessage}}</b></h3>
+		</div>
+
+		<h3>{{massMessage}}</h3>
 		<!-- <h2>{{user.displayName}}</h2> -->
 	</section></center>
 </div>
