@@ -1,7 +1,7 @@
 <div ng-if="user.loggedIn == true">
 	<div ng-init="getNominees()">
 		<div ng-repeat="(key,value) in nominees">
-			<p><span class="image left"><img src="{{value.profilePicture}}" alt="" id="profile_pic_candidate" /></span><h1>{{key}}</h1>{{value.pitch}}</p><hr />
+			<p><span class="image left"><img src="{{value.profilePicture}}" alt="" id="profile_pic_candidate" /></span><h1>{{key}}</h1><pre>{{value.pitch}}</pre></p><hr />
 		</div>
 	</div>
 </div>

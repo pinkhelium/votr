@@ -308,24 +308,30 @@ app.get('/nominees', function(request,response){
 
 app.post('/nominees', function(request,response){
 	var uid = parseInt(request.body.uid);
-	var uidUrl = "/" + request.body.uid + "?fields=name";
-	//console.log(request);
-	graph.get(uidUrl, {access_token : request.user.accessToken} ,function(err, res) {
-		//console.log("\n\n\nResponse: " + res + "\n\n\n");
-		var nomineeParam = {};
-		nomineeParam[res.name] = {
-			uid: uid,
-			CScore : 0,
-			VScore: 0,
-			TScore: 0,
-			SScore: 0,
-			Total: 0,
-			pitch: "",
-			profilePicture: ""
-		};
-		nomineesRef.update(nomineeParam);
-		response.send("Added Candidate"); // { id: '4', name: 'Mark Zuckerberg'... }
-	});
+	if(isNaN(uid) == true){
+		response.status(400).send("Error: Invalid UID");
+	}
+	else{
+		var uidUrl = "/" + request.body.uid + "?fields=name";
+		//console.log(request);
+		graph.get(uidUrl, {access_token : request.user.accessToken} ,function(err, res) {
+			//console.log("\n\n\nResponse: " + res + "\n\n\n");
+			var nomineeParam = {};
+			nomineeParam[res.name] = {
+				uid: uid,
+				CScore : 0,
+				VScore: 0,
+				TScore: 0,
+				SScore: 0,
+				Total: 0,
+				pitch: "",
+				profilePicture: ""
+			};
+			nomineesRef.update(nomineeParam);
+			response.send("Added Candidate"); // { id: '4', name: 'Mark Zuckerberg'... }
+		});
+	}
+	
 })
 
 app.delete('/nominees', function(request,response){
