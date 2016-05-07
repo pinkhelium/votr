@@ -14,53 +14,64 @@ var CONFIG = require('./config.js');
 var waterfall = require('async-waterfall');
 var fb_msg_post = require('./facebook_message_poster');
 
+var Firebase = require("firebase");
+var FirebaseTokenGenerator = require("firebase-token-generator");
 
 var C = {};
 
-var Firebase = require("firebase");
-var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
+/* FIREBASE REFERENCES */
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
+var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
 var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes");
 var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
-
 var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/votrType");
 var masterPasswordRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/masterPassword");
 
+
+/* FIREBASE AUTHENTICATION TOKEN GENERATOR */
+var tokenGenerator = new FirebaseTokenGenerator(CONFIG.firebaseAppSecret);
+
+
+/* GLOBAL OBJECTS */
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
-
 var votrType = "";
 var masterPassword = ""
 
-
-
-
+/* GLOBAL REFERENCE LISTENERS */
 votrTypeRef.on("value", function(snapshot){
 	votrType = snapshot.val();
-})
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
+});
 
 masterPasswordRef.on("value", function(snapshot){
 	masterPassword = snapshot.val();
-})
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
+});
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
-	console.log("CANDIDATES_LIST_STRUCTURE_WITH_COUNT");
-	console.log(JSON.stringify(candidateList));
+	// console.log("CANDIDATES_LIST_STRUCTURE_WITH_COUNT");
+	// console.log(JSON.stringify(candidateList));
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
 voteRef.on("value", function(data){
 	Votes = data.val();
-	console.log("Acquiring Votes...");
-	console.log(JSON.stringify(Votes));
+	// console.log("Acquiring Votes...");
+	// console.log(JSON.stringify(Votes));
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
-
 nomineesRef.on('value', function(data){
-  console.log("Nominees On Change:\n\n:");
-  console.log(data.val());
+  // console.log("Nominees On Change:\n\n:");
+  // console.log(data.val());
   nominee_list = data.val();
   for(nominee in nominee_list){
   	//console.log("\n\n\nNOMINEE: " + nominee_list[nominee].CScore);
@@ -70,6 +81,8 @@ nomineesRef.on('value', function(data){
   		nominee_list[nominee].picUrl = response.location;
   	})
   }
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
 
@@ -542,10 +555,23 @@ app.post('/changemode', function(request,response){
 	else{
 		response.send("Password Incorrect");
 	}
-
-})
+});
 
 app.listen(port, function(){
 	console.log("Server running on port: " + port);
+	// uid field is required, rest of the fields are arbitrary/as per requirement
+    // the fields are available as part of the auth object under secuirty & rules in your firebase dashboard
+	CONFIG.token = tokenGenerator.createToken({ uid: "@dm!n", from: "node-server", clientID: CONFIG.firebaseClientID });
+	console.log("Created a client token: " + CONFIG.token );
+
+    myFirebaseRef.authWithCustomToken(CONFIG.token, function(error, authData) {
+	  if (error) {
+	    console.log("Authentication Failed!", error);
+	  } else {
+	    console.log("Authenticated successfully with payload:", authData);
+	  }
+	});
+	console.log("Ref Auth Request Sent");
 });
+
 
