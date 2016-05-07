@@ -5,3 +5,4 @@
 node_modules/
 npm-debug.log
 config.js
+config_backup.js

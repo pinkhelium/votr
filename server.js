@@ -576,20 +576,20 @@ app.post("/message", function(request,response){
 })
 
 app.listen(port, function(){
-	console.log("Server running on port: " + port);
+	console.log("Server is now running on port: " + port);
+
 	// uid field is required, rest of the fields are arbitrary/as per requirement
     // the fields are available as part of the auth object under secuirty & rules in your firebase dashboard
 	CONFIG.token = tokenGenerator.createToken({ uid: "@dm!n", from: "node-server", clientID: CONFIG.firebaseClientID });
-	console.log("Created a client token: " + CONFIG.token );
-
-    myFirebaseRef.authWithCustomToken(CONFIG.token, function(error, authData) {
+	
+	myFirebaseRef.authWithCustomToken(CONFIG.token, function(error, authData) {
 	  if (error) {
-	    console.log("Authentication Failed!", error);
+	    console.log("Firebase Authorization Failed: ", error);
 	  } else {
-	    console.log("Authenticated successfully with payload:", authData);
+	    console.log("Firebase Authorization Succeeded With Payload:", authData);
 	  }
 	});
-	console.log("Ref Auth Request Sent");
+	console.log("Firebase Authentication Initiated.");
 });
 
 
