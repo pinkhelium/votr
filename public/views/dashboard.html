@@ -44,11 +44,13 @@
 				<br />
 				<center>
 				<div class="6u 12u$(small)">
-					<h3> PRE MODE: {{prevote}}</h3>
+					<h3> VOTE MODE: {{votrType}}</h3>
 				</div>
 				<br />
 				<div class="6u$ 12u$(small)">
-					<button class="button special small" ng-click="voteMode()">VOTE MODE: {{vote}} ({{voteTypeCount}})</button>
+				<input type="text" ng-model="masterPassword" placeholder="Enter Master Password"/>
+				<br/>
+				<button class="button special small" ng-disabled="masterPassword == ''" ng-click="votrModeChange(masterPassword)">Change VOTR Type</button>
 				</div>
 				</center>
 			</div>

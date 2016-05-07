@@ -25,26 +25,28 @@ var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
 var candidateVoteRef = new Firebase("https://votr-dev.firebaseio.com/candidatevotes");
 var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
-var voteTypeCountRef = new Firebase("https://votr-dev.firebaseio.com/type/voteTypeCount");
-var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/type/votrType");
-var adminSettingsRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings");
+var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/votrType");
+var masterPasswordRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings/masterPassword");
+
 
 /* FIREBASE AUTHENTICATION TOKEN GENERATOR */
 var tokenGenerator = new FirebaseTokenGenerator(CONFIG.firebaseAppSecret);
 
 /* GLOBAL OBJECTS */
+
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
-var votrTypeCount = 0;
-
-voteTypeCountRef.on("value", function(snapshot){
-	voteTypeCount = snapshot.val();
-});
+var votrType = "";
+var masterPassword = ""
 
 votrTypeRef.on("value", function(snapshot){
 	votrType = snapshot.val();
 });
+
+masterPasswordRef.on("value", function(snapshot){
+	masterPassword = snapshot.val();
+})
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
@@ -520,43 +522,28 @@ app.post("/pitch", function(request,response){
 	response.send("Success");
 })
 
-app.get('/votetypecount', function(request,response){
-	//console.log("here votrtypecount " + voteTypeCount);
-	response.send(voteTypeCount + "");
-})
 
 app.get('/votrtype', function(request,response){
 	response.send(votrType);
 })
 
-app.post('/votetypecount', function(request,response){
-	var userID = request.user.id;
-	var newEntry = {};
-	newEntry[userID] = {
-		vote: "yes",
-		name: request.user.displayName
-	};
 
-	var prev_obj = {};
+app.post('/changemode', function(request,response){
 
-	adminSettingsRef.child(userID).once("value", function(snapshot){
-		prev_obj = snapshot.val();
-	})
-	if(prev_obj != null){
-		console.log("PREVIOUS OBJECT!!!")
+	var password = request.body.password;
+	if(masterPassword == password){
+		if(votrType == 'prevote'){
+			console.log("Changing to vote");
+			votrTypeRef.set("vote");
+		}
+		else if(votrType == 'vote'){
+			votrTypeRef.set("prevote");
+		}
+		response.send("success");
 	}
 	else{
-		voteTypeCountRef.set(voteTypeCount + 1);
+		response.send("Password Incorrect");
 	}
-
-	
-	if(voteTypeCount >= 3){
-		votrTypeRef.set("vote");
-	}
-
-	adminSettingsRef.update(newEntry);
-
-	response.send(votrType);
 });
 
 app.listen(port, function(){
