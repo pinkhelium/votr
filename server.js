@@ -32,32 +32,41 @@ var masterPasswordRef = new Firebase("https://votr-dev.firebaseio.com/adminSetti
 /* FIREBASE AUTHENTICATION TOKEN GENERATOR */
 var tokenGenerator = new FirebaseTokenGenerator(CONFIG.firebaseAppSecret);
 
-/* GLOBAL OBJECTS */
 
+/* GLOBAL OBJECTS */
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
 var votrType = "";
 var masterPassword = ""
 
+/* GLOBAL REFERENCE LISTENERS */
 votrTypeRef.on("value", function(snapshot){
 	votrType = snapshot.val();
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
 masterPasswordRef.on("value", function(snapshot){
 	masterPassword = snapshot.val();
-})
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
+});
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
 	// console.log("CANDIDATES_LIST_STRUCTURE_WITH_COUNT");
 	// console.log(JSON.stringify(candidateList));
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
 voteRef.on("value", function(data){
 	Votes = data.val();
 	// console.log("Acquiring Votes...");
 	// console.log(JSON.stringify(Votes));
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
 nomineesRef.on('value', function(data){
@@ -72,6 +81,8 @@ nomineesRef.on('value', function(data){
   		nominee_list[nominee].picUrl = response.location;
   	})
   }
+}, function(error){
+	console.log("Firebase reference failed due to: " + error);
 });
 
 
