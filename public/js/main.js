@@ -147,7 +147,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location){
 			}
 			$location.path("/");
 		}, function error(error){
-			$scope.$parent.voteMessage = "Something Went Wrong.";
+			$scope.$parent.voteMessage = "Something went wrong";
 			console.log(error);
 			$location.path('/');
 		})
@@ -177,6 +177,27 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location){
 		return deferred.promise;
 	}
 
+
+	//Mass Message
+
+	$scope.addMassMessage = function(message){
+
+		$http({
+			url: 'message',
+			method: 'POST',
+			data: {
+				message: message
+			}
+		}).then(function success(response){
+			$scope.$parent.voteMessage = "Mass Message Added";
+			$scope.$parent.massMessage = message;
+			$location.path('/');
+		}, function error(){
+			$scope.$parent.voteMessage = "Something went wrong";
+			$location.path('/')
+		})
+	}
+
 })
 
 app.controller("AppCtrl", function($scope,$http,$q){
@@ -188,6 +209,28 @@ app.controller("AppCtrl", function($scope,$http,$q){
 			console.log("Data: " + data);
 			$scope.votrType = data;
 		})
+	}
+
+	$scope.getMassMessage = function(){
+		var promise = massMessage();
+		promise.then(function success(data){
+			$scope.massMessage = data;
+		})
+	}
+
+	var massMessage = function(){
+		var deferred = $q.defer();
+
+		$http({
+			url: '/message',
+			method: 'GET',
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		}, function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
 	}
 
 	var votrType = function(){
@@ -320,8 +363,11 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		$scope.user.loggedIn = data.loggedIn;
 		$scope.user.admin = data.admin;
 		$scope.user.displayName = data.displayName;
+		//Just to trigger these functions on call
 		$scope.checkNominee();
 		$scope.getTypeOfVotr();
+		$scope.getMassMessage();
+		///--------------------------------------
 		var permissionsPromise = $scope.getUserPermissions();
 		permissionsPromise.then(function success(data){
 			console.log("Permissions got successfully.");
@@ -410,7 +456,7 @@ app.controller('ResultCtrl', function($scope,$http,$q){
 	}
 })
 
-app.controller('PrevoteCtrl', function($scope,$q,$http){
+app.controller('PrevoteCtrl', function($scope,$q,$http,$location){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
 
 	$scope.getCandidates = function(){
@@ -445,8 +491,13 @@ app.controller('PrevoteCtrl', function($scope,$q,$http){
 			}
 		}).then(function success(response){
 			console.log(response.data);
+			$scope.$parent.voteMessage = "Candidate Added";
+			$location.path('/');
+
 		}, function error(error){
 			console.log(error);
+			$scope.$parent.voteMessage = "Something went wrong";
+			$location.path('/');
 		})
 	}
 
@@ -459,8 +510,12 @@ app.controller('PrevoteCtrl', function($scope,$q,$http){
 			}
 		}).then(function success(response){
 			console.log(response.data);
+			$scope.$parent.voteMessage = "Candidate Nominated";
+			$location.path('/');
 		}, function error(error){
 			console.log(error);
+			$scope.$parent.voteMessage = "Something went wrong";
+			$location.path('/');
 		})
 	}
 })
@@ -511,7 +566,7 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location){
 				$scope.$parent.voteMessage = "Vote Successfully Cast";
 			}
 			else{
-				$scope.$parent.voteMessage = "Something Went Wrong";
+				$scope.$parent.voteMessage = "Something went wrong";
 			}
 			$location.path("/")
 		}, function error(error){
@@ -541,7 +596,7 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 				$location.path("/");
 			}
 			else{
-				$scope.$parent.voteMessage = "Something Went Wrong!";
+				$scope.$parent.voteMessage = "Something went wrong";
 				$location.path("/");
 			}
 			
@@ -552,5 +607,28 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 })
 
 app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
+
+	$scope.getNominees = function(){
+		var promise = nomineesCall();
+
+		promise.then(function success(data){
+			$scope.nominees = data;
+		})
+	}
+
+	var nomineesCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			method: 'GET',
+			url: '/nominees',
+		}).then(function success(response){
+			console.log(response);
+			deferred.resolve(response.data);
+		}, function(error){
+			deferred.reject(error);
+		})
+		return deferred.promise;
+	}
 
 })

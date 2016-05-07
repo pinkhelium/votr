@@ -48,11 +48,23 @@
 				</div>
 				<br />
 				<div class="6u$ 12u$(small)">
-				<input type="text" ng-model="masterPassword" placeholder="Enter Master Password"/>
+				<input type="password" ng-model="masterPassword" placeholder="Enter Master Password"/>
 				<br/>
 				<button class="button special small" ng-disabled="masterPassword == ''" ng-click="votrModeChange(masterPassword)">Change VOTR Type</button>
 				</div>
 				</center>
+			</div>
+		</div>
+		<div class="row uniform">
+			<div class="8u">
+				<br/>
+				<header>
+					<center><h1>Mass Message</h1></center>
+				</header>
+				<textarea ng-model="message" rows="10" placeholder="Mass Message"></textarea>
+				<br/>
+				<br/>
+				<button ng-click="addMassMessage(message)">Add Mass Message</button>
 			</div>
 		</div>
 	</div>
