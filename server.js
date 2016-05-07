@@ -14,10 +14,12 @@ var CONFIG = require('./config.js');
 var waterfall = require('async-waterfall');
 var fb_msg_post = require('./facebook_message_poster');
 
+var Firebase = require("firebase");
+var FirebaseTokenGenerator = require("firebase-token-generator");
 
 var C = {};
 
-var Firebase = require("firebase");
+/* FIREBASE REFERENCES */
 var nomineesRef = new Firebase("https://votr-dev.firebaseio.com/nominees");
 var myFirebaseRef = new Firebase("https://votr-dev.firebaseio.com/");
 var candidateRef = new Firebase("https://votr-dev.firebaseio.com/candidates");
@@ -26,6 +28,14 @@ var voteRef = new Firebase("https://votr-dev.firebaseio.com/votes");
 var voteTypeCountRef = new Firebase("https://votr-dev.firebaseio.com/type/voteTypeCount");
 var votrTypeRef = new Firebase("https://votr-dev.firebaseio.com/type/votrType");
 var adminSettingsRef = new Firebase("https://votr-dev.firebaseio.com/adminSettings");
+
+/* FIREBASE AUTHENTICATION */
+
+var tokenGenerator = new FirebaseTokenGenerator(CONFIG.firebaseAppSecret);
+var token = tokenGenerator.createToken({ uid: "1", some: "arbitrary", data: "here" });
+
+
+/* GLOBAL OBJECTS */
 var nominee_list = [];
 var candidateList = [];
 var Votes = {};
@@ -33,11 +43,11 @@ var votrTypeCount = 0;
 
 voteTypeCountRef.on("value", function(snapshot){
 	voteTypeCount = snapshot.val();
-})
+});
 
 votrTypeRef.on("value", function(snapshot){
 	votrType = snapshot.val();
-})
+});
 
 candidateRef.on("value", function(data){
 	candidateList = data.val();
@@ -50,7 +60,6 @@ voteRef.on("value", function(data){
 	console.log("Acquiring Votes...");
 	console.log(JSON.stringify(Votes));
 });
-
 
 nomineesRef.on('value', function(data){
   console.log("Nominees On Change:\n\n:");

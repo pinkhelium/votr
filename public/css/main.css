@@ -4,32 +4,9 @@
 
 #profile_pic_mini {
 	border-radius:50%;
-	width: 65px;
-	/*margin-top: -57px;
-	margin-right: 8px;*/
 }
 
 .button#vote_submit {
 	display: inline-block;
 	float: none;
 }
-
-/*.logo h1 {
-	display: inline-block;
-}
-
-.logo .unline {
-	margin-top: -50%;
-}
-
-table.no-css tbody tr {
-	border: none;
-}
-
-table.no-css tbody tr:nth-child(2n + 1) {
-	background-color: transparent;
-}
-
-table.no-css td {
-	vertical-align: middle;
-}*/
