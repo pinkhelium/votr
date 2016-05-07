@@ -9,7 +9,7 @@ var clientSecret = 'c303396aaab9e8f67f2e410773ae1cef';
 
 // Switch Between these two for Production & Development Environments
 // var callbackUrl = 'http://votr.eu-1.evennode.com/login/facebook/return';
-var callbackUrl = 'http://localhost:3000/login/facebook/return';
+var callbackUrl = 'http://votr.eu-1.evennode.com/login/facebook/return';
 
 var graphAppSecret = clientSecret;
 
