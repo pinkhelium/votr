@@ -1,4 +1,3 @@
-
 var app = angular.module('votrApp',['ngRoute', 'toaster']);
 
 app.config(function($routeProvider){
@@ -31,8 +30,11 @@ app.config(function($routeProvider){
 			templateUrl: './views/candidates.html',
 			controller: 'CandidatesCtrl'
 		})
+		.when('/nominationsResults', {
+			templateUrl: './views/nominationResults.html',
+			controller: 'NominationResultsCtrl'
+		})
 });
-
 
 app.controller("MainCtrl", function($scope,$http){
 	//$scope.pageName = $scope.$parent.pageName;
@@ -199,8 +201,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster){
 			$location.path('/')
 		})
 	}
-
-})
+});
 
 app.controller("AppCtrl", function($scope,$http,$q){
 
@@ -401,7 +402,6 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	});
 });
 
-
 app.controller('ResultCtrl', function($scope,$http,$q){
 	//Results
 	$scope.populateTable= function(){
@@ -459,7 +459,7 @@ app.controller('ResultCtrl', function($scope,$http,$q){
 
 		chart.draw(data, options);
 	}
-})
+});
 
 app.controller('PrevoteCtrl', function($scope,$q,$http,$location,toaster){
 	$scope.user.loggedIn = $scope.$parent.user.loggedIn;
@@ -578,7 +578,6 @@ app.controller('VoteCtrl', function($scope,$http,$q,$location,toaster){
 			$scope.voteMessage = error;
 		})
 	}
-
 });
 
 app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$location,toaster){
@@ -610,7 +609,7 @@ app.controller('CandidateDashboardCtrl', function($scope,$http,$q,$route,$locati
 			console.log("AddDescription: " + error);
 		})
 	}
-})
+});
 
 app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 
@@ -636,5 +635,8 @@ app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 		})
 		return deferred.promise;
 	}
+});
 
-})
+app.controller('NominationResultsCtrl', function($http,$scope,$q){
+
+});
