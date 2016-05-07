@@ -9,11 +9,11 @@
 
 <div ng-if="user.loggedIn == true">
 	<center><section>
-		<img src="{{user.picture.location}}" id="profile_pic">
+		<img src="{{user.picture.url}}" id="profile_pic">
 		<h1 style="margin-top: -1em; background-color: white;">{{user.displayName}}</h1>
 		
 		<h3>{{massMessage}}</h3>
-
+		<img src="{{user.cover.source}}" alt="">
 		<div ng-if="user.isValidACMMember == false">
 			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote.<br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
 		</div>

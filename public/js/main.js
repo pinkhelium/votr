@@ -260,8 +260,9 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.user.nominee = false;
 	$scope.user.displayName = "";
 	$scope.user.picture = {
-		location: '/images/ui-anim_basic_16x16.gif'
+		url: '/images/ui-anim_basic_16x16.gif'
 	};
+	$scope.user.cover = {};
 
 
 	var isNominee = function(){
@@ -317,7 +318,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		if($scope.user.loggedIn == true){
 			$http({
 				method: 'GET',
-				url: '/user/picture'	
+				url: '/user/more'	
 			}).then(function success(response){
 				console.log("function getMoreDetails: success");
 				console.log(response);
@@ -386,7 +387,10 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		detailsPromise.then(function success(data){
 			console.log("Picture got successfully.");
 			console.log(data);
-			$scope.user.picture = data;
+			$scope.user.picture = data.picture.data;
+			$scope.user.cover = data.cover;
+			console.log("cover: ");
+			console.log($scope.user.cover);
 		}, function error(data){
 			console.log("PictureError");
 			console.log(data);
