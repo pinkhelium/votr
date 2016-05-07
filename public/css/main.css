@@ -2,7 +2,7 @@
 	border-radius: 50%;
 	width: 300px;
 	position: relative;
-	z-index: -5000;
+	z-index: 15;
 }
 
 #profile_pic_mini {
@@ -30,4 +30,21 @@
 	/*border-bottom: 1px solid black;*/
 	margin-top: -2.0em;
 	background-color: white;
+}
+
+
+.coverPhotoContainer {
+	height: 200px;
+	overflow: hidden;
+	border-radius: 45px;
+	/*text-align: left;*/
+}
+
+#profile_pic2 {
+	position: relative;
+	margin-top: -250px;
+	margin-left: -50px;
+	z-index: 200;
+	border-radius: 50%;
+	width: 300px;
 }
