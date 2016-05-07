@@ -383,7 +383,7 @@ app.get('/user/picture', function(request, response){
 		return;
 	}
 
-	var reqURL = '/me/picture?height=300&access_token='+request.session.passport.user.accessToken;
+	var reqURL = '/me/?fields=picture.height(300),cover&access_token='+request.session.passport.user.accessToken;
 	
 	graph.get(reqURL, function(error, success){
 		if(error){

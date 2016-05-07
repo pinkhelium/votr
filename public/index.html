@@ -29,9 +29,13 @@
 							<!-- Logo -->
 								
 								<a href="/#/" class="logo">
-									<h1>v</h1><img ng-if="user.loggedIn == true" src="{{user.picture.location}}" id="profile_pic_mini"><h1 ng-if="user.loggedIn == false">o</h1><h1>tr</h1>
+									<h1>v</h1><img ng-if="user.loggedIn == true" src="{{user.picture.location}}" id="profile_pic_mini"><h1 ng-if="user.loggedIn == false" style="z-index: 10000;">o</h1><h1>tr</h1>
 									<br/>
-									<span class="title"><hr style="margin-top: 0em; margin-bottom: 0em;"/> by pinkHelium <hr style="margin-top: 0em;"/></span>
+									<span class="title">
+										<!-- <hr style="margin-top: -0.5em; margin-bottom: 0em; z-index: -500;"/>  -->
+											by pinkHelium 
+										<!-- <hr style="margin-top: 0em;"/> -->
+									</span>
 								</a>
 
 							<!-- Nav -->
