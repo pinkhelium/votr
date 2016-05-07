@@ -1683,7 +1683,7 @@
 	}
 
 	em, i {
-		font-style: italic;
+		/*font-style: italic;*/
 	}
 
 	p {
@@ -2858,7 +2858,7 @@
 /* Header */
 
 	#header {
-		padding: 2em 0 0.1em 0 ;
+		padding: 3em 0 0.1em 0 ;
 	}
 
 		#header .logo {
@@ -2866,7 +2866,7 @@
 			border-bottom: 0;
 			color: inherit;
 			font-weight: 900;
-			letter-spacing: 0.35em;
+			/*letter-spacing: 0.35em;*/
 			margin: 0 0 2.5em 0;
 			text-decoration: none;
 			text-transform: uppercase;
@@ -3197,8 +3197,9 @@
 /* Footer */
 
 	#footer {
-		padding: 5em 0 6em 0 ;
+		padding: 0em 0 3em 0 ;
 		background-color: #f6f6f6;
+
 	}
 
 		#footer > .inner {
@@ -3260,7 +3261,7 @@
 		@media screen and (max-width: 1280px) {
 
 			#footer {
-				padding: 5em 0 3em 0 ;
+				/*padding: 1em 0 3em 0 ;*/
 			}
 
 				#footer > .inner section:nth-child(1) {
@@ -3292,7 +3293,7 @@
 		@media screen and (max-width: 736px) {
 
 			#footer {
-				padding: 3em 0 1em 0 ;
+				/*padding: 1em 0 1em 0 ;*/
 			}
 
 				#footer > .inner {
