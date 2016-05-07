@@ -4,6 +4,7 @@
 
 #profile_pic_mini {
 	border-radius:50%;
+	width: 65px;
 }
 
 #profile_pic_candidate {
