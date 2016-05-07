@@ -44,7 +44,7 @@ app.controller("MainCtrl", function($scope,$http){
 	$scope.user.picture = $scope.$parent.user.picture;
 });
 
-app.controller("DashboardCtrl", function($scope,$http,$q,$route){
+app.controller("DashboardCtrl", function($scope,$http,$q,$location){
 
 	//Nominate Part
 
@@ -130,39 +130,51 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$route){
 		return deferred.promise;
 	}
 
-
 	//Switching between VOTR-types
 
 	$scope.votrType = $scope.$parent.votrType;
+	$scope.masterPassword = '';
 	
-	$scope.getVoteTypeCount = function(){
+	$scope.votrModeChange = function(masterPassword){
+		var promise = changeMode(masterPassword);
+		promise.then(function success(data){
+			$scope.$parent.voteMessage = "VOTR Type Change Successful";
+			if($scope.votrType == 'prevote'){
+				$scope.$parent.votrType = 'vote';
+			}
+			else if($scope.votrType == 'vote'){
+				$scope.$parent.votrType = 'prevote';
+			}
+			$location.path("/");
+		}, function error(error){
+			$scope.$parent.voteMessage = "Something Went Wrong.";
+			console.log(error);
+			$location.path('/');
+		})
+	}
+
+	var changeMode = function(masterPassword){
+
+		var deferred = $q.defer();
+
 		$http({
-			url: '/votetypecount',
-			method: 'GET'
+			url : '/changemode',
+			method: 'POST',
+			data: {
+				password: masterPassword
+			}
 		}).then(function success(response){
-			$scope.voteTypeCount = response.data;
-			console.log($scope.votetypecount);
-			if($scope.votrType == "prevote"){
-				$scope.prevote = "ON";
-				$scope.vote = "OFF";
+			if(response.data == 'success'){
+				deferred.resolve(response.data);
 			}
 			else{
-				$scope.prevote = "OFF";
-				$scope.vote="ON";
+				deferred.reject(response.data);
 			}
+		}, function error(){
+			deferred.reject(error);
 		})
-	} 
 
-	$scope.voteMode = function(){
-		$http({
-			url: '/votetypecount',
-			method: 'POST'
-		}).then(function success(response){
-			$scope.votrType = response.data;
-			$scope.$parent.votrType = response.data;
-		}, function error(error){
-			console.log(error);
-		})
+		return deferred.promise;
 	}
 
 })
