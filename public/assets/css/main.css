@@ -2162,6 +2162,9 @@
 		width: 100%;
 	}
 
+	textarea {
+		background-color: rgba(144, 144, 144, 0.075);
+	}
 		input[type="text"]:invalid,
 		input[type="password"]:invalid,
 		input[type="email"]:invalid,
@@ -2222,7 +2225,7 @@
 	}
 
 	textarea {
-		padding: 0;
+		padding: 1em;
 		min-height: 3.75em;
 	}
 
