@@ -8,6 +8,7 @@
 * [About](#about)
 * [Features](#feat)
 * [Behind the Scenes](#req)
+* [Note About Security](#security)
 * [Instructions to Setup](#setup)
 
 <a name="about"/>
@@ -34,6 +35,11 @@ A project by [pink**helium**](https://github.com/pinkhelium) - [Sandesh Gade](ht
 * Passport.js for Authentication using Facebook
 * Facebook Graph API
 * AngularJS || ejs
+
+[To Top](#contents)
+
+<a name="security"/>
+## Note About Security
 
 [To Top](#contents)
 

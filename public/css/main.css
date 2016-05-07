@@ -6,6 +6,13 @@
 	border-radius:50%;
 }
 
+#profile_pic_candidate {
+	border-radius:50%;
+	width: 150px;
+	/*margin-top: -57px;
+	margin-right: 8px;*/
+}
+
 .button#vote_submit {
 	display: inline-block;
 	float: none;
