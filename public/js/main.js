@@ -194,7 +194,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster,$rout
 			}
 		}).then(function success(response){
 			toaster.pop("success","Message From Admin", "Added Successfully");
-			$scope.$parent.massMessage = message;
+			$scope.$parent.getMassMessage();
 			$location.path('/');
 		}, function error(){
 			toaster.pop("error","Message From Admin", "Something Went Wrong");
@@ -217,7 +217,15 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.getMassMessage = function(){
 		var promise = massMessage();
 		promise.then(function success(data){
-			$scope.massMessage = data;
+			$scope.massMessages = data;
+			for(key in $scope.massMessages){
+				if($scope.massMessages[key].dateJSON.day < 10){
+					$scope.massMessages[key].dateJSON.day = "0" + $scope.massMessages[key].dateJSON.day;
+				}
+				if($scope.massMessages[key].dateJSON.month < 10){
+					$scope.massMessages[key].dateJSON.month = "0" + $scope.massMessages[key].dateJSON.month;
+				}
+			}
 		})
 	}
 

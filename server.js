@@ -40,7 +40,7 @@ var candidateList = [];
 var Votes = {};
 var votrType = "";
 var masterPassword = "";
-var massMessage = "";
+var massMessage = [];
 
 /* GLOBAL REFERENCE LISTENERS */
 votrTypeRef.on("value", function(snapshot){
@@ -630,12 +630,36 @@ app.get("/message", function(request,response){
 
 app.post("/message", function(request,response){
 
+	
+
 	if(request.user == null){
 		response.status(400).send("Error: Not Authorized");
 	} else {
-		var message = request.body.message;
-		massMessageRef.set(message);
-		response.send("success");
+		
+		var newEntry = {};
+
+		waterfall([
+
+			function(callback){
+				var now = new Date();
+				console.log(now);
+				callback(null,now);
+			},
+			function(now,callback){
+				newEntry.message = request.body.message;
+				newEntry.date = String(now);
+				newEntry.dateJSON = {
+					month: now.getMonth() + 1,
+					day: now.getDate(),
+					hour: now.getHours(),
+					minutes: now.getMinutes(),
+				}
+				var newMessage = massMessageRef.push();
+				newMessage.set(newEntry);
+				//massMessageRef.set(message);
+				response.send("success");
+			}
+		]);
 	}
 })
 
