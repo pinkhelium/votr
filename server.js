@@ -211,52 +211,68 @@ app.get('/candidates', function(request,response){
 
 
 app.post('/candidates', function(request,response){
+	var candidateFound = false;
 
 	if(request.user == null){
 		response.status(400).send("Error: Not Authorized");
 	} else {
-		//To add a new candidate
-		var candidateParam = {};
-		//To get the previous vote
-		var candidateName = request.body.candidateName;
-		//console.log(request.body);
-		candidateParam[candidateName] = {
-			count: 1
-		};
-
-		candidateRef.update(candidateParam);
-
-		var prev_candidate_vote_snapshot = {};
-		
-		waterfall([
-			function(callback){
-				candidateVoteRef.child(request.user.id).once("value", function(data){
-					prev_candidate_vote_snapshot = data.val();
-					console.log(JSON.stringify(data.val()));
-					console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
-
-					callback(null, prev_candidate_vote_snapshot);
-				});
-			},
-			function(prev_candidate_vote_snapshot, callback){
-				console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
-				if(prev_candidate_vote_snapshot != null){
-				// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
-					console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
-					candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
-				}
-
-				var newEntry = {};
-				newEntry[request.user.id] = {
-					name: candidateName,
-					voter_name: request.user.displayName
+		console.log("CHECKING CHECKING CHECKING CHECKING CHECKING");
+		console.log(request.body.candidateName + " is being searched for");
+		for(var key in member_list){
+			if(member_list[key].name == request.body.candidateName){
+				console.log("Found the user "+request.body.candidateName+" in the member list");
+				//To add a new candidate
+				var candidateParam = {};
+				//To get the previous vote
+				var candidateName = request.body.candidateName;
+				//console.log(request.body);
+				candidateParam[candidateName] = {
+					count: 1
 				};
 
-				console.log("GONNA DIE HERE ALL ALONE");
-				candidateVoteRef.update(newEntry);
+				candidateRef.update(candidateParam);
+
+				var prev_candidate_vote_snapshot = {};
+				
+				waterfall([
+					function(callback){
+						candidateVoteRef.child(request.user.id).once("value", function(data){
+							prev_candidate_vote_snapshot = data.val();
+							console.log(JSON.stringify(data.val()));
+							console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
+
+							callback(null, prev_candidate_vote_snapshot);
+						});
+					},
+					function(prev_candidate_vote_snapshot, callback){
+						console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
+						if(prev_candidate_vote_snapshot != null){
+						// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
+							console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
+							candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
+						}
+
+						var newEntry = {};
+						newEntry[request.user.id] = {
+							name: candidateName,
+							voter_name: request.user.displayName
+						};
+
+						console.log("GONNA DIE HERE ALL ALONE");
+						candidateVoteRef.update(newEntry);
+					}
+				]);
+
+				candidateFound = true;
 			}
-		]);
-		response.send("Success");
+		}
+		if (candidateFound) {
+			response.send("Success");
+		}
+		else {
+			console.log("NNONONONONONO");
+			response.send("Candidate not a member of PESITSouth ACM Facebook Group");
+		}
 	}
 });
 
@@ -430,6 +446,7 @@ app.get('/user/more', function(request, response){
 	});
 });
 
+var member_list = {};
 app.get('/user/permissions', function(request, response){
 
 	if(!request.session.flash){
@@ -451,7 +468,7 @@ app.get('/user/permissions', function(request, response){
 			response.status(500).send(error);
 		}
 		else {
-			var member_list = success.data;
+			member_list = success.data;
 			for(var key in member_list){
 				if(member_list[key].id == currentUser.id){
 					console.log("Found the user "+currentUser.displayName+" in the member list");
