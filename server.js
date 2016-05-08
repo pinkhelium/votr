@@ -201,99 +201,109 @@ app.get("/tabledata", function(request,response){
 
 app.get('/candidates', function(request,response){
 
-	response.send(candidateList);
-
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		response.send(candidateList);
+	}
 });
 
 
 
 app.post('/candidates', function(request,response){
 
-	//To add a new candidate
-	var candidateParam = {};
-	//To get the previous vote
-	var candidateName = request.body.candidateName;
-	//console.log(request.body);
-	candidateParam[candidateName] = {
-		count: 1
-	};
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		//To add a new candidate
+		var candidateParam = {};
+		//To get the previous vote
+		var candidateName = request.body.candidateName;
+		//console.log(request.body);
+		candidateParam[candidateName] = {
+			count: 1
+		};
 
-	candidateRef.update(candidateParam);
+		candidateRef.update(candidateParam);
 
-	var prev_candidate_vote_snapshot = {};
-	
-	waterfall([
-		function(callback){
-			candidateVoteRef.child(request.user.id).once("value", function(data){
-				prev_candidate_vote_snapshot = data.val();
-				console.log(JSON.stringify(data.val()));
-				console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
+		var prev_candidate_vote_snapshot = {};
+		
+		waterfall([
+			function(callback){
+				candidateVoteRef.child(request.user.id).once("value", function(data){
+					prev_candidate_vote_snapshot = data.val();
+					console.log(JSON.stringify(data.val()));
+					console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
 
-				callback(null, prev_candidate_vote_snapshot);
-			});
-		},
-		function(prev_candidate_vote_snapshot, callback){
-			console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
-			if(prev_candidate_vote_snapshot != null){
-			// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
-				console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
-				candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
+					callback(null, prev_candidate_vote_snapshot);
+				});
+			},
+			function(prev_candidate_vote_snapshot, callback){
+				console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
+				if(prev_candidate_vote_snapshot != null){
+				// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
+					console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
+					candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
+				}
+
+				var newEntry = {};
+				newEntry[request.user.id] = {
+					name: candidateName,
+					voter_name: request.user.displayName
+				};
+
+				console.log("GONNA DIE HERE ALL ALONE");
+				candidateVoteRef.update(newEntry);
 			}
-
-			var newEntry = {};
-			newEntry[request.user.id] = {
-				name: candidateName,
-				voter_name: request.user.displayName
-			};
-
-			console.log("GONNA DIE HERE ALL ALONE");
-			candidateVoteRef.update(newEntry);
-		}
-	]);
-	response.send("Success");
-
+		]);
+		response.send("Success");
+	}
 });
 
 app.post('/nominate', function(request,response){
 
-	var candidateName = request.body.candidateName;
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		var candidateName = request.body.candidateName;
 
-	// var prev_candidate_vote_obj = {};
+		// var prev_candidate_vote_obj = {};
 
-	var prev_candidate_vote_snapshot = {};
-	
-	waterfall([
-		function(callback){
-			candidateVoteRef.child(request.user.id).once("value", function(data){
-				prev_candidate_vote_snapshot = data.val();
-				console.log(JSON.stringify(data.val()));
-				console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
+		var prev_candidate_vote_snapshot = {};
+		
+		waterfall([
+			function(callback){
+				candidateVoteRef.child(request.user.id).once("value", function(data){
+					prev_candidate_vote_snapshot = data.val();
+					console.log(JSON.stringify(data.val()));
+					console.log("prev snapshot is: " + JSON.stringify(prev_candidate_vote_snapshot));
 
-				callback(null, prev_candidate_vote_snapshot);
-			});
-		},
-		function(prev_candidate_vote_snapshot, callback){
-			console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
-			if(prev_candidate_vote_snapshot != null){
-			// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
-				console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
-				candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
+					callback(null, prev_candidate_vote_snapshot);
+				});
+			},
+			function(prev_candidate_vote_snapshot, callback){
+				console.log("prev snapshot OUTSIDE scope is: " + JSON.stringify(prev_candidate_vote_snapshot));
+				if(prev_candidate_vote_snapshot != null){
+				// 	console.log('PRE: ' + JSON.stringify(prev_candidate_vote_obj));
+					console.log("COMMITTING SUICIDE NOW! old value is:" + JSON.stringify(candidateList[prev_candidate_vote_snapshot.name]));
+					candidateRef.child(prev_candidate_vote_snapshot.name).child("count").set(candidateList[prev_candidate_vote_snapshot.name].count - 1);
+				}
+
+				var newEntry = {};
+				newEntry[request.user.id] = {
+					name: candidateName,
+					voter_name: request.user.displayName
+				};
+
+				console.log("GONNA DIE HERE ALL ALONE");
+				candidateVoteRef.update(newEntry);
+
+				//To add the new vote
+				candidateRef.child(candidateName).child("count").set(candidateList[candidateName].count + 1);
 			}
-
-			var newEntry = {};
-			newEntry[request.user.id] = {
-				name: candidateName,
-				voter_name: request.user.displayName
-			};
-
-			console.log("GONNA DIE HERE ALL ALONE");
-			candidateVoteRef.update(newEntry);
-
-			//To add the new vote
-			candidateRef.child(candidateName).child("count").set(candidateList[candidateName].count + 1);
-		}
-	]);
-	response.send("Success");
+		]);
+		response.send("Success");
+	}
 });
 
 /*
@@ -303,50 +313,68 @@ app.post('/nominate', function(request,response){
 		-> DELETE : Removes a nominee.
 */
 app.get('/nominees', function(request,response){
-	response.send(nominee_list);
+
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		response.send(nominee_list);
+	}
+	
 })
 
 app.post('/nominees', function(request,response){
-	var uid = parseInt(request.body.uid);
-	if(isNaN(uid) == true){
-		response.status(400).send("Error: Invalid UID");
-	}
-	else{
-		var uidUrl = "/" + request.body.uid + "?fields=name";
-		//console.log(request);
-		graph.get(uidUrl, {access_token : request.user.accessToken} ,function(err, res) {
-			//console.log("\n\n\nResponse: " + res + "\n\n\n");
-			var nomineeParam = {};
-			nomineeParam[res.name] = {
-				uid: uid,
-				CScore : 0,
-				VScore: 0,
-				TScore: 0,
-				SScore: 0,
-				Total: 0,
-				pitch: "",
-				profilePicture: ""
-			};
-			nomineesRef.update(nomineeParam);
-			response.send("Added Candidate"); // { id: '4', name: 'Mark Zuckerberg'... }
-		});
+	
+
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else { 
+		var uid = parseInt(request.body.uid);
+		if(isNaN(uid) == true){
+			response.status(400).send("Error: Invalid UID");
+		}
+		else{
+			var uidUrl = "/" + request.body.uid + "?fields=name";
+			//console.log(request);
+			graph.get(uidUrl, {access_token : request.user.accessToken} ,function(err, res) {
+				//console.log("\n\n\nResponse: " + res + "\n\n\n");
+				var nomineeParam = {};
+				nomineeParam[res.name] = {
+					uid: uid,
+					CScore : 0,
+					VScore: 0,
+					TScore: 0,
+					SScore: 0,
+					Total: 0,
+					pitch: "",
+					profilePicture: ""
+				};
+				nomineesRef.update(nomineeParam);
+				response.send("Added Candidate"); // { id: '4', name: 'Mark Zuckerberg'... }
+			});
+		}
 	}
 	
 })
 
 app.delete('/nominees', function(request,response){
-	var nominee = request.query.nominee;
-	var delRef = new Firebase("https://votr-dev.firebaseio.com/nominees/" + nominee );
-	var onComplete = function(error){
-		if(error){
-			response.send(error);
-		}
-		else{
-			response.send("success");
-		}
-	}
 
-	delRef.remove(onComplete);
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		var nominee = request.query.nominee;
+		var delRef = new Firebase("https://votr-dev.firebaseio.com/nominees/" + nominee );
+		var onComplete = function(error){
+			if(error){
+				response.send(error);
+			}
+			else{
+				response.send("success");
+			}
+		}
+
+		delRef.remove(onComplete);
+	}
+	
 })
 
 /*
@@ -452,99 +480,110 @@ app.get('/user/permissions', function(request, response){
 
 app.post('/vote', function(request,response){
 
-	var userID = request.user["id"];
-	var vote = request.body.vote;
-	console.log("Vote: " + vote);
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		var userID = request.user["id"];
+		var vote = request.body.vote;
+		console.log("Vote: " + vote);
 
-	var child_string = "votes/" + userID;
-	console.log("child_string is: ----->" + child_string);
-	
-	//To get the previous vote cast
-	var prev_vote_OBJ = {};
-	
-	if (userID in Votes){
+		var child_string = "votes/" + userID;
+		console.log("child_string is: ----->" + child_string);
+		
+		//To get the previous vote cast
+		var prev_vote_OBJ = {};
+		
+		if (userID in Votes){
+			prev_vote_OBJ = Votes[userID];
+		}
+
+		console.log("--------------------------------------------------------------------------------");
+		console.log("CAPTURE PREVIOUS VOTE");
+		console.log("--------------------------------------------------------------------------------");
+		console.log("--------------------------------------------------------------------------------");
+		console.log(JSON.stringify(prev_vote_OBJ));
+		console.log("--------------------------------------------------------------------------------");
+		// myFirebaseRef.child(child_string).once("value", function(snapshot) {
+		// 	prev_vote_OBJ = snapshot.val();
+		// });
+
+		if (prev_vote_OBJ != null) { 
+			if(prev_vote_OBJ.chair){
+				var csref = nomineesRef.child(prev_vote_OBJ.chair+'/CScore');
+				csref.set( nominee_list[prev_vote_OBJ.chair]['CScore'] - 1);
+			}
+
+			if(prev_vote_OBJ.vice_chair){
+				var vsref = nomineesRef.child(prev_vote_OBJ.vice_chair+'/VScore');
+				vsref.set( nominee_list[prev_vote_OBJ.vice_chair]['VScore'] - 1); 
+			}
+
+			if(prev_vote_OBJ.treasurer){
+				var tsref = nomineesRef.child(prev_vote_OBJ.treasurer+'/TScore');
+				tsref.set( nominee_list[prev_vote_OBJ.treasurer]['TScore'] - 1);
+			}
+
+			if(prev_vote_OBJ.secretary){
+				var ssref = nomineesRef.child(prev_vote_OBJ.secretary+'/SScore');
+				ssref.set( nominee_list[prev_vote_OBJ.secretary]['SScore'] - 1);
+			}
+
+			console.log("PREVIOUS VOTE CLEARED!");
+		}
+
+		var db_param = {};
+		vote["voter_name"] = request.body.user;
+		var uID = request.user["id"];
+		db_param[uID] = vote
+		myFirebaseRef.child('votes').update(db_param);
+
+		if(vote.chair){
+			csref = nomineesRef.child(vote.chair+'/CScore');
+			csref.set( nominee_list[vote.chair]['CScore'] + 1);
+		} 
+
+		if(vote.vice_chair){
+			vsref = nomineesRef.child(vote.vice_chair+'/VScore');
+			vsref.set( nominee_list[vote.vice_chair]['VScore'] + 1); 
+		}
+
+		if(vote.treasurer){
+			tsref = nomineesRef.child(vote.treasurer+'/TScore');
+			tsref.set( nominee_list[vote.treasurer]['TScore'] + 1);
+		}
+
+		if(vote.secretary){
+			ssref = nomineesRef.child(vote.secretary+'/SScore');
+			ssref.set( nominee_list[vote.secretary]['SScore'] + 1);
+		} 
+		
 		prev_vote_OBJ = Votes[userID];
+		console.log("--------------------------------------------------------------------------------");
+		console.log("NEW VOTE");
+		console.log("--------------------------------------------------------------------------------");
+		console.log("--------------------------------------------------------------------------------");
+		console.log(JSON.stringify(prev_vote_OBJ));
+		console.log("--------------------------------------------------------------------------------");
+
+		response.send("success");
 	}
 
-	console.log("--------------------------------------------------------------------------------");
-	console.log("CAPTURE PREVIOUS VOTE");
-	console.log("--------------------------------------------------------------------------------");
-	console.log("--------------------------------------------------------------------------------");
-	console.log(JSON.stringify(prev_vote_OBJ));
-	console.log("--------------------------------------------------------------------------------");
-	// myFirebaseRef.child(child_string).once("value", function(snapshot) {
-	// 	prev_vote_OBJ = snapshot.val();
-	// });
-
-	if (prev_vote_OBJ != null) { 
-		if(prev_vote_OBJ.chair){
-			var csref = nomineesRef.child(prev_vote_OBJ.chair+'/CScore');
-			csref.set( nominee_list[prev_vote_OBJ.chair]['CScore'] - 1);
-		}
-
-		if(prev_vote_OBJ.vice_chair){
-			var vsref = nomineesRef.child(prev_vote_OBJ.vice_chair+'/VScore');
-			vsref.set( nominee_list[prev_vote_OBJ.vice_chair]['VScore'] - 1); 
-		}
-
-		if(prev_vote_OBJ.treasurer){
-			var tsref = nomineesRef.child(prev_vote_OBJ.treasurer+'/TScore');
-			tsref.set( nominee_list[prev_vote_OBJ.treasurer]['TScore'] - 1);
-		}
-
-		if(prev_vote_OBJ.secretary){
-			var ssref = nomineesRef.child(prev_vote_OBJ.secretary+'/SScore');
-			ssref.set( nominee_list[prev_vote_OBJ.secretary]['SScore'] - 1);
-		}
-
-		console.log("PREVIOUS VOTE CLEARED!");
-	}
-
-	var db_param = {};
-	vote["voter_name"] = request.body.user;
-	var uID = request.user["id"];
-	db_param[uID] = vote
-	myFirebaseRef.child('votes').update(db_param);
-
-	if(vote.chair){
-		csref = nomineesRef.child(vote.chair+'/CScore');
-		csref.set( nominee_list[vote.chair]['CScore'] + 1);
-	} 
-
-	if(vote.vice_chair){
-		vsref = nomineesRef.child(vote.vice_chair+'/VScore');
-		vsref.set( nominee_list[vote.vice_chair]['VScore'] + 1); 
-	}
-
-	if(vote.treasurer){
-		tsref = nomineesRef.child(vote.treasurer+'/TScore');
-		tsref.set( nominee_list[vote.treasurer]['TScore'] + 1);
-	}
-
-	if(vote.secretary){
-		ssref = nomineesRef.child(vote.secretary+'/SScore');
-		ssref.set( nominee_list[vote.secretary]['SScore'] + 1);
-	} 
 	
-	prev_vote_OBJ = Votes[userID];
-	console.log("--------------------------------------------------------------------------------");
-	console.log("NEW VOTE");
-	console.log("--------------------------------------------------------------------------------");
-	console.log("--------------------------------------------------------------------------------");
-	console.log(JSON.stringify(prev_vote_OBJ));
-	console.log("--------------------------------------------------------------------------------");
-
-	response.send("success");
 });
 
 app.post("/pitch", function(request,response){
-	var pitch = request.body.pitch;
-	var userName = request.user.displayName;
-	var picture = request.body.picture;
 
-	nomineesRef.child(userName).child("profilePicture").set(picture.url);
-	nomineesRef.child(userName).child("pitch").set(pitch);
-	response.send("Success");
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		var pitch = request.body.pitch;
+		var userName = request.user.displayName;
+		var picture = request.body.picture;
+
+		nomineesRef.child(userName).child("profilePicture").set(picture.url);
+		nomineesRef.child(userName).child("pitch").set(pitch);
+		response.send("Success");
+	}
 })
 
 app.get("/pitch", function(request,response){
@@ -580,13 +619,24 @@ app.post('/changemode', function(request,response){
 });
 
 app.get("/message", function(request,response){
-	response.send(massMessage);
+
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		response.send(massMessage);
+	}
+	
 })
 
 app.post("/message", function(request,response){
-	var message = request.body.message;
-	massMessageRef.set(message);
-	response.send("success");
+
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		var message = request.body.message;
+		massMessageRef.set(message);
+		response.send("success");
+	}
 })
 
 app.listen(port, function(){
