@@ -227,7 +227,7 @@ Main components
 }
 .cd-timeline-content .cd-read-more {
   float: right;
-  padding: .8em 1em;
+  /*padding: .8em 1em;*/
   background: #F6F6F6;
   color: white;
   border-radius: 0.25em;
@@ -267,7 +267,7 @@ Main components
 @media only screen and (min-width: 1170px) {
   .cd-timeline-content {
     margin-left: 0;
-    padding: 1.6em;
+    /*padding: 1.6em;*/
     width: 45%;
   }
   .cd-timeline-content::before {
