@@ -5,6 +5,11 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<!-- textr -->
+
+		<link rel="stylesheet" href="textr/css/reset.css"> <!-- CSS reset -->
+		<link rel="stylesheet" href="textr/css/style.css"> <!-- Resource style -->
+		<script src="textr/js/modernizr.js"></script> <!-- Modernizr -->
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="css/main.css" />
 		<link rel="stylesheet" href="css/toaster.css"/>
@@ -15,7 +20,9 @@
 		<script type="text/javascript" src="js/toaster.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 
 	</head>
 	<body ng-controller="AppCtrl">
@@ -25,19 +32,24 @@
 				<!-- Header -->
 					<header id="header">
 						<div class="inner">
-
 							<!-- Logo -->
-								
-								<a href="/#/" class="logo">
+								<div >
+								<a href="/#/" class="logo" style="width: auto; background: white; position:fixed; z-index: 1234">
 									<h1>v</h1><img ng-if="user.loggedIn == true" src="{{user.picture.url}}" id="profile_pic_mini"><h1 ng-if="user.loggedIn == false" style="z-index: 10000;">o</h1><h1>tr</h1>
 									<br/>
-									<span class="title">
-										<!-- <hr style="margin-top: -0.5em; margin-bottom: 0em; z-index: -500;"/>  -->
-											by pinkHelium 
-										<!-- <hr style="margin-top: 0em;"/> -->
-									</span>
+									<section style="padding-bottom: 0;" class="cd-intro title">
+										<p class="cd-headline letters type"> <br />
+											coded with ❤ by
+											<span class="cd-words-wrapper waiting">
+												<b class="is-visible">cyberbeast</b>
+												<b>seel</b>
+												<b>diti</b>
+												<b>pinkHelium</b>
+											</span>
+										</p>
+									</section>
 								</a>
-
+								</div>
 							<!-- Nav -->
 								<nav ng-if="user.loggedIn == true">
 									<ul>
@@ -67,7 +79,7 @@
 				<!-- Main -->
 					<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
 					<div id="main">
-						<div class="inner" ng-view="">
+						<div class="inner" style="padding-top: 8rem;" ng-view="">
 							
 						</div>
 					</div>
@@ -82,5 +94,24 @@
 			<script src="assets/js/main.js"></script>
 			<script src="js/jqcloud.min.js"></script>
 
+		
+		<!-- <script src="textr/js/jquery-2.1.1.js"></script> -->
+
+		<footer id="footer">
+			<center><div>
+				<section style="vertical-align:top;" class="cd-intro">
+					<p style="vertical-align:top;" class="cd-headline letters type"> <br />
+						coded with ❤ by
+						<span class="cd-words-wrapper waiting">
+							<b class="is-visible">cyberbeast</b>
+							<b>seel</b>
+							<b>diti</b>
+							<b>pinkHelium</b>
+						</span>
+					</p>
+				</section>
+			</div></center>
+		</footer>
+		<script src="textr/js/main.js"></script> <!-- Resource jQuery -->
 	</body>
 </html>
