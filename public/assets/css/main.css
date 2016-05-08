@@ -2153,7 +2153,8 @@
 		background-color: transparent;
 		border: none;
 		border-radius: 0;
-		border-bottom: solid 1px #c9c9c9;
+		border-bottom: solid 5px #c9c9c9;
+		border-top: solid 5px #c9c9c9;
 		color: inherit;
 		display: block;
 		outline: 0;
@@ -2181,6 +2182,9 @@
 		select:focus,
 		textarea:focus {
 			border-bottom-color: #f2849e;
+			border-top-color: #f2849e;
+			border-left-color: #f2849e;
+			border-right-color: #f2849e;
 			box-shadow: inset 0 -1px 0 0 #f2849e;
 		}
 

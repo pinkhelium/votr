@@ -21,20 +21,49 @@
 				<!-- <h1 style="margin-bottom: 0em; position: relative; z-index: 10222; font-size: 520%; text-transform: uppercase;">{{user.displayName}}</h1> -->
 				<h1>{{user.displayName}}</h1>
 				<!-- <h3 style="margin-bottom: 0em; position: relative; z-index: 10000; text-transform: uppercase;">{{massMessage}}</h3> -->
-				<h3>{{massMessage}}</h3>
+				<!-- <h3>{{massMessage}}</h3> -->
 			</center>
 				<!-- <p><span class="image left"><img src="{{user.picture.url}}" alt="" id="profile_pic2" /></span><h1 style="margin-top: -170px; margin-left: 220px; background-color: white; position: relative; z-index: 10; text-align: left"> &nbsp&nbsp&nbsp&nbsp{{user.displayName}}</h1></p> -->
 			</div>
 
 		</div>	
+
 	</div>
+
+
 		<!-- <img src="{{user.picture.url}}" id="profile_pic"> -->
 		
 		<!-- <h3>{{massMessage}}</h3> -->
 		<!-- <img src="{{user.cover.source}}" alt=""> -->
-		<div ng-if="user.isValidACMMember == false">
-			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote.<br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
-		</div>
+		
 		<!-- <h2>{{user.displayName}}</h2> -->
 	</section></center>
+	<section id="cd-timeline" class="cd-container">
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-picture">
+				<img src="timeline/img/cd-icon-picture.svg" alt="Picture">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+				<h2>ADMIN MESSAGE</h2>
+				<p>{{massMessage}}</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-picture">
+				<img src="timeline/img/cd-icon-picture.svg" alt="Picture">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+				<h2>{{massMessage}}</h2>
+				<p>mass message content</p>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+	</section>
+	<div ng-if="user.isValidACMMember == false">
+			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote.<br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
+		</div>
+
+	
+
 </div>

@@ -1,10 +1,17 @@
 <div ng-if="user.loggedIn == true" ng-init="getNominees()">
-	<div class="box alt" ng-if="user.admin == true">
-		<div class="row uniform">
-			<div class="8u">
-				<header>
+	<div ng-if="user.admin == true">
+		<div ng-controller="TabCtrl"><div class="container">
+
+	<ul class="tabs">
+		<li class="tab current" data-tab="tab-1"><h2 id="tab_name">Nominate</h2></li>
+		<li class="tab" data-tab="tab-2"><h2 id="tab_name">Toggle Mode</h2></li>
+		<li class="tab" data-tab="tab-3"><h2 id="tab_name">Mass Message</h2></li>
+	</ul>
+
+	<div id="tab-1" class="tab-content current">
+<!--     	<header>
 					<center><h1>Nominate A Candidate</h1></center>
-				</header>
+				</header> -->
 					<!-- <hr> -->
 				<br />
 				<form>
@@ -35,39 +42,44 @@
 						</div>
 					</div>
 				</center>
-			</div>
-			<div class="4u" ng-init="getVoteTypeCount()">
-				<header>
+	</div>
+    
+	<div id="tab-2" class="tab-content">
+    	<div ng-init="getVoteTypeCount()">
+<!-- 				<header>
 					<center><h1>Settings</h1></center>
-				</header>
+				</header> -->
 					<!-- <hr> -->
 				<br />
 				<center>
 				<div class="6u 12u$(small)">
-					<h3> VOTE MODE: {{votrType}}</h3>
+					<h2> VOTE MODE: {{votrType}}</h2>
 				</div>
 				<br />
 				<div class="6u$ 12u$(small)">
-				<input type="password" ng-model="masterPassword" placeholder="Enter Master Password"/>
+				<input type="password" ng-model="masterPassword" placeholder="Enter Master Password to toggle VOTR mode..." style="text-align: center;" />
 				<br/>
 				<button class="button special small" ng-disabled="masterPassword == ''" ng-click="votrModeChange(masterPassword)">Change VOTR Type</button>
 				</div>
 				</center>
 			</div>
-		</div>
-		<div class="row uniform">
-			<div class="8u">
-				<br/>
-				<header>
+	</div>
+    
+	<div id="tab-3" class="tab-content">
+    	<center><div>
+<!-- 				<header>
 					<center><h1>Mass Message</h1></center>
-				</header>
+				</header> -->
 				<textarea ng-model="message" rows="10" placeholder="Mass Message"></textarea>
 				<br/>
 				<br/>
 				<button ng-click="addMassMessage(message)">Add Mass Message</button>
-			</div>
-		</div>
+			</div></center>
 	</div>
+</div>
+</div>
+	</div>
+	
 	<div ng-if="user.admin == false">
 		<center><p>You Shall Not Pass!</p></center>
 	</div>

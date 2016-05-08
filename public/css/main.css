@@ -48,3 +48,9 @@
 	border-radius: 50%;
 	width: 300px;
 }
+
+#tab_name {
+	letter-spacing: 0em; 
+	line-height: 2; 
+	margin-bottom: 0;
+}
