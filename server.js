@@ -647,6 +647,7 @@ app.post("/message", function(request,response){
 			},
 			function(now,callback){
 				newEntry.message = request.body.message;
+				newEntry.poster = request.user.displayName;
 				newEntry.date = String(now);
 				newEntry.dateJSON = {
 					month: now.getMonth() + 1,
