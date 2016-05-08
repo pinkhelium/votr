@@ -217,6 +217,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 	$scope.getMassMessage = function(){
 		var promise = massMessage();
 		promise.then(function success(data){
+			$scope.massMessagesArray = [];
 			$scope.massMessages = data;
 			for(key in $scope.massMessages){
 				if($scope.massMessages[key].dateJSON.day < 10){
@@ -225,7 +226,16 @@ app.controller("AppCtrl", function($scope,$http,$q){
 				if($scope.massMessages[key].dateJSON.month < 10){
 					$scope.massMessages[key].dateJSON.month = "0" + $scope.massMessages[key].dateJSON.month;
 				}
+				//$scope.massMessages[key].date = new Date($scope.massMessages[key].date);
+				$scope.massMessagesArray.push($scope.massMessages[key]);		
 			}
+			$scope.massMessagesArray.sort(function(a, b) {
+			    a = new Date(a.date);
+			    b = new Date(b.date);
+			    console.log("Sort");
+			    return a>b ? -1 : a<b ? 1 : 0;
+			});
+			//console.log(massMessagesArray);
 		})
 	}
 

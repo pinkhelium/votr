@@ -39,7 +39,7 @@
 		<!-- <h2>{{user.displayName}}</h2> -->
 	</section></center>
 	<section id="cd-timeline" class="cd-container">
-		<div class="cd-timeline-block" ng-repeat="value in massMessages">
+		<div class="cd-timeline-block" ng-repeat="value in massMessagesArray | orderBy: '-value.date'">
 			<div class="cd-timeline-img cd-picture">
 				<img src="timeline/img/cd-icon-picture.svg" alt="Picture">
 			</div> <!-- cd-timeline-img -->
