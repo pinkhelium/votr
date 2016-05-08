@@ -1,5 +1,25 @@
-<h2>
-	Word Cloud Here	
-</h2>
-
-<div id="my-graph" style="width:90%;height:250px;"></div>
+<div ng-if="user.loggedIn == true" ng-init="getCandidates()">
+	<div ng-if="user.admin == true" >
+		<table>
+			<tr>
+				<th>Nominee Name</th>
+				<th>Count</th>
+			</th>
+			<tr ng-repeat="candidate in candidates">
+				<td>{{candidate.name}}</td>
+				<td>{{candidate.count}}</td>
+			</tr>
+		</table>
+	</div>
+	<div ng-if="user.admin == false">
+		<center><p>You Shall Not Pass!</p></center>
+	</div>
+</div>
+<div ng-if="user.loggedIn == false">
+	<header>
+		<center><h1><a href="/login">sign in here</a>.</h1></center>
+		
+		<!-- <hr> -->
+	</header>
+		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
+</div>
