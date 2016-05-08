@@ -681,6 +681,41 @@ app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 
 app.controller('NominationResultsCtrl', function($http,$scope,$q){
 
+	$scope.getCandidates = function(){
+		var promise = serverCall();
+		promise.then(function success(data){
+			$scope.candidates = [] ;
+			for(key in data){
+				var newEntry = data[key];
+				newEntry.name = key;
+				$scope.candidates.push(newEntry);
+			}
+			console.log($scope.candidates);
+			$scope.candidates.sort(function(a, b) {
+			    a = a.count;
+			    b = b.count;
+			    console.log("Sort");
+			    return a>b ? -1 : a<b ? 1 : 0;
+			});
+
+		});
+	}
+
+	var serverCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			url: '/candidates',
+			method: "GET"
+		}).then(function success(response){
+			deferred.resolve(response.data);
+		} ,function error(error){
+			deferred.reject(error);
+		})
+
+		return deferred.promise;
+	}
+
 });
 
 app.controller('TabCtrl', [function() {
