@@ -3,6 +3,9 @@
 		<div ng-if="user.isValidACMMember == true">
 		<header>
 			<center><h1>Nominate A Candidate</h1></center>
+			<br/>
+			<br/>
+			<center><p>The <strong>"Current Nominees"</strong> list has names of the candidates already nominated by others. <strong>If you don't find your candidate's name in the list, add him/her in the field below that. =)</strong></p></center>.
 		</header>
 			<!-- <hr> -->
 		<br />
@@ -12,7 +15,7 @@
 					<div class="select-wrapper">
 						<select ng-model="candidateName">
 							<option value="" disabled selected>Current Nominees (Click Here)</option>
-							<option ng-repeat="(key,value) in candidates">{{key}}</option>
+							<option ng-repeat="candidate in candidates">{{candidate}}</option>
 						</select>
 					</div>
 				</td>
@@ -26,6 +29,8 @@
 		
 		<div ng-if="user.isValidACMMember == true">
 			<center>
+			<hr/>
+			<p>Don't see your Nominee above? <strong>Add him/her below! =)</strong>
 				<div>
 					<table style="border-collapse: separate;">
 						<tr>

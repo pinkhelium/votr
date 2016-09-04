@@ -6,33 +6,43 @@ app.config(function($routeProvider){
 			templateUrl: "./views/home.html",
 			controller: "MainCtrl"
 		})
-		.when('/dashboard', {
-			templateUrl: "./views/dashboard.html",
-			controller: "DashboardCtrl",
-		})
-		.when('/vote', {
-			templateUrl: './views/vote.html',
-			controller: 'VoteCtrl'
-		})
-		.when('/result', {
+		// .when('/dashboard', {
+		// 	templateUrl: "./views/dashboard.html",
+		// 	controller: "DashboardCtrl",
+		// })
+		// .when('/karanneedstovote', {
+		// 	templateUrl: './views/vote.html',
+		// 	controller: 'VoteCtrl'
+		// })
+		.when('/flamingeyelid', {
 			templateUrl: './views/result.html',
 			controller: 'ResultCtrl'
 		})
-		.when('/prevote', {
-			templateUrl: './views/prevote.html',
-			controller: 'PrevoteCtrl'
+		.when('/404', {
+			templateUrl: './views/404.html'
 		})
-		.when('/candidatedashboard', {
-			templateUrl: './views/candidatedashboard.html',
-			controller: 'CandidateDashboardCtrl'
-		})
-		.when('/candidates', {
-			templateUrl: './views/candidates.html',
-			controller: 'CandidatesCtrl'
-		})
-		.when('/nominationsResults', {
-			templateUrl: './views/nominationResults.html',
-			controller: 'NominationResultsCtrl'
+		// .when('/prevote', {
+		// 	templateUrl: './views/prevote.html',
+		// 	controller: 'PrevoteCtrl'
+		// })
+		// .when('/candidatedashboard', {
+		// 	templateUrl: './views/candidateDashboard.html',
+		// 	controller: 'CandidateDashboardCtrl'
+		// })
+		// .when('/candidates', {
+		// 	templateUrl: './views/candidates.html',
+		// 	controller: 'CandidatesCtrl'
+		// })
+		// .when('/nominationsResults', {
+		// 	templateUrl: './views/nominationResults.html',
+		// 	controller: 'NominationResultsCtrl'
+		// })
+		// .when('/candidate/:c_id', {
+		// 	templateUrl: './views/singleCandidate.html',
+		// 	controller: 'SingleCandidateCtrl'
+		// })
+		.otherwise({
+			redirectTo: '/404'
 		})
 });
 
@@ -70,7 +80,7 @@ app.controller("DashboardCtrl", function($scope,$http,$q,$location,toaster,$rout
 
 		$http({
 			method: 'GET',
-			url: '/nominees',
+			url: '/tabledata',
 		}).then(function success(response){
 			console.log(response);
 			deferred.resolve(response.data);
@@ -232,7 +242,6 @@ app.controller("AppCtrl", function($scope,$http,$q){
 			$scope.massMessagesArray.sort(function(a, b) {
 			    a = new Date(a.date);
 			    b = new Date(b.date);
-			    console.log("Sort");
 			    return a>b ? -1 : a<b ? 1 : 0;
 			});
 			//console.log(massMessagesArray);
@@ -304,7 +313,7 @@ app.controller("AppCtrl", function($scope,$http,$q){
 		var promise = isNominee();
 		promise.then(function success(data){
 			for (key in data){
-				if(key === $scope.user.displayName){
+				if(data[key] === $scope.user.displayName){
 					$scope.user.nominee = true;
 					console.log("IS NOMINEE");
 				}
@@ -422,25 +431,41 @@ app.controller("AppCtrl", function($scope,$http,$q){
 
 app.controller('ResultCtrl', function($scope,$http,$q){
 	//Results
+	$scope.nominees = [];
 	$scope.populateTable= function(){
 
 		var promise = getData();
 
 		promise.then(function success(data){
+			// $scope.nominees = data;
 			for(key in data){
-				var newEntry = [];
-				newEntry.push(key);
-				newEntry.push(data[key].CScore);
-				newEntry.push(data[key].VScore);
-				newEntry.push(data[key].TScore);
-				newEntry.push(data[key].SScore);
-
-				dataSet.push(newEntry);
-				console.log(dataSet);
+				var newEntry={};
+				newEntry.name = key;
+				newEntry.CScore = data[key].CScore;
+				newEntry.VScore = data[key].VScore;
+				newEntry.TScore = data[key].TScore;
+				newEntry.SScore = data[key].SScore;
+				newEntry.TotalScore = 8*newEntry.CScore + 4*newEntry.VScore + 2*newEntry.TScore + newEntry.SScore;
+				$scope.nominees.push(newEntry);
 			}
-			drawChart();
-		})
 
+			$scope.nominees.sort(function(a,b){
+				// return (a.TotalScore - b.TotalScore);
+				if( (b.CScore - a.CScore) != 0 ){
+					return (b.CScore - a.CScore);
+				} 
+				else if( (b.VScore - a.VScore)!=0 ){
+					return (b.VScore - a.VScore);
+				}
+				else if( (b.TScore - a.TScore)!=0 ) {
+					return (b.TScore - a.TScore);
+				}
+				else{
+					return (b.SScore - a.SScore);
+				}
+
+			});
+		});
 	}
 
 	var getData = function(){
@@ -456,26 +481,6 @@ app.controller('ResultCtrl', function($scope,$http,$q){
 		})
 
 		return deferred.promise;
-	}
-	google.charts.load('current', {'packages':['bar']});
-	google.charts.setOnLoadCallback(drawChart);
-	var dataSet = [
-	  ['', 'CScore', 'VScore', 'TScore', 'SScore']
-	]
-
-	$scope.add = function(){
-	  drawChart();
-	}
-
-	function drawChart() {
-		var data = google.visualization.arrayToDataTable(dataSet);
-		var options = {
-		  bars: 'horizontal' // Required for Material Bar Charts.
-		};
-
-		var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-		chart.draw(data, options);
 	}
 });
 
@@ -493,7 +498,7 @@ app.controller('PrevoteCtrl', function($scope,$q,$http,$location,toaster){
 		var deferred = $q.defer();
 
 		$http({
-			url: '/candidates',
+			url: '/candidatenames',
 			method: "GET"
 		}).then(function success(response){
 			deferred.resolve(response.data);
@@ -519,7 +524,11 @@ app.controller('PrevoteCtrl', function($scope,$q,$http,$location,toaster){
 
 		}, function error(error){
 			console.log(error);
-			toaster.pop("error","Adding Candidate", "Something Went Wrong");
+			if(error.data = "Candidate not a member of PESITSouth ACM Facebook Group"){
+				toaster.pop("error","Adding Candidate", error.data);
+			} else {
+				toaster.pop("error","Adding Candidate", "Something Went Wrong");	
+			}
 			$location.path('/');
 		})
 	}
@@ -668,7 +677,7 @@ app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 
 		$http({
 			method: 'GET',
-			url: '/nominees',
+			url: '/nameandpitch',
 		}).then(function success(response){
 			console.log(response);
 			deferred.resolve(response.data);
@@ -676,6 +685,9 @@ app.controller('CandidatesCtrl', function($http,$scope,$q,$route){
 			deferred.reject(error);
 		})
 		return deferred.promise;
+	}
+	$scope.randomsort = function(){
+		return 0.5 - Math.random();
 	}
 });
 
@@ -731,3 +743,38 @@ app.controller('TabCtrl', [function() {
 	});
     });
 }]);
+
+app.controller('SingleCandidateCtrl', function($scope, $q, $http, $routeParams) {
+
+	$scope.uid = $routeParams.c_id;
+	$scope.thisNominee = null;
+
+    $scope.getNominees = function(){
+		var promise = nomineesCall();
+		console.log("---------------------------------------HERE");
+		promise.then(function success(data){
+			for (nom in data){
+				if(data[nom].uid == $routeParams.c_id){
+					$scope.thisNominee = data[nom];
+					console.log('nomgot: ');
+					console.log($scope.thisNominee);
+				}
+			}
+		});
+	}
+
+	var nomineesCall = function(){
+		var deferred = $q.defer();
+
+		$http({
+			method: 'GET',
+			url: '/nameandpitch',
+		}).then(function success(response){
+			console.log(response);
+			deferred.resolve(response.data);
+		}, function(error){
+			deferred.reject(error);
+		})
+		return deferred.promise;
+	}
+});

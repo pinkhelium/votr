@@ -9,7 +9,8 @@
 			<textarea ng-model="pitch" rows="10" placeholder="Your Pitch"></textarea>
 			<br/>
 			<br/>
-			<button ng-click="addPitch(pitch)">Add Pitch</button>
+			<button ng-if='pitch == ""' ng-click="addPitch(pitch)">Add Pitch</button>
+			<button ng-if='pitch != ""' ng-click="addPitch(pitch)">Save Pitch</button>
 			</center>
 		</div>
 		<div ng-if="user.nominee == false">

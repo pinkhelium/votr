@@ -1,7 +1,18 @@
 <div ng-if="user.loggedIn == true">
 	<div ng-init="getNominees()">
-		<div ng-repeat="(key,value) in nominees">
-			<p><span class="image left"><img src="{{value.profilePicture}}" alt="" id="profile_pic_candidate" /></span><h1>{{key}}</h1><pre>{{value.pitch}}</pre></p><hr />
+		<h1>Candidates</h1>
+		<p>Here are the selected nominees contesting for the ACM elections (listed in randomised order =p)</p>
+		<div ng-repeat="nominee in nominees|orderBy: randomsort">
+			<p>
+				<span class="image left">
+					<a href="/#/candidate/{{nominee.uid}}"><img src="{{nominee.profilePicture}}" alt="" id="profile_pic_candidate" /></a>
+				</span>
+				<h2><a href="/#/candidate/{{nominee.uid}}">{{nominee.name}}</a></h2>
+				<p style="white-space: pre-wrap;">{{nominee.pitch | limitTo:350}} ...</p>
+				<a href="/#/candidate/{{nominee.uid}}" class="button small" style="float: right">Read more</a>
+				<div style="content: ''; float: none; clear:both;"></div>
+			</p>
+			<hr />
 		</div>
 	</div>
 </div>

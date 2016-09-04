@@ -6,21 +6,19 @@
 				<center><h1>Cast My Vote!</h1></center>
 				<br/>
 				<br/>
-				<center><p>Note: Your current votes will <strong>OVERWRITE</strong> a previous vote (if any) and only the <strong>most recent vote will be considered</strong> =) </p></center>.
+				<center>
+					<p>Note: Your current votes will <strong>OVERWRITE</strong> a previous vote (if any) and only the <strong>most recent vote will be considered</strong> =) 
+					</p>
+					<p>Please select a person in each category according to who you think deserves that position. =)</p>
+				</center>.
 			</header>
-			<!-- <pre>
-				{{nominees}}
-			</pre>
-			<pre>
-				{{vote}}
-			</pre> -->
 			<table style="border-collapse: separate;">
 				<tr>
 					<td>
 						<div class="select-wrapper">
 						<select ng-model="vote.chair" placeholder="Select Chairperson">
 							<option value="" disabled selected>CHAIRMAN</option>
-							<option ng-repeat="(key, value) in nominees"><img src={{value.picUrl}}/>{{key}}</option>
+							<option ng-repeat="nominee in nominees">{{nominee}}</option>
 						</select>
 						</div>
 					</td>
@@ -30,7 +28,7 @@
 						<div class="select-wrapper">
 						<select ng-model="vote.vice_chair" placeholder="Select Vice-Chairperson">
 							<option value="" disabled selected>VICE-CHAIRMAN</option>
-							<option ng-repeat="(key, value) in nominees">{{key}}</option>
+							<option ng-repeat="nominee in nominees">{{nominee}}</option>
 						</select>
 						</div>
 					</td>
@@ -39,8 +37,7 @@
 					<td>
 						<div class="select-wrapper">
 						<select ng-model="vote.treasurer" placeholder="Select Treasurer">
-							<option value="" disabled selected>TREASURER</option>
-							<option ng-repeat="(key, value) in nominees">{{key}}</option>
+							<option ng-repeat="nominee in nominees">{{nominee}}</option>
 						</select>
 						</div>
 					</td>
@@ -50,7 +47,7 @@
 						<div class="select-wrapper">
 						<select ng-model="vote.secretary" placeholder="Select Secretary">
 							<option value="" disabled selected>SECRETARY</option>
-							<option ng-repeat="(key, value) in nominees">{{key}}</option>
+							<option ng-repeat="nominee in nominees">{{nominee}}</option>
 						</select>
 						</div>
 					</td>

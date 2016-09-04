@@ -15,8 +15,7 @@
 #profile_pic_candidate {
 	border-radius:50%;
 	width: 150px;
-	/*margin-top: -57px;
-	margin-right: 8px;*/
+	height: 150px;
 }
 
 .button#vote_submit {
@@ -26,8 +25,6 @@
 
 .logo > .title {
 	display: block;
-	/*border-top: 1px solid black;*/
-	/*border-bottom: 1px solid black;*/
 	margin-top: -1.0em;
 	background-color: white;
 }

@@ -2153,8 +2153,7 @@
 		background-color: transparent;
 		border: none;
 		border-radius: 0;
-		border-bottom: solid 5px #c9c9c9;
-		border-top: solid 5px #c9c9c9;
+		border-bottom: solid 2px #c9c9c9;
 		color: inherit;
 		display: block;
 		outline: 0;
@@ -2343,7 +2342,7 @@
 		}
 
 		.image.left, .image.right {
-			max-width: 40%;
+			max-width: 50%;
 		}
 
 			.image.left img, .image.right img {

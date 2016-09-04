@@ -1,131 +1,141 @@
 <!DOCTYPE HTML>
 <html ng-app="votrApp">
-	<head>
-		<title>VOTR by pinkHelium</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" type="text/css" href="tabs/	style.css">
-		<!-- Timeline -->
-		<link rel="stylesheet" href="timeline/css/reset.css"> <!-- CSS reset -->
-		<link rel="stylesheet" href="timeline/css/style.css"> <!-- Resource style -->
 
-		<!-- textr -->
-		<link rel="stylesheet" href="textr/css/reset.css"> <!-- CSS reset -->
-		<link rel="stylesheet" href="textr/css/style.css"> <!-- Resource style -->
-		<script src="textr/js/modernizr.js"></script> <!-- Modernizr -->
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="css/main.css" />
-		<link rel="stylesheet" href="css/toaster.css"/>
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
-		<script src="js/angular.min.js"></script>
-		<script type="text/javascript" src="js/angular-route.min.js"></script>
-		<script type="text/javascript" src="js/toaster.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
+<head>
+  <title>VOTR by pinkHelium</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+  <link rel="stylesheet" type="text/css" href="tabs/	style.css">
+  <!-- Timeline -->
+  <link rel="stylesheet" href="timeline/css/reset.css">
+  <!-- CSS reset -->
+  <link rel="stylesheet" href="timeline/css/style.css">
+  <!-- Resource style -->
 
-		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
-		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <!-- textr -->
+  <link rel="stylesheet" href="textr/css/reset.css">
+  <!-- CSS reset -->
+  <link rel="stylesheet" href="textr/css/style.css">
+  <!-- Resource style -->
+  <script src="textr/js/modernizr.js"></script>
+  <!-- Modernizr -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/toaster.css" />
+  <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+  <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+  <script src="js/angular.min.js"></script>
+  <script type="text/javascript" src="js/angular-route.min.js"></script>
+  <script type="text/javascript" src="js/toaster.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 
-	</head>
-	<body ng-controller="AppCtrl">
-		<!-- Wrapper -->
-			<div id="wrapper">
+</head>
 
-				<!-- Header -->
-					<header id="header">
-						<div class="inner">
-							<!-- Logo -->
-								<div >
-								<a href="/#/" class="logo" style="width: auto; background: white; position:fixed; z-index: 1234">
-									<h1>v</h1><img ng-if="user.loggedIn == true" src="{{user.picture.url}}" id="profile_pic_mini"><h1 ng-if="user.loggedIn == false" style="z-index: 10000;">o</h1><h1>tr</h1>
-									<br/>
-									<section style="padding-bottom: 0;" class="cd-intro title">
-										<p class="cd-headline letters type"> <br />
-											coded with ❤ by
-											<span class="cd-words-wrapper waiting">
-												<b class="is-visible">cyberbeast</b>
-												<b>seel</b>
-												<b>diti</b>
-												<b>pinkHelium</b>
-											</span>
-										</p>
-									</section>
-								</a>
-								</div>
-							<!-- Nav -->
-								<nav ng-if="user.loggedIn == true">
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
+<body ng-controller="AppCtrl">
+  <!-- Wrapper -->
+  <div id="wrapper">
 
-						</div>
-					</header>
+    <!-- Header -->
+    <header id="header">
+      <div class="inner">
+        <!-- Logo -->
+        <div>
+          <a href="/#/" class="logo" style="width: auto; background: white; z-index: 1234">
+            <h1>v</h1><img ng-if="user.loggedIn == true" src="{{user.picture.url}}" id="profile_pic_mini">
+            <h1 ng-if="user.loggedIn == false" style="z-index: 10000;">o</h1>
+            <h1>tr</h1>
+            <br/>
+            <section style="padding-bottom: 0;" class="cd-intro title">
+              <p class="cd-headline letters type">
+                <br /> coded with ❤ by
+                <span class="cd-words-wrapper waiting">
+													<b class="is-visible">cyberbeast</b>
+													<b>seel</b>
+													<b>diti</b>
+													<b>pinkHelium</b>
+												</span>
+              </p>
+            </section>
+          </a>
+          <nav ng-if="user.loggedIn == true">
+            <ul>
+              <li><a href="#menu">Menu</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <!-- Nav -->
 
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="#/">Home</a></li>
-							<li ng-if="votrType == 'prevote'"><a href="#/prevote">Member Nominate</a></li>
-							<li ng-if="votrType == 'vote'"><a href="#/candidates">Candidates</a></li>
-							<li ng-if="user.nominee == true && votrType == 'vote' "><a href="#/candidatedashboard">Candidate Dashboard</a></li>
-							<li ng-if="votrType == 'vote'"><a href="#/vote">Vote</a></li>
-							<!-- <li ng-if="votrType == 'prevote'"><a href="#/nominationsResults">Nomination Results</a></li> -->
-							<li ng-if="user.admin == true"><a href="#/dashboard">Admin Panel</a></li>
-							<li ng-if="user.admin == true && votrType == 'prevote'"><a href="#/nominationsResults">Nomination Results</a></li>
-							<li ng-if="user.admin == true && votrType == 'vote'"><a href="#/result">Result</a></li> 
-							<li><a href="/logout">Logout</a></li>
-						</ul>
-					</nav>
+      </div>
+    </header>
 
-				<!-- Main -->
-					<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
-					<div id="main">
-					<div class="container">
-	
-</div>
-						<div class="inner" style="padding-top: 8rem;" ng-view="">
-							
-						</div>
-					</div>
+    <!-- Menu -->
+    <nav id="menu">
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="#/">Home</a>
+        </li>
+        <li ng-if="votrType == 'vote'"><a href="#/candidates">Candidates</a>
+        </li>
+        <li><a href="/logout">Logout</a>
+        </li>
+      </ul>
+    </nav>
 
-			</div>
+    <!-- Main -->
+    <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+    <div id="main">
+      <div class="container">
+      </div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
-			<script src="js/jqcloud.min.js"></script>
+      <div class="inner" ng-view="">
+      </div>
+    </div>
 
-			<script src="tabs/jquery.js" type="text/javascript"></script>
-			<script src="tabs/animate.js" type="text/javascript"></script>
-		
-		<!-- <script src="textr/js/jquery-2.1.1.js"></script> -->
+  </div>
 
-		<footer id="footer">
-			<center><div>
-				<section style="vertical-align:top;" class="cd-intro">
-					<p style="vertical-align:top;" class="cd-headline letters type"> <br />
-						coded with ❤ by
-						<span class="cd-words-wrapper waiting">
+  <!-- Scripts -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/skel.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+  <script src="assets/js/main.js"></script>
+  <script src="js/jqcloud.min.js"></script>
+
+  <script src="tabs/jquery.js" type="text/javascript"></script>
+  <script src="tabs/animate.js" type="text/javascript"></script>
+
+  <!-- <script src="textr/js/jquery-2.1.1.js"></script> -->
+
+  <footer id="footer">
+    <center>
+      <div>
+        <section style="vertical-align:top;" class="cd-intro">
+          <p style="vertical-align:top;" class="cd-headline letters type">
+            <br /> coded with ❤ by
+            <span class="cd-words-wrapper waiting">
 							<b class="is-visible">cyberbeast</b>
 							<b>seel</b>
 							<b>diti</b>
 							<b>pinkHelium</b>
 						</span>
-					</p>
-				</section>
-			</div></center>
+          </p>
+        </section>
+      </div>
+    </center>
 
 
-		</footer>
-		<script src="textr/js/main.js"></script> <!-- Resource jQuery -->
-		<script src="timeline/js/main.js"></script> <!-- Resource jQuery -->
+  </footer>
+  <script src="textr/js/main.js"></script>
+  <!-- Resource jQuery -->
+  <script src="timeline/js/main.js"></script>
+  <!-- Resource jQuery -->
 
-	</body>
+</body>
+
 </html>

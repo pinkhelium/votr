@@ -5,6 +5,7 @@ var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var graph = require('fbgraph');
+var moment = require('moment-timezone');
 
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
@@ -184,7 +185,22 @@ app.get('/logout', function(request, response){
 });
 
 app.get("/tabledata", function(request,response){
-	response.send(nominee_list);
+	if(request.user == null){
+
+		response.status(400).send("Error: Not Authorized");
+
+	} else {
+
+		if(request.user.isAdmin == false){
+		
+			response.status(400).send("Error: Not Authorized");
+		
+		} else {
+		
+			response.send(nominee_list);
+		
+		}
+	}
 })
 
 
@@ -202,13 +218,37 @@ app.get("/tabledata", function(request,response){
 app.get('/candidates', function(request,response){
 
 	if(request.user == null){
+
+
 		response.status(400).send("Error: Not Authorized");
+
 	} else {
-		response.send(candidateList);
+		if(request.user.isAdmin == false){
+
+			response.status(400).send("Error: Not Authorized");
+		
+		} else {
+
+			console.log("\n\nREQUEST ISADMIN: " + request.user.isAdmin);
+			response.send(candidateList);
+		
+		}
 	}
 });
 
+app.get('/candidatenames', function(request,response){
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
 
+		var candidateNames = [];
+		for( key in candidateList){
+			candidateNames.push(key);
+		}
+		response.send(candidateNames);
+
+	}
+})
 
 app.post('/candidates', function(request,response){
 	var candidateFound = false;
@@ -219,12 +259,12 @@ app.post('/candidates', function(request,response){
 		console.log("CHECKING CHECKING CHECKING CHECKING CHECKING");
 		console.log(request.body.candidateName + " is being searched for");
 		for(var key in member_list){
-			if(member_list[key].name == request.body.candidateName){
+			if(member_list[key].name.toUpperCase() == request.body.candidateName.toUpperCase()){
 				console.log("Found the user "+request.body.candidateName+" in the member list");
 				//To add a new candidate
 				var candidateParam = {};
 				//To get the previous vote
-				var candidateName = request.body.candidateName;
+				var candidateName = request.body.candidateName.toUpperCase();
 				//console.log(request.body);
 				candidateParam[candidateName] = {
 					count: 1
@@ -271,7 +311,7 @@ app.post('/candidates', function(request,response){
 		}
 		else {
 			console.log("NNONONONONONO");
-			response.send("Candidate not a member of PESITSouth ACM Facebook Group");
+			response.status(400).send("Candidate not a member of PESITSouth ACM Facebook Group");
 		}
 	}
 });
@@ -333,9 +373,34 @@ app.get('/nominees', function(request,response){
 	if(request.user == null){
 		response.status(400).send("Error: Not Authorized");
 	} else {
-		response.send(nominee_list);
+		
+		var nomineeNames = [];
+		for( key in nominee_list){
+			nomineeNames.push(key);
+		}
+		response.send(nomineeNames);
 	}
 	
+});
+
+
+app.get("/nameandpitch", function(request,response){
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+
+		var nomineeNamesAndPitch = [];
+		for(key in  nominee_list){
+			var nominee = {};
+			nominee.name = key;
+			nominee.profilePicture = nominee_list[key].profilePicture;
+			nominee.pitch = nominee_list[key].pitch;
+			nominee.uid = nominee_list[key].uid;
+			nomineeNamesAndPitch.push(nominee);
+		}
+		response.send(nomineeNamesAndPitch);
+
+	}
 })
 
 app.post('/nominees', function(request,response){
@@ -478,6 +543,10 @@ app.get('/user/permissions', function(request, response){
 
 					if(member_list[key].administrator == true){
 						returnPermissions.isAdmin = true;
+						request.user.isAdmin = true;
+					}
+					else {
+						request.user.isAdmin = false;
 					}
 
 					returnPermissions.id = member_list[key].id;
@@ -604,11 +673,15 @@ app.post("/pitch", function(request,response){
 })
 
 app.get("/pitch", function(request,response){
-	var userName = request.user.displayName;
+	if(request.user == null){
+		response.status(400).send("Error: Not Authorized");
+	} else {
+		var userName = request.user.displayName;
 	
-	nomineesRef.child(userName).child("pitch").once("value", function(snapshot){
-		response.send(snapshot.val());
-	})
+		nomineesRef.child(userName).child("pitch").once("value", function(snapshot){
+			response.send(snapshot.val());
+		})
+	}
 })
 
 
@@ -658,7 +731,8 @@ app.post("/message", function(request,response){
 		waterfall([
 
 			function(callback){
-				var now = new Date();
+				//var now = new Date();
+				var now = moment().tz("Asia/Kolkata").format();
 				console.log(now);
 				callback(null,now);
 			},
@@ -667,10 +741,10 @@ app.post("/message", function(request,response){
 				newEntry.poster = request.user.displayName;
 				newEntry.date = String(now);
 				newEntry.dateJSON = {
-					month: now.getMonth() + 1,
-					day: now.getDate(),
-					hour: now.getHours(),
-					minutes: now.getMinutes(),
+					month: moment().tz("Asia/Kolkata").month() + 1,
+					day: moment().tz("Asia/Kolkata").date(),
+					hour: moment().tz("Asia/Kolkata").hour(),
+					minutes: moment().tz("Asia/Kolkata").minute(),
 				}
 				var newMessage = massMessageRef.push();
 				newMessage.set(newEntry);
