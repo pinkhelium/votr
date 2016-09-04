@@ -4,7 +4,25 @@
 			<center><h1>Results</h1></center>
 			<hr>
 		</header>
-		<div id="barchart_material" style="width: 100%; height: auto;"></div>
+		
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>CScore</th>
+				<th>VScore</th>
+				<th>TScore</th>
+				<th>SScore</th>
+				<th>TotalScore</th>
+			</tr>
+			<tr ng-repeat="nominee in nominees">
+				<td>{{nominee.name}}</td>
+				<td>{{nominee.CScore}}</td>
+				<td>{{nominee.VScore}}</td>
+				<td>{{nominee.TScore}}</td>
+				<td>{{nominee.SScore}}</td>
+				<td>{{nominee.TotalScore}}</td>
+			</tr>
+		</table>
 	</div>
 	<div ng-if="user.admin == false">
 		<center><p>You Shall Not Pass!</p></center>

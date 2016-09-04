@@ -1,61 +1,24 @@
-<div ng-if="user.loggedIn == false">
+<!-- <div ng-if="user.loggedIn == false">
 	<header>
 		<center><h1><a href="/login">sign in here</a>.</h1></center>
-		<!-- <hr> -->
+		
 	</header>
 		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
-</div>
+</div> -->
 
-<div ng-if="user.loggedIn == true">
-	<center><section>
+<section>
+	<h2>Voting phase has come to an end.</h2>
+	<p>
+		<span class="image left">
+			<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Thats_all_folks.svg/2000px-Thats_all_folks.svg.png" style="height:auto; max-width: 475px">
+		</span>
+	The interface is now closed! <br /><br />
 
-	<div class="box alt">
-		<div class="row uniform center">
-			<div class="12u$">
-			<center>
-				<!-- <div class="coverPhotoContainer"> -->
-					<!-- <span class="image fit"><img src="images/pic13.jpg" alt="cover_photo" class="coverPhoto"/></span> -->
-				<!-- </div> -->
-				<img src="{{user.picture.url}}" id="profile_pic" />
-				<!-- <h1 style="margin-bottom: -0.5em; position: relative; z-index: 10000; text-transform: lowercase;">hey</h1> -->
-				<!-- <h1 style="margin-bottom: 0em; position: relative; z-index: 10222; font-size: 520%; text-transform: uppercase;">{{user.displayName}}</h1> -->
-				<h1>{{user.displayName}}</h1>
-				<!-- <h3 style="margin-bottom: 0em; position: relative; z-index: 10000; text-transform: uppercase;">{{massMessage}}</h3> -->
-				<!-- <h3>{{massMessage}}</h3> -->
-			</center>
-				<!-- <p><span class="image left"><img src="{{user.picture.url}}" alt="" id="profile_pic2" /></span><h1 style="margin-top: -170px; margin-left: 220px; background-color: white; position: relative; z-index: 10; text-align: left"> &nbsp&nbsp&nbsp&nbsp{{user.displayName}}</h1></p> -->
-			</div>
+	The <strong>VOTR</strong> team and the current office bearers of <a href="https://www.facebook.com/groups/pesseacm/"><strong>PESITSouth ACM Student Chapter</strong></a> extend our thanks to the <strong>316</strong> voters who have used this platform. <br />
 
-		</div>	
+	We're off to crunch the numbers.  We'll be back with the result soon. =)<br /><br />
 
-	</div>
-
-
-		<!-- <img src="{{user.picture.url}}" id="profile_pic"> -->
-		
-		<!-- <h3>{{massMessage}}</h3> -->
-		<!-- <img src="{{user.cover.source}}" alt=""> -->
-		
-		<!-- <h2>{{user.displayName}}</h2> -->
-	</section></center>
-	<section id="cd-timeline" class="cd-container">
-		<div class="cd-timeline-block" ng-repeat="value in massMessagesArray | orderBy: '-value.date'">
-			<div class="cd-timeline-img cd-picture">
-				<img src="timeline/img/cd-icon-picture.svg" alt="Picture">
-			</div> <!-- cd-timeline-img -->
-
-			<div class="cd-timeline-content">
-
-				<h2 style="letter-spacing: 0; text-transform: none;">{{value.message}}</h2>
-				<p>Message posted by {{value.poster}} at {{value.dateJSON.hour}}:{{value.dateJSON.minutes}} , {{value.dateJSON.day}}/{{value.dateJSON.month}}</p>
-
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
-	</section>
-	<div ng-if="user.isValidACMMember == false">
-			<center><p>Only <strong>members</strong> of PESITSouth ACM Student Chapter's <a href="https://www.facebook.com/groups/pesseacm/">Facebook Group </a>are allowed to vote.<br/>Please ask to <a href="https://www.facebook.com/groups/pesseacm/">join</a> the group before voting</p></center>
-		</div>
-
-	
-
-</div>
+	<em>That's all folks!</em>
+	</p>
+</section>
+<hr /><br /><br />

@@ -1,0 +1,31 @@
+<div ng-if="user.loggedIn == true">
+	<div ng-init="getNominees()">
+		<div ng-if="thisNominee != null">
+			<center>
+				<a href="/#/candidates" class="button small">Back to Candidates List</a>
+				<a href="/#/vote" class="button special small">Vote!</a>
+			</center>
+			<p>
+				<span class="image left">
+					<img src="{{thisNominee.profilePicture}}" alt="" id="profile_pic_candidate" style="width: 200px; height:200px;" />
+				</span>
+				
+				<h1>{{thisNominee.name}}</h1>
+				<p style="white-space: pre-wrap;">{{thisNominee.pitch}}</p>
+			</p>
+			<hr />
+		</div>
+		<div ng-if="thisNominee == null">
+			<h2>Invalid Nominee Identifier.</h2>
+			<a href="/#/" class="button big">Back to Candidates List</a>
+		</div>
+	</div>
+</div>
+<div ng-if="user.loggedIn == false">
+	<header>
+		<center><h1><a href="/login">sign in here</a>.</h1></center>
+		
+		<!-- <hr> -->
+	</header>
+		<center><p>signing in allows you to participate in the PESIT South ACM Student Chapter General Elections 2016</p></center>
+</div>

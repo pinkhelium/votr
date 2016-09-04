@@ -4,5 +4,7 @@
 # Node.js
 node_modules/
 npm-debug.log
+
+# Configurations shouldn't be tracked
 config_backup.js
 config.js
